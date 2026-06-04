@@ -1,0 +1,79 @@
+{
+  "hero": {
+    "badge": "Available for new projects",
+    "headline": "One team for",
+    "rotatingWords": [
+      "Web Development",
+      "Marketing",
+      "Startup Launch",
+      "Operations",
+      "Content"
+    ],
+    "sub": "Design, build, and grow — without juggling agencies. We handle the whole thing.",
+    "primaryCta": "Start a project",
+    "primaryCtaHref": "#contact",
+    "secondaryCta": "See our work",
+    "secondaryCtaHref": "#services",
+    "stats": [
+      { "id": "s1", "num": "20+", "label": "Projects shipped" },
+      { "id": "s2", "num": "8", "label": "Active clients" },
+      { "id": "s3", "num": "4.9", "label": "Client rating" },
+      { "id": "s4", "num": "2026", "label": "Since" }
+    ]
+  },
+  "cta": {
+    "eyebrow": "Open for new projects",
+    "title": "Got an idea?",
+    "accentTitle": "Let's talk.",
+    "sub": "A quick 30-minute call. No pitch, just your project.",
+    "primary": "Book a call",
+    "primaryHref": "#contact",
+    "secondary": "hello@zenova.bd",
+    "secondaryHref": "mailto:hello@zenova.bd"
+  },
+  "faqs": [
+    { "id": "f1", "q": "How are you different from an agency?", "a": "One team handles design, build, and growth. No handoffs between vendors — same people from start to finish." },
+    { "id": "f2", "q": "How long is a typical project?", "a": "6 to 10 weeks for a build. Many clients stay on monthly for ongoing growth work." },
+    { "id": "f3", "q": "Do we own the code and designs?", "a": "Yes. Everything sits in your accounts from day one — your GitHub, your Figma, your domain." },
+    { "id": "f4", "q": "How does pricing work?", "a": "Flat fee per phase for builds. Flat monthly fee for ongoing work. No hourly billing." },
+    { "id": "f5", "q": "Can you work with our team?", "a": "Yes. We often plug into existing teams and follow your conventions." },
+    { "id": "f6", "q": "How soon can we start?", "a": "Usually 1 to 2 weeks after our intro call." }
+  ],
+  "testimonials": [
+    { "id": "q1", "quote": "They replaced three of our vendors. One team, one channel, one invoice.", "name": "Maya Okafor", "role": "COO, Northwind", "tone": "#3a5bff" },
+    { "id": "q2", "quote": "A working prototype in eleven days. Best momentum we've had in years.", "name": "Daniel Reyes", "role": "CEO, Stellar", "tone": "#6d4cff" },
+    { "id": "q3", "quote": "We came in for a site. We left with a full growth plan and real pipeline.", "name": "Priya Nair", "role": "Head of Growth, Aperture", "tone": "#a855f7" },
+    { "id": "q4", "quote": "The cleanest handoff we've ever seen. Our team picked it up the next morning.", "name": "Jonas Weber", "role": "CTO, Cobalt", "tone": "#5b6cff" },
+    { "id": "q5", "quote": "Traffic up 4x. CAC down a third. They run growth like a product team.", "name": "Aisha Mensah", "role": "Founder, Mosaic", "tone": "#7a55ff" },
+    { "id": "q6", "quote": "Most agencies sell a deck. Zenova built us a system and taught us how to run it.", "name": "Leo Castelli", "role": "COO, Verge", "tone": "#9a4dff" }
+  ],
+  "marquee": [
+    { "id": "m1", "label": "Branding" },
+    { "id": "m2", "label": "Web Design" },
+    { "id": "m3", "label": "SEO" },
+    { "id": "m4", "label": "Paid Ads" },
+    { "id": "m5", "label": "Email" },
+    { "id": "m6", "label": "Content" },
+    { "id": "m7", "label": "Strategy" },
+    { "id": "m8", "label": "Operations" }
+  ],
+  "contactEmail": "hello@zenova.bd",
+  "about": {
+    "values": [
+      { "id": "v1", "icon": "Layers", "title": "One team, start to finish", "blurb": "The people you meet on day one are the same people on day ninety. No handoffs.", "hue": "#3a5bff" },
+      { "id": "v2", "icon": "Spark", "title": "Build, then talk", "blurb": "We ship working things, not decks about working things.", "hue": "#6d4cff" },
+      { "id": "v3", "icon": "Compass", "title": "Outcomes over output", "blurb": "Every project ends with one number we agreed to move. We share it either way.", "hue": "#a855f7" }
+    ],
+    "roles": [
+      { "id": "r1", "title": "Senior product designer", "location": "Remote", "href": "" },
+      { "id": "r2", "title": "Senior engineer", "location": "Remote", "href": "" },
+      { "id": "r3", "title": "Growth strategist", "location": "Remote", "href": "" }
+    ],
+    "timeline": [
+      { "id": "tl1", "year": "2019", "what": "Mira and Tobias start Zenova." },
+      { "id": "tl2", "year": "2021", "what": "First long-term client. Growth becomes a core practice." },
+      { "id": "tl3", "year": "2023", "what": "Content and operations teams join." },
+      { "id": "tl4", "year": "2026", "what": "Working with 8 active clients across 3 continents." }
+    ]
+  }
+}

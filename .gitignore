@@ -1,0 +1,34 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Build caches
+.tsbuildinfo
+*.tsbuildinfo
+.vite/
+
+# Never commit emitted Vite config artifacts. tsc -b used to emit these
+# from vite.config.ts and they would shadow the .ts at build time.
+vite.config.js
+vite.config.d.ts
+
+# Archived pre-refactor sources — kept locally, not for commit
+_legacy/

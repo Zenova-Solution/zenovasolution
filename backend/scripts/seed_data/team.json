@@ -1,0 +1,34 @@
+[
+  {
+    "id": "t1",
+    "name": "Mira Aldana",
+    "role": "Co-founder, Design",
+    "bio": "Leads brand and product design. Previously at Linear.",
+    "initials": "MA",
+    "tone": "#3a5bff"
+  },
+  {
+    "id": "t2",
+    "name": "Tobias Reinhardt",
+    "role": "Co-founder, Engineering",
+    "bio": "Leads the build team. Previously at Stripe and Vercel.",
+    "initials": "TR",
+    "tone": "#6d4cff"
+  },
+  {
+    "id": "t3",
+    "name": "Suri Patel",
+    "role": "Head of Growth",
+    "bio": "Runs marketing, paid media and lifecycle programs.",
+    "initials": "SP",
+    "tone": "#a855f7"
+  },
+  {
+    "id": "t4",
+    "name": "Jordan Wei",
+    "role": "Editorial Lead",
+    "bio": "Heads up the content and brand voice work.",
+    "initials": "JW",
+    "tone": "#7a55ff"
+  }
+]

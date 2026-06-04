@@ -1,0 +1,596 @@
+/* ----------------------------------------------------------------------- */
+/* Shared base styles for custom input components                          */
+/* Reuses the design tokens defined in global.css (--bg, --fg, --line, …)  */
+/* ----------------------------------------------------------------------- */
+
+.zui-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  text-align: left;
+}
+[data-theme='light'] .zui-trigger {
+  background: rgba(14, 15, 23, 0.02);
+}
+.zui-trigger:hover:not(:disabled) {
+  border-color: var(--line-strong);
+  background: var(--card-hover);
+}
+.zui-trigger:focus-visible,
+.zui-trigger.is-open {
+  outline: none;
+  border-color: rgba(109, 76, 255, 0.55);
+  background: rgba(109, 76, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(109, 76, 255, 0.18);
+}
+.zui-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.zui-trigger__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zui-trigger__value.is-placeholder {
+  color: var(--fg-faint);
+}
+.zui-trigger__caret {
+  color: var(--fg-faint);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.zui-trigger.is-open .zui-trigger__caret {
+  transform: rotate(180deg);
+  color: var(--accent-3);
+}
+.zui-trigger__clear {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: var(--line);
+  color: var(--fg-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.zui-trigger__clear:hover {
+  background: var(--line-strong);
+  color: var(--fg);
+}
+.zui-trigger__icon {
+  flex-shrink: 0;
+  color: var(--fg-faint);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Popover panel (rendered into a portal) */
+.zui-popover {
+  position: fixed;
+  z-index: 1000;
+  background: rgba(12, 13, 20, 0.96);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  animation: zui-pop-in 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+  overflow: hidden;
+}
+[data-theme='light'] .zui-popover {
+  background: rgba(255, 255, 255, 0.96);
+}
+@keyframes zui-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ----------------------------------------------------------------------- */
+/* Dropdown                                                                 */
+/* ----------------------------------------------------------------------- */
+
+.zui-dropdown__search {
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.zui-dropdown__search input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+}
+.zui-dropdown__search input:focus {
+  border-color: var(--accent-2);
+  background: rgba(109, 76, 255, 0.06);
+}
+.zui-dropdown__list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.zui-dropdown__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--fg);
+  border: none;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: background 0.12s;
+}
+.zui-dropdown__option:hover,
+.zui-dropdown__option.is-active {
+  background: rgba(255, 255, 255, 0.05);
+}
+.zui-dropdown__option.is-selected {
+  background: rgba(109, 76, 255, 0.16);
+  color: var(--fg);
+}
+.zui-dropdown__option.is-selected .zui-dropdown__option-check {
+  opacity: 1;
+}
+.zui-dropdown__option-icon {
+  width: 18px;
+  flex-shrink: 0;
+  color: var(--fg-faint);
+}
+.zui-dropdown__option-body {
+  flex: 1;
+  min-width: 0;
+}
+.zui-dropdown__option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zui-dropdown__option-hint {
+  font-size: 11px;
+  color: var(--fg-faint);
+  margin-top: 2px;
+}
+.zui-dropdown__option-check {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--accent-3);
+  opacity: 0;
+}
+.zui-dropdown__empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--fg-faint);
+  font-size: 13px;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Calendar / DatePicker                                                    */
+/* ----------------------------------------------------------------------- */
+
+.zui-calendar {
+  width: 280px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.zui-calendar__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.zui-calendar__title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--fg);
+}
+.zui-calendar__nav {
+  display: flex;
+  gap: 4px;
+}
+.zui-calendar__nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.zui-calendar__nav-btn:hover {
+  background: var(--card-hover);
+  color: var(--fg);
+  border-color: var(--line-strong);
+}
+.zui-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 0;
+}
+.zui-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.zui-calendar__day {
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--fg);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s,
+    transform 0.12s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.zui-calendar__day:hover:not(:disabled):not(.is-selected) {
+  background: rgba(255, 255, 255, 0.05);
+}
+.zui-calendar__day.is-other-month {
+  color: var(--fg-faint);
+}
+.zui-calendar__day.is-today {
+  border-color: rgba(109, 76, 255, 0.45);
+  color: var(--accent-3);
+}
+.zui-calendar__day.is-selected {
+  background: var(--grad);
+  color: #fff;
+  font-weight: 500;
+  border-color: transparent;
+}
+.zui-calendar__day.is-selected:hover {
+  transform: translateY(-1px);
+}
+.zui-calendar__day:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.zui-calendar__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 2px;
+}
+.zui-calendar__footer-btn {
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.zui-calendar__footer-btn:hover {
+  color: var(--accent-3);
+  background: rgba(109, 76, 255, 0.08);
+}
+
+/* ----------------------------------------------------------------------- */
+/* TimePicker                                                               */
+/* ----------------------------------------------------------------------- */
+
+.zui-time {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+.zui-time__display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.zui-time__display .zui-time__sep {
+  color: var(--fg-faint);
+}
+.zui-time__display .zui-time__part {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.zui-time__cols {
+  display: grid;
+  gap: 8px;
+  align-items: stretch;
+}
+.zui-time__cols--12 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.zui-time__cols--24 {
+  grid-template-columns: 1fr 1fr;
+}
+.zui-time__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.zui-time__col-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 2px;
+}
+.zui-time__scroll {
+  height: 140px;
+  width: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+.zui-time__scroll::-webkit-scrollbar {
+  display: none;
+}
+.zui-time__scroll-item {
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.zui-time__scroll-item:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+.zui-time__scroll-item.is-selected {
+  color: var(--fg);
+  font-weight: 600;
+  background: rgba(109, 76, 255, 0.18);
+}
+.zui-time__ampm {
+  display: flex;
+  gap: 4px;
+}
+.zui-time__ampm-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.zui-time__ampm-btn.is-selected {
+  background: var(--grad);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ----------------------------------------------------------------------- */
+/* DateTimePicker                                                           */
+/* ----------------------------------------------------------------------- */
+
+.zui-datetime {
+  display: flex;
+  flex-direction: column;
+}
+.zui-datetime__split {
+  display: flex;
+  align-items: stretch;
+}
+.zui-datetime__split > .zui-calendar {
+  border-right: 1px solid var(--line);
+}
+
+/* ----------------------------------------------------------------------- */
+/* Toggle switch                                                            */
+/* ----------------------------------------------------------------------- */
+
+.zui-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  color: var(--fg);
+}
+.zui-toggle__track {
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
+  position: relative;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+  flex-shrink: 0;
+}
+.zui-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fg-dim);
+  transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.22s;
+}
+.zui-toggle.is-on .zui-toggle__track {
+  background: var(--grad);
+  border-color: transparent;
+}
+.zui-toggle.is-on .zui-toggle__thumb {
+  background: #fff;
+  transform: translateX(16px);
+}
+.zui-toggle.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.zui-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------------- */
+/* SegmentedControl                                                         */
+/* ----------------------------------------------------------------------- */
+
+.zui-segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+}
+.zui-segmented__option {
+  position: relative;
+  z-index: 1;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.zui-segmented__option:hover:not(.is-selected):not(:disabled) {
+  color: var(--fg);
+}
+.zui-segmented__option.is-selected {
+  color: var(--fg);
+}
+.zui-segmented__option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.zui-segmented__pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 7px;
+  background: rgba(109, 76, 255, 0.22);
+  border: 1px solid rgba(109, 76, 255, 0.4);
+  transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 0;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Field label wrapper (optional convenience around the inputs)             */
+/* ----------------------------------------------------------------------- */
+
+.zui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.zui-field__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.zui-field__hint {
+  font-size: 12px;
+  color: var(--fg-faint);
+  line-height: 1.5;
+}

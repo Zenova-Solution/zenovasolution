@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Zenova</title>
+    <script>
+      // SPA redirect for GitHub Pages.
+      //
+      // We can't read Vite's BASE_URL here, but the project base is always the
+      // first path segment on a project Pages site (https://<owner>.github.io/<repo>/...)
+      // and zero segments on a user/org site or custom domain. We treat
+      // anything that doesn't look like a known SPA route as a base segment.
+      (function () {
+        var l = window.location;
+        // Pages from a project site have an extra repo segment; user/org sites
+        // do not. If document.referrer points back at the same origin, the
+        // path before the first separator is almost certainly the base.
+        var segments = l.pathname.split('/').filter(Boolean);
+        // Default: one segment of base (project site). Override via meta tag
+        // if a custom domain or org site is used.
+        var meta = document.querySelector('meta[name="base-segments"]');
+        var keep = meta ? Number(meta.getAttribute('content')) : 1;
+        if (!Number.isFinite(keep) || keep < 0) keep = 1;
+        if (keep > segments.length) keep = segments.length;
+
+        var basePath = '/' + segments.slice(0, keep).join('/');
+        if (basePath !== '/') basePath += '/';
+
+        // Ensure favicon resolves from the project base even on deep 404 paths.
+        var icon = document.createElement('link');
+        icon.rel = 'icon';
+        icon.type = 'image/png';
+        icon.href = basePath + 'assets/favicon.png';
+        document.head.appendChild(icon);
+
+        var rest = segments.slice(keep).join('/').replace(/&/g, '~and~');
+        var search = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+
+        l.replace(
+          l.protocol + '//' + l.host + basePath + '?/' + rest + search + l.hash,
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
