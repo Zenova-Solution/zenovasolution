@@ -9,24 +9,30 @@
   background: var(--bg);
   overflow: hidden;
   pointer-events: all;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .preloader.is-exiting {
-  animation: preloader-exit 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation: preloader-exit 0.8s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
   pointer-events: none;
+}
+
+/* Kill expensive inner elements during exit to keep 60fps */
+.preloader.is-exiting .preloader__grid,
+.preloader.is-exiting .preloader__glow,
+.preloader.is-exiting .preloader__glow-accent {
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 @keyframes preloader-exit {
   0% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    opacity: 0;
-    transform: scale(1.06);
-    filter: blur(14px);
-    visibility: hidden;
+    transform: translate3d(0, -105%, 0);
   }
 }
 
@@ -230,8 +236,7 @@
 @media (prefers-reduced-motion: reduce) {
   .preloader.is-exiting {
     animation: none;
-    opacity: 0;
-    visibility: hidden;
+    transform: translate3d(0, -105%, 0);
   }
 
   .preloader__grid,
