@@ -1312,3 +1312,56 @@ section.sec {
   }
 }
 
+/* ── 404 Page: Glitch & Signal Animations ── */
+
+@keyframes notfound-glitch-skew {
+  0%, 90%, 93%, 97%, 100% { transform: skewX(0deg); }
+  91.5% { transform: skewX(3.5deg); }
+  95% { transform: skewX(-2deg); }
+}
+
+@keyframes notfound-channel-red {
+  0%, 90%, 93%, 97%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  91.5% { transform: translate(-7px, 4px); opacity: 0.7; }
+  95% { transform: translate(5px, -3px); opacity: 0.35; }
+}
+
+@keyframes notfound-channel-blue {
+  0%, 90%, 93%, 97%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  91.5% { transform: translate(7px, -4px); opacity: 0.7; }
+  95% { transform: translate(-5px, 3px); opacity: 0.35; }
+}
+
+@keyframes notfound-flicker {
+  0%, 84%, 86%, 90%, 100% { opacity: 1; }
+  85% { opacity: 0.82; }
+  89% { opacity: 0.9; }
+}
+
+@keyframes notfound-scanlines {
+  from { background-position: 0 0; }
+  to { background-position: 0 7px; }
+}
+
+@keyframes notfound-ring-1 {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.45; }
+  100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+}
+
+@keyframes notfound-ring-2 {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.35; }
+  100% { transform: translate(-50%, -50%) scale(1.55); opacity: 0; }
+}
+
+@keyframes notfound-ring-3 {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.25; }
+  100% { transform: translate(-50%, -50%) scale(1.75); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notfound-static * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+

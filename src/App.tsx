@@ -9,6 +9,7 @@ import { ProcessPage } from '@/pages/ProcessPage';
 import { WorkPage } from '@/pages/WorkPage';
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 import { AboutPage } from '@/pages/AboutPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminLogin, AuthGate } from '@/admin/pages/Login';
 import { Overview } from '@/admin/pages/Overview';
 import { ClientLogin, ClientAuthGate } from '@/client/pages/Login';
@@ -167,6 +168,9 @@ function PublicLayout({
   onToggleTheme,
 }: PublicLayoutProps) {
   useSmoothScroll();
+  const location = useLocation();
+  const isKnownPath =
+    /^\/(services|process|work|about)?(\/.*)?$/.test(location.pathname);
   return (
     <>
       <Nav theme={theme} onToggleTheme={onToggleTheme} />
@@ -175,7 +179,7 @@ function PublicLayout({
         showMarquee={showMarquee}
         showTestimonials={showTestimonials}
       />
-      <Footer />
+      {isKnownPath && <Footer />}
     </>
   );
 }
@@ -207,6 +211,7 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
         <Route path="/work" element={<WorkPage />} />
         <Route path="/work/:slug" element={<ProjectDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

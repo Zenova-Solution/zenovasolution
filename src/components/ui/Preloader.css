@@ -1,0 +1,258 @@
+/* ── Preloader ──────────────────────────────────────────── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  overflow: hidden;
+  pointer-events: all;
+}
+
+.preloader.is-exiting {
+  animation: preloader-exit 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes preloader-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(14px);
+    visibility: hidden;
+  }
+}
+
+/* ── Background grid ─────────────────────────────────── */
+.preloader__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: preloader-grid-in 0.8s 0.05s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+.preloader__grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 0%, transparent 85%);
+}
+
+@keyframes preloader-grid-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Glows ───────────────────────────────────────────── */
+.preloader__glow {
+  position: absolute;
+  width: min(700px, 80vw);
+  height: min(300px, 40vw);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(109, 76, 255, 0.18) 0%, transparent 70%);
+  filter: blur(70px);
+  opacity: 0;
+  animation: preloader-glow-in 1s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) forwards,
+             preloader-glow-pulse 3.5s 1s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes preloader-glow-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes preloader-glow-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%      { opacity: 0.85; transform: scale(1.06); }
+}
+
+.preloader__glow-accent {
+  position: absolute;
+  width: min(350px, 45vw);
+  height: min(180px, 25vw);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(58, 91, 255, 0.22) 0%, transparent 70%);
+  filter: blur(80px);
+  opacity: 0;
+  animation: preloader-glow-accent-in 1.1s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  pointer-events: none;
+  transform: translate(70px, -40px);
+}
+
+@keyframes preloader-glow-accent-in {
+  from { opacity: 0; transform: translate(70px, -40px) scale(0.4); }
+  to   { opacity: 0.6; transform: translate(70px, -40px) scale(1); }
+}
+
+/* ── Stage ───────────────────────────────────────────── */
+.preloader__stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+/* ── Wordmark ────────────────────────────────────────── */
+.preloader__wordmark {
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(52px, 12vw, 140px);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  position: relative;
+}
+
+/* Shimmer sweep — plays once after all letters settle */
+.preloader__wordmark.is-complete::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.10) 47%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.10) 53%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: preloader-shimmer 0.9s ease forwards;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+@keyframes preloader-shimmer {
+  from { background-position: 200% 0; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  to   { background-position: -200% 0; opacity: 0; }
+}
+
+/* Each letter container clips for the rise-in effect */
+.preloader__letter {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.preloader__letter-inner {
+  display: inline-block;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  transform: translateY(100%);
+  filter: blur(10px);
+  animation: preloader-letter-in 0.75s cubic-bezier(0.16, 0.9, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes preloader-letter-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+    filter: blur(10px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ── Slogan ──────────────────────────────────────────── */
+.preloader__slogan {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
+  opacity: 0;
+  animation: preloader-slogan-in 0.5s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  user-select: none;
+  text-align: center;
+}
+
+@keyframes preloader-slogan-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dot indicator ───────────────────────────────────── */
+.preloader__dot-row {
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  animation: preloader-counter-in 0.4s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.preloader__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--fg-faint);
+  transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.preloader__dot.is-lit {
+  background: var(--accent-2);
+  transform: scale(1.6);
+  box-shadow: 0 0 10px var(--accent-2);
+}
+
+/* ── Reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .preloader.is-exiting {
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .preloader__grid,
+  .preloader__glow,
+  .preloader__glow-accent,
+  .preloader__slogan,
+  .preloader__dot-row {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .preloader__letter-inner {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  .preloader__wordmark.is-complete::after {
+    animation: none;
+    opacity: 0;
+  }
+}
