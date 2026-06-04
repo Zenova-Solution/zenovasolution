@@ -1,5 +1,10 @@
 name: Deploy to GitHub Pages
 
+# Works for both user repos (<user>.github.io) and org repos (<org>/<repo>).
+# Base path is auto-detected from GITHUB_REPOSITORY (root for *.github.io
+# repos, /<repo>/ for project repos). Override by setting the BASE_PATH
+# secret/variable in the repository or organization settings.
+
 on:
   push:
     branches:
@@ -35,6 +40,8 @@ jobs:
         run: npm run typecheck
 
       - name: Build
+        env:
+          BASE_PATH: ${{ vars.BASE_PATH || '' }}
         run: npm run build
 
       - name: Verify build output
