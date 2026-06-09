@@ -693,6 +693,15 @@ section.sec {
   }
 }
 
+/* ── Stacked service cards responsive ────────────────── */
+@media (max-width: 860px) {
+  .svc-stack-card > div {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 32px 28px !important;
+  }
+}
+
 @media (max-width: 480px) {
   .work-card {
     padding: 20px !important;
