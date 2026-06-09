@@ -34,6 +34,13 @@ export interface TeamMember {
   bio: string;
   initials: string;
   tone: string;
+  avatar?: string;
+  socials?: SocialLink[];
+}
+
+export interface SocialLink {
+  platform: string;
+  url: string;
 }
 
 export interface FAQItem {

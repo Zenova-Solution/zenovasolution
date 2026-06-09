@@ -128,6 +128,11 @@ class ProjectDetail(_Base):
 # Team
 # ---------------------------------------------------------------------------
 
+class SocialLink(_Base):
+    platform: str
+    url: str
+
+
 class TeamMember(_Base):
     id: str
     name: str
@@ -135,6 +140,8 @@ class TeamMember(_Base):
     bio: str
     initials: str
     tone: HexColor
+    avatar: str | None = None
+    socials: list[SocialLink] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -357,6 +364,8 @@ class TeamMemberPatch(_Base):
     bio: str | None = None
     initials: str | None = None
     tone: HexColor | None = None
+    avatar: str | None = None
+    socials: list[SocialLink] | None = None
 
 
 class ServicePatch(_Base):

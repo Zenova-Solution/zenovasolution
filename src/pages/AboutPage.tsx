@@ -5,6 +5,44 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Icon, type IconName, type IconComponent } from '@/components/icons/Icon';
 import { useTeam, useBrand, useContent } from '@/admin/store';
 
+const SOCIAL_ICON: Record<string, (s: number) => JSX.Element> = {
+  twitter: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4l11.733 16h4L8 4H4z" /><path d="M4 20l6.768-6.768M20 4l-6.768 6.768" />
+    </svg>
+  ),
+  linkedin: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="16" height="16" rx="2" /><path d="M6 9v8M6 6v.01M10 11v6M14 9v6" />
+    </svg>
+  ),
+  github: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5a4.3 4.3 0 00-.4-2.9 3 3 0 000-2.4s-1-.3-3.3 1.3a11.4 11.4 0 00-6 0C8 3.7 7 4 7 4a3 3 0 000 2.4 4.3 4.3 0 00-.4 2.9c0 3.5 3 5.5 6 5.5a4.8 4.8 0 00-1 3.5v4" /><path d="M9 18c-3 .7-3-2-4-2" />
+    </svg>
+  ),
+  dribbble: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" /><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" /><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" /><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
+    </svg>
+  ),
+  instagram: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="5" /><circle cx="17.5" cy="6.5" r=".75" />
+    </svg>
+  ),
+  website: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+    </svg>
+  ),
+  email: (s) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 4L12 13 2 4" />
+    </svg>
+  ),
+};
+
 export function AboutPage() {
   const [TEAM] = useTeam();
   const [brand] = useBrand();
@@ -152,53 +190,82 @@ export function AboutPage() {
                 key={m.id}
                 className="card"
                 style={{
-                  padding: 28,
+                  padding: '32px 24px 28px',
                   borderRadius: 20,
                   border: '1px solid var(--line)',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))',
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 16,
+                  alignItems: 'center',
+                  gap: 14,
                   position: 'relative',
                   overflow: 'hidden',
+                  transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = `${m.tone}44`;
+                  (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 32px ${m.tone}14`;
+                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                  (e.currentTarget as HTMLElement).style.transform = 'none';
                 }}
               >
                 <div
                   style={{
                     position: 'absolute',
-                    top: -50,
-                    right: -50,
-                    width: 180,
-                    height: 180,
+                    top: -60,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 200,
+                    height: 200,
                     borderRadius: '50%',
-                    background: `radial-gradient(circle, ${m.tone}33, transparent 65%)`,
+                    background: `radial-gradient(circle, ${m.tone}20, transparent 60%)`,
                     pointerEvents: 'none',
                   }}
                 />
-                <div
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${m.tone}, var(--accent-3))`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 600,
-                    fontSize: 18,
-                    color: '#fff',
-                    boxShadow: `0 8px 20px ${m.tone}55`,
-                    position: 'relative',
-                  }}
-                >
-                  {m.initials}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  {m.avatar ? (
+                    <img
+                      src={m.avatar}
+                      alt={m.name}
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: `3px solid ${m.tone}44`,
+                        boxShadow: `0 0 0 6px ${m.tone}14, 0 8px 28px ${m.tone}33`,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: '50%',
+                        background: `linear-gradient(135deg, ${m.tone}, var(--accent-3))`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 600,
+                        fontSize: 24,
+                        color: '#fff',
+                        boxShadow: `0 8px 28px ${m.tone}55`,
+                      }}
+                    >
+                      {m.initials}
+                    </div>
+                  )}
                 </div>
-                <div style={{ position: 'relative' }}>
-                  <div className="display" style={{ fontSize: 20, fontWeight: 500 }}>
+                <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                  <div className="display" style={{ fontSize: 18, fontWeight: 600 }}>
                     {m.name}
                   </div>
-                  <div className="mono" style={{ color: 'var(--fg-faint)', marginTop: 4, fontSize: 12 }}>
+                  <div style={{ color: m.tone, fontSize: 13, fontWeight: 500, marginTop: 4 }}>
                     {m.role}
                   </div>
                 </div>
@@ -208,11 +275,54 @@ export function AboutPage() {
                     color: 'var(--fg-dim)',
                     fontSize: 14,
                     lineHeight: 1.6,
+                    textAlign: 'center',
                     position: 'relative',
+                    zIndex: 1,
+                    maxWidth: 280,
                   }}
                 >
                   {m.bio}
                 </p>
+                {m.socials && m.socials.length > 0 && (
+                  <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: 8, justifyContent: 'center', marginTop: 4 }}>
+                    {m.socials.map((s, si) => {
+                      const icon = SOCIAL_ICON[s.platform];
+                      if (!icon) return null;
+                      return (
+                        <a
+                          key={si}
+                          href={s.platform === 'email' ? `mailto:${s.url}` : s.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={s.platform}
+                          style={{
+                            width: 34,
+                            height: 34,
+                            borderRadius: 8,
+                            border: '1px solid var(--line)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'var(--fg-dim)',
+                            transition: 'color 0.2s, border-color 0.2s, background 0.2s',
+                          }}
+                          onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.color = m.tone;
+                            (e.currentTarget as HTMLElement).style.borderColor = `${m.tone}44`;
+                            (e.currentTarget as HTMLElement).style.background = `${m.tone}10`;
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.color = 'var(--fg-dim)';
+                            (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
+                            (e.currentTarget as HTMLElement).style.background = 'transparent';
+                          }}
+                        >
+                          {icon(16)}
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ))}
           </div>
