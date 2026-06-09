@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
+import { GhostButton } from '@/components/ui/GhostButton';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { useContent } from '@/admin/store';
 
@@ -149,13 +149,7 @@ export function FAQ() {
           }}
         >
           More questions?
-          <Link
-            to={{ pathname: '/', hash: '#contact' }}
-            className="btn-ghost"
-            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-          >
-            Book a 30-minute call <Icon.Arrow size={14} />
-          </Link>
+          <GhostButton text="Book a 30-minute call" size="xs" onClick={() => { window.location.href = '/#contact'; }} />
         </div>
       </div>
     </section>

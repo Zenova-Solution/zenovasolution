@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon } from '@/components/icons/Icon';
+import { NeonButton } from '@/components/ui/NeonButton';
+import { GhostButton } from '@/components/ui/GhostButton';
 
 interface Crumb {
   label: string;
@@ -157,13 +158,9 @@ export function PageHero({ eyebrow, title, sub, crumbs, meta, secondary }: PageH
         )}
 
         <div className="page-hero__ctas" style={{ marginTop: meta && meta.length > 0 ? 40 : 56, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link to="/#contact" className="btn-primary" style={{ textDecoration: 'none' }}>
-            Get in touch <Icon.Arrow size={16} />
-          </Link>
+          <NeonButton text="Get in touch" onClick={() => { window.location.href = '/#contact'; }} />
           {secondary && (
-            <Link to={secondary.to} className="btn-ghost" style={{ textDecoration: 'none' }}>
-              {secondary.label}
-            </Link>
+            <GhostButton text={secondary.label} onClick={() => { window.location.href = secondary.to; }} />
           )}
         </div>
       </div>

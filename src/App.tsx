@@ -34,20 +34,6 @@ import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { useTweaks } from '@/hooks/useTweaks';
 import { applyPalette } from '@/lib/palette';
 import { hydrateSite } from '@/admin/store';
-import type { Theme } from '@/types/tweaks';
-
-const THEME_STORAGE_KEY = 'zenova.theme';
-
-function readStoredTheme(fallback: Theme): Theme {
-  if (typeof window === 'undefined') return fallback;
-  try {
-    const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark') return stored;
-  } catch {
-    /* private mode etc. */
-  }
-  return fallback;
-}
 
 // Tweaks panel ships only in dev builds — lazy import is tree-shaken in prod.
 const ZenovaTweaks = import.meta.env.DEV
@@ -55,10 +41,7 @@ const ZenovaTweaks = import.meta.env.DEV
   : null;
 
 export function App() {
-  const [t, setTweak] = useTweaks({
-    ...TWEAK_DEFAULTS,
-    theme: readStoredTheme(TWEAK_DEFAULTS.theme),
-  });
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
   useEffect(() => {
     void hydrateSite();
@@ -67,38 +50,6 @@ export function App() {
   useEffect(() => {
     applyPalette(t.palette);
   }, [t.palette]);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const next = t.theme ?? 'dark';
-    if (root.getAttribute('data-theme') === next) return;
-    const apply = () => {
-      root.setAttribute('data-theme', next);
-      try {
-        localStorage.setItem(THEME_STORAGE_KEY, next);
-      } catch {
-        /* ignore — private mode etc. */
-      }
-    };
-    if (typeof document.startViewTransition === 'function') {
-      document.startViewTransition(apply);
-    } else {
-      apply();
-    }
-  }, [t.theme]);
-
-  // Sync with other tabs / the admin shell flipping the theme.
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key !== THEME_STORAGE_KEY) return;
-      const next = e.newValue;
-      if (next === 'dark' || next === 'light') {
-        if (next !== t.theme) setTweak('theme', next);
-      }
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, [t.theme, setTweak]);
 
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
@@ -136,13 +87,9 @@ export function App() {
           path="/*"
           element={
             <PublicLayout
-              theme={t.theme}
               rotateMs={t.rotateMs}
               showMarquee={t.showMarquee}
               showTestimonials={t.showTestimonials}
-              onToggleTheme={() =>
-                setTweak('theme', t.theme === 'dark' ? 'light' : 'dark')
-              }
             />
           }
         />
@@ -157,19 +104,15 @@ export function App() {
 }
 
 interface PublicLayoutProps {
-  theme: 'dark' | 'light';
   rotateMs: number;
   showMarquee: boolean;
   showTestimonials: boolean;
-  onToggleTheme: () => void;
 }
 
 function PublicLayout({
-  theme,
   rotateMs,
   showMarquee,
   showTestimonials,
-  onToggleTheme,
 }: PublicLayoutProps) {
   useSmoothScroll();
   const location = useLocation();
@@ -177,7 +120,7 @@ function PublicLayout({
     /^\/(services|process|work|about)?(\/.*)?$/.test(location.pathname);
   return (
     <>
-      <Nav theme={theme} onToggleTheme={onToggleTheme} />
+      <Nav />
       <AnimatedRoutes
         rotateMs={rotateMs}
         showMarquee={showMarquee}

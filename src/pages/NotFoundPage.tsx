@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Icon } from '@/components/icons/Icon';
+import { GhostButton } from '@/components/ui/GhostButton';
+import { NeonButton } from '@/components/ui/NeonButton';
 
 export function NotFoundPage() {
   useEffect(() => {
@@ -231,43 +231,8 @@ export function NotFoundPage() {
             animation: 'fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both',
           }}
         >
-          <Link to="/" className="btn-primary" style={{ textDecoration: 'none' }}>
-            Return Home
-            <Icon.Arrow size={16} />
-          </Link>
-          <Link
-            to="/work"
-            style={{
-              height: 52,
-              padding: '0 26px',
-              borderRadius: 16,
-              border: '1px solid var(--line-strong)',
-              background: 'rgba(255,255,255,0.03)',
-              color: 'var(--fg)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 10,
-              fontWeight: 500,
-              fontSize: 15,
-              textDecoration: 'none',
-              backdropFilter: 'blur(8px)',
-              transition:
-                'background 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.07)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.24)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-              e.currentTarget.style.borderColor = 'var(--line-strong)';
-              e.currentTarget.style.transform = '';
-            }}
-          >
-            View Work
-            <Icon.Arrow size={16} />
-          </Link>
+          <NeonButton text="Return Home" onClick={() => { window.location.href = '/'; }} />
+          <GhostButton text="View Work" onClick={() => { window.location.href = '/work'; }} />
         </div>
       </div>
     </div>

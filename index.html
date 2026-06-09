@@ -32,13 +32,7 @@
       })(window.location);
     </script>
     <script>
-      // Set initial theme synchronously, before paint, to avoid first-frame flash.
-      try {
-        const stored = localStorage.getItem('zenova.theme');
-        document.documentElement.setAttribute('data-theme', stored === 'light' ? 'light' : 'dark');
-      } catch (_) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+      document.documentElement.setAttribute('data-theme', 'dark');
     </script>
   </head>
   <body>

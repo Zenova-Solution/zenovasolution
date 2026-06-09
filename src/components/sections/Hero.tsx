@@ -1,4 +1,5 @@
-import { Icon } from '@/components/icons/Icon';
+import { GhostButton } from '@/components/ui/GhostButton';
+import { NeonButton } from '@/components/ui/NeonButton';
 import { RotatingWords } from '@/components/ui/RotatingWords';
 import { useContent } from '@/admin/store';
 
@@ -122,27 +123,20 @@ export function Hero({ rotateMs }: HeroProps) {
             animation: 'fade-up 1.2s cubic-bezier(.2,.7,.2,1) both .3s',
           }}
         >
-          <button
-            className="btn-primary"
+          <NeonButton
+            text={content.hero.primaryCta}
             onClick={() => {
               const href = content.hero.primaryCtaHref || '#contact';
               window.location.href = href;
             }}
-          >
-            {content.hero.primaryCta}
-            <span style={{ display: 'inline-flex', animation: 'arrow-bounce 1.6s ease-in-out infinite' }}>
-              <Icon.Arrow size={16} />
-            </span>
-          </button>
-          <button
-            className="btn-ghost"
+          />
+          <GhostButton
+            text={content.hero.secondaryCta}
             onClick={() => {
               const href = content.hero.secondaryCtaHref || '#services';
               window.location.href = href;
             }}
-          >
-            {content.hero.secondaryCta}
-          </button>
+          />
         </div>
 
         <div

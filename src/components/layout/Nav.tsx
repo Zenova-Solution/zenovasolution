@@ -1,13 +1,7 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo } from './Logo';
 import { Icon } from '@/components/icons/Icon';
-import type { Theme } from '@/types/tweaks';
-
-interface NavProps {
-  theme?: Theme;
-  onToggleTheme?: () => void;
-}
 
 const NAV_LINKS = [
   { label: 'Services', to: '/services' },
@@ -16,7 +10,7 @@ const NAV_LINKS = [
   { label: 'About', to: '/about' },
 ];
 
-export function Nav({ theme = 'dark', onToggleTheme }: NavProps) {
+export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -42,47 +36,6 @@ export function Nav({ theme = 'dark', onToggleTheme }: NavProps) {
       document.body.style.overflow = '';
     };
   }, [menuOpen]);
-
-  const themeBtn = (extra: CSSProperties = {}) => (
-    <button
-      onClick={onToggleTheme}
-      aria-label="Toggle theme"
-      title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-      style={{
-        width: 40,
-        height: 40,
-        borderRadius: 999,
-        border: '1px solid var(--line)',
-        background: 'transparent',
-        color: 'var(--fg-dim)',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        transition: 'all .25s',
-        ...extra,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'var(--card-hover)';
-        e.currentTarget.style.color = 'var(--fg)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent';
-        e.currentTarget.style.color = 'var(--fg-dim)';
-      }}
-    >
-      {theme === 'dark' ? (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-        </svg>
-      ) : (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-      )}
-    </button>
-  );
 
   return (
     <nav
@@ -144,26 +97,27 @@ export function Nav({ theme = 'dark', onToggleTheme }: NavProps) {
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <div className="nav-desktop-only" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {onToggleTheme && themeBtn()}
             <Link
               to="/#contact"
               className="nav-cta"
-              style={{
-                height: 42,
-                padding: '0 18px',
-                borderRadius: 999,
-                background: 'var(--grad)',
-                color: 'white',
-                fontSize: 14,
-                fontWeight: 500,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                textDecoration: 'none',
-                boxShadow: '0 4px 18px rgba(58,91,255,0.35)',
-              }}
             >
-              Get in touch <Icon.Arrow size={14} />
+              <svg className="nav-cta__sparkle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+              </svg>
+              <span className="nav-cta__text">
+                <span className="nav-cta__letter">G</span>
+                <span className="nav-cta__letter">e</span>
+                <span className="nav-cta__letter">t</span>
+                <span className="nav-cta__letter">&nbsp;</span>
+                <span className="nav-cta__letter">i</span>
+                <span className="nav-cta__letter">n</span>
+                <span className="nav-cta__letter">&nbsp;</span>
+                <span className="nav-cta__letter">t</span>
+                <span className="nav-cta__letter">o</span>
+                <span className="nav-cta__letter">u</span>
+                <span className="nav-cta__letter">c</span>
+                <span className="nav-cta__letter">h</span>
+              </span>
             </Link>
           </div>
 
@@ -220,7 +174,6 @@ export function Nav({ theme = 'dark', onToggleTheme }: NavProps) {
               gap: 12,
             }}
           >
-            {onToggleTheme && themeBtn({ width: 46, height: 46 })}
             <Link
               to="/#contact"
               onClick={() => setMenuOpen(false)}
@@ -228,19 +181,18 @@ export function Nav({ theme = 'dark', onToggleTheme }: NavProps) {
                 flex: 1,
                 height: 46,
                 borderRadius: 14,
-                background: 'var(--grad)',
-                color: 'white',
-                fontWeight: 500,
-                fontSize: 15,
+                background: 'rgba(255,255,255,0.04)',
+                color: 'var(--fg)',
+                fontWeight: 600,
+                fontSize: 14,
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: 8,
                 textDecoration: 'none',
-                boxShadow: '0 6px 22px rgba(58,91,255,0.35), inset 0 1px 0 rgba(255,255,255,0.18)',
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
-              Get in touch <Icon.Arrow size={14} />
+              Get in touch
             </Link>
           </div>
         </div>

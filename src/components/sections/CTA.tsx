@@ -1,4 +1,5 @@
-import { Icon } from '@/components/icons/Icon';
+import { GhostButton } from '@/components/ui/GhostButton';
+import { NeonButton } from '@/components/ui/NeonButton';
 import { useContent } from '@/admin/store';
 
 export function CTA() {
@@ -67,22 +68,18 @@ export function CTA() {
               {cta.sub}
             </p>
             <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <button
-                className="btn-primary"
+              <NeonButton
+                text={cta.primary}
                 onClick={() => {
                   if (cta.primaryHref) window.location.href = cta.primaryHref;
                 }}
-              >
-                {cta.primary} <Icon.Arrow size={16} />
-              </button>
-              <button
-                className="btn-ghost"
+              />
+              <GhostButton
+                text={cta.secondary}
                 onClick={() => {
                   if (cta.secondaryHref) window.location.href = cta.secondaryHref;
                 }}
-              >
-                {cta.secondary}
-              </button>
+              />
             </div>
           </div>
         </div>

@@ -38,15 +38,15 @@ export function Background() {
 
     const init = () => {
       resize();
-      const count = Math.floor((w * h) / 14000);
+      const count = Math.floor((w * h) / 8000);
       particles.current = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        r: Math.random() * 2.5 + 1,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 3.5 + 1.2,
         hue: Math.random() > 0.5 ? 235 : 270,
-        opacity: Math.random() * 0.35 + 0.1,
+        opacity: Math.random() * 0.5 + 0.2,
       }));
     };
 
@@ -64,8 +64,8 @@ export function Background() {
         const dy = my - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < 180 && dist > 0) {
-          const force = (1 - dist / 180) * 0.04;
+        if (dist < 140 && dist > 0) {
+          const force = (1 - dist / 140) * 0.02;
           p.vx += (dx / dist) * force;
           p.vy += (dy / dist) * force;
         }
@@ -80,17 +80,17 @@ export function Background() {
         if (p.y < -20) p.y = h + 20;
         if (p.y > h + 20) p.y = -20;
 
-        const glowDist = dist < 180 ? 1 - dist / 180 : 0;
-        const alpha = p.opacity + glowDist * 0.3;
-        const size = p.r + glowDist * 4;
+        const glowDist = dist < 140 ? 1 - dist / 140 : 0;
+        const alpha = p.opacity + glowDist * 0.2;
+        const size = p.r + glowDist * 2;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
 
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size);
         const color = p.hue === 235
-          ? `hsla(235, 90%, 62%, ${alpha})`
-          : `hsla(270, 70%, 55%, ${alpha})`;
+          ? `hsla(235, 90%, 65%, ${alpha})`
+          : `hsla(270, 75%, 60%, ${alpha})`;
         grad.addColorStop(0, color);
         grad.addColorStop(1, 'transparent');
         ctx.fillStyle = grad;
@@ -104,12 +104,12 @@ export function Background() {
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 110) {
+          if (dist < 140) {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `hsla(250, 80%, 65%, ${0.06 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `hsla(250, 80%, 65%, ${0.1 * (1 - dist / 140)})`;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
           }
         }
@@ -119,8 +119,10 @@ export function Background() {
       raf.current = requestAnimationFrame(draw);
     };
 
-    const onMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      mouse.current = { x: cx, y: cy };
     };
 
     init();
@@ -131,11 +133,13 @@ export function Background() {
       init();
     });
     window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('touchmove', onMove, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf.current);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onMove);
     };
   }, []);
 

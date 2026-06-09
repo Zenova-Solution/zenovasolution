@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { GhostButton } from '@/components/ui/GhostButton';
 import { PageHero } from '@/components/layout/PageHero';
 import { CTA } from '@/components/sections/CTA';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -463,13 +464,11 @@ export function ServiceDetailPage() {
                     </div>
                   ))}
                 </div>
-                <Link
-                  to="/#contact"
-                  className="btn-ghost"
-                  style={{ marginTop: 'auto', textDecoration: 'none', justifyContent: 'center' }}
-                >
-                  Get in touch
-                </Link>
+                <GhostButton
+                  text="Get in touch"
+                  size="xs"
+                  onClick={() => { window.location.href = '/#contact'; }}
+                />
               </div>
             ))}
           </div>

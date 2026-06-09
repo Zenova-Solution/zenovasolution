@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
+import { GhostButton } from '@/components/ui/GhostButton';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { ProjectPreview } from './ProjectPreview';
 import { useProjects } from '@/admin/store';
@@ -153,9 +154,7 @@ export function Work() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 48 }}>
-          <Link to="/work" className="btn-ghost" style={{ textDecoration: 'none' }}>
-            See all projects <Icon.Arrow size={16} />
-          </Link>
+          <GhostButton text="See all projects" onClick={() => { window.location.href = '/work'; }} />
         </div>
       </div>
     </section>
