@@ -435,12 +435,13 @@ section.sec {
   }
   .hero-cta-row .neon-button,
   .hero-cta-row .ghost-button {
-    height: 48px;
-    font-size: 14px;
-    border-radius: 24px;
     flex: 1 1 auto;
     min-width: 0;
-    justify-content: center;
+    max-width: 175px;
+  }
+  .hero-cta-row .neon-button .neon-button__text,
+  .hero-cta-row .ghost-button .ghost-button__text {
+    font-size: 0.8125rem;
   }
   .hero-sub {
     margin-top: 24px !important;
@@ -809,7 +810,7 @@ section.sec {
   .hero-cta-row .neon-button,
   .hero-cta-row .ghost-button {
     flex: 1 1 100%;
-    max-width: 320px;
+    max-width: 175px;
   }
 }
 

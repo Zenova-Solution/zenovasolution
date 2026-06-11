@@ -4,6 +4,8 @@
   --radius: 99px;
 
   position: relative;
+  display: inline-flex;
+  align-items: center;
   appearance: none;
   background: none;
   border: 1px solid rgba(255, 129, 58, 0.2);
@@ -191,4 +193,33 @@
 @keyframes neon-idle-breathe {
   0%, 100% { opacity: 0.08; }
   50%      { opacity: 0.18; }
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 520px) {
+  .neon-button-content {
+    gap: 10px;
+    padding: 9px 9px 9px 18px;
+  }
+  .neon-button__text {
+    font-size: 0.8125rem;
+  }
+  .neon-button__icon-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 380px) {
+  .neon-button-content {
+    gap: 6px;
+    padding: 8px 8px 8px 14px;
+  }
+  .neon-button__text {
+    font-size: 0.75rem;
+  }
+  .neon-button__icon-wrapper {
+    width: 26px;
+    height: 26px;
+  }
 }

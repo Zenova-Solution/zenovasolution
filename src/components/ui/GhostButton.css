@@ -90,3 +90,22 @@
 .ghost-button--lg .ghost-button__text {
   font-size: 1.375rem;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 520px) {
+  .ghost-button__content {
+    padding: 10px 20px;
+  }
+  .ghost-button__text {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .ghost-button__content {
+    padding: 8px 16px;
+  }
+  .ghost-button__text {
+    font-size: 0.75rem;
+  }
+}
