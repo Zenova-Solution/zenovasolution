@@ -37,8 +37,27 @@ const SOCIAL = ['Tw', 'Ln', 'Gh', 'Dr'];
 
 export function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid var(--line)', padding: '72px 0 32px', position: 'relative' }}>
-      <div className="container">
+    <footer
+      style={{
+        borderTop: '1px solid var(--line)',
+        padding: '72px 0 32px',
+        position: 'relative',
+        background: 'var(--bg)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: -120,
+          left: 0,
+          right: 0,
+          height: 120,
+          background: 'linear-gradient(to bottom, transparent, var(--bg))',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}
+      />
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '1.4fr repeat(2, 1fr)', gap: 48 }}>
           <div>
             <Logo size={25} />
