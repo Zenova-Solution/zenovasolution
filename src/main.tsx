@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { Preloader } from './components/ui/Preloader';
+import './styles/tailwind.css';
 import './styles/global.css';
 import './admin/admin.css';
 import './components/ui/inputs/inputs.css';
