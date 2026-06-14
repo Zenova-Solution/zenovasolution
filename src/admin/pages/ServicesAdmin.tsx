@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AdminShell } from '@/admin/components/AdminShell';
-import { servicesStore, useServices } from '@/admin/store';
+import { Toast } from '@/admin/components/Form';
+import { createService, deleteService, servicesStore, useServices } from '@/admin/store';
 import type { ServiceDetail } from '@/data/services';
 
 const ICON_OPTIONS = ['Code', 'Spark', 'Rocket', 'Layers', 'Pen', 'Compass', 'Grid'];
@@ -19,6 +21,7 @@ function emptyService(): ServiceDetail {
     stat: ['', ''],
     hue: '#ff813a',
     visual: 'browser',
+    image: undefined,
     meta: [
       ['', ''],
       ['', ''],
@@ -38,19 +41,44 @@ export { ICON_OPTIONS, VISUAL_OPTIONS, emptyService };
 
 export function ServicesAdmin() {
   const [services] = useServices();
+  const [busy, setBusy] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
-  const duplicate = (s: ServiceDetail) => {
+  const duplicate = async (s: ServiceDetail) => {
+    const base = s.slug.replace(/-copy\d*$/g, '');
+    let copySlug = `${base}-copy`;
+    let n = 2;
+    while (services.some((x) => x.slug === copySlug)) {
+      copySlug = `${base}-copy-${n}`;
+      n += 1;
+    }
     const copy: ServiceDetail = {
       ...s,
-      slug: s.slug + '-copy',
+      slug: copySlug,
       title: s.title + ' (copy)',
     };
-    servicesStore.set([...services, copy]);
+    setBusy(copySlug);
+    try {
+      await createService(copy);
+      setToast(`"${copy.title}" created.`);
+    } catch (err) {
+      setToast(err instanceof Error ? err.message : 'Duplicate failed.');
+    } finally {
+      setBusy(null);
+    }
   };
 
-  const remove = (s: ServiceDetail) => {
+  const remove = async (s: ServiceDetail) => {
     if (!window.confirm(`Delete "${s.title}"? This cannot be undone.`)) return;
-    servicesStore.set(services.filter((x) => x.slug !== s.slug));
+    setBusy(s.slug);
+    try {
+      await deleteService(s.slug);
+      setToast(`"${s.title}" deleted.`);
+    } catch (err) {
+      setToast(err instanceof Error ? err.message : 'Delete failed.');
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
@@ -143,16 +171,25 @@ export function ServicesAdmin() {
               <Link to={`/admin/services/${s.slug}`} className="adm-btn adm-btn--sm">
                 Edit
               </Link>
-              <button className="adm-btn adm-btn--sm" onClick={() => duplicate(s)}>
-                Duplicate
+              <button
+                className="adm-btn adm-btn--sm"
+                onClick={() => duplicate(s)}
+                disabled={busy === s.slug}
+              >
+                {busy === s.slug ? '…' : 'Duplicate'}
               </button>
-              <button className="adm-btn adm-btn--sm adm-btn--danger" onClick={() => remove(s)}>
-                Delete
+              <button
+                className="adm-btn adm-btn--sm adm-btn--danger"
+                onClick={() => remove(s)}
+                disabled={busy === s.slug}
+              >
+                {busy === s.slug ? '…' : 'Delete'}
               </button>
             </div>
           </div>
         ))}
       </div>
+      <Toast message={toast} onClear={() => setToast(null)} />
     </AdminShell>
   );
 }

@@ -55,6 +55,7 @@ export interface TestimonialItem {
   name: string;
   role: string;
   tone: string;
+  image?: string;
 }
 
 export interface MarqueeItem {
@@ -171,12 +172,12 @@ const DEFAULT_CONTENT: SiteContent = {
     { id: 'f6', q: 'How soon can we start?', a: 'Usually 1 to 2 weeks after our intro call.' },
   ],
   testimonials: [
-    { id: 'q1', quote: 'They replaced three of our vendors. One team, one channel, one invoice.', name: 'Maya Okafor', role: 'COO, Northwind', tone: '#ff813a' },
-    { id: 'q2', quote: 'A working prototype in eleven days. Best momentum we’ve had in years.', name: 'Daniel Reyes', role: 'CEO, Stellar', tone: '#e06820' },
-    { id: 'q3', quote: 'We came in for a site. We left with a full growth plan and real pipeline.', name: 'Priya Nair', role: 'Head of Growth, Aperture', tone: '#ff9a5c' },
-    { id: 'q4', quote: 'The cleanest handoff we’ve ever seen. Our team picked it up the next morning.', name: 'Jonas Weber', role: 'CTO, Cobalt', tone: '#ff6b1a' },
-    { id: 'q5', quote: 'Traffic up 4x. CAC down a third. They run growth like a product team.', name: 'Aisha Mensah', role: 'Founder, Mosaic', tone: '#cc6622' },
-    { id: 'q6', quote: 'Most agencies sell a deck. Zenova built us a system and taught us how to run it.', name: 'Leo Castelli', role: 'COO, Verge', tone: '#ffa870' },
+    { id: 'q1', quote: 'They replaced three of our vendors. One team, one channel, one invoice.', name: 'Maya Okafor', role: 'COO, Northwind', tone: '#ff813a', image: 'https://ui-avatars.com/api/?name=Maya+Okafor&background=ff813a&color=fff' },
+    { id: 'q2', quote: 'A working prototype in eleven days. Best momentum we’ve had in years.', name: 'Daniel Reyes', role: 'CEO, Stellar', tone: '#e06820', image: 'https://ui-avatars.com/api/?name=Daniel+Reyes&background=e06820&color=fff' },
+    { id: 'q3', quote: 'We came in for a site. We left with a full growth plan and real pipeline.', name: 'Priya Nair', role: 'Head of Growth, Aperture', tone: '#ff9a5c', image: 'https://ui-avatars.com/api/?name=Priya+Nair&background=ff9a5c&color=fff' },
+    { id: 'q4', quote: 'The cleanest handoff we’ve ever seen. Our team picked it up the next morning.', name: 'Jonas Weber', role: 'CTO, Cobalt', tone: '#ff6b1a', image: 'https://ui-avatars.com/api/?name=Jonas+Weber&background=ff6b1a&color=fff' },
+    { id: 'q5', quote: 'Traffic up 4x. CAC down a third. They run growth like a product team.', name: 'Aisha Mensah', role: 'Founder, Mosaic', tone: '#cc6622', image: 'https://ui-avatars.com/api/?name=Aisha+Mensah&background=cc6622&color=fff' },
+    { id: 'q6', quote: 'Most agencies sell a deck. Zenova built us a system and taught us how to run it.', name: 'Leo Castelli', role: 'COO, Verge', tone: '#ffa870', image: 'https://ui-avatars.com/api/?name=Leo+Castelli&background=ffa870&color=fff' },
   ],
   marquee: [
     { id: 'm1', label: 'Branding' },
@@ -543,6 +544,46 @@ export async function patchService(
     else next.push(saved);
     servicesStore.setLocal(next);
     return saved;
+  } catch (err) {
+    servicesStore.setLocal(prev);
+    throw err;
+  }
+}
+
+export async function createService(service: ServiceDetail): Promise<ServiceDetail> {
+  const prev = servicesStore.get();
+  if (prev.some((s) => s.slug === service.slug)) {
+    throw new Error(`Service '${service.slug}' already exists.`);
+  }
+  const optimistic = [...prev, service];
+  servicesStore.setLocal(optimistic);
+  try {
+    const saved = await api<ServiceDetail>('/admin/services', {
+      method: 'POST',
+      body: service,
+      auth: true,
+    });
+    const next = servicesStore.get().slice();
+    const j = next.findIndex((s) => s.slug === saved.slug);
+    if (j >= 0) next[j] = saved;
+    else next.push(saved);
+    servicesStore.setLocal(next);
+    return saved;
+  } catch (err) {
+    servicesStore.setLocal(prev);
+    throw err;
+  }
+}
+
+export async function deleteService(slug: string): Promise<void> {
+  const prev = servicesStore.get();
+  const optimistic = prev.filter((s) => s.slug !== slug);
+  servicesStore.setLocal(optimistic);
+  try {
+    await api<void>(`/admin/services/${encodeURIComponent(slug)}`, {
+      method: 'DELETE',
+      auth: true,
+    });
   } catch (err) {
     servicesStore.setLocal(prev);
     throw err;

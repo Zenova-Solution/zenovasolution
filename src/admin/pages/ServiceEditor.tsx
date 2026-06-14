@@ -10,8 +10,9 @@ import {
   Toast,
   Field,
 } from '@/admin/components/Form';
+import { ImageField } from '@/admin/components/ImageField';
 import { Toggle } from '@/components/ui/inputs';
-import { patchService, servicesStore, useServices } from '@/admin/store';
+import { createService, patchService, useServices } from '@/admin/store';
 import type {
   ServiceDetail,
   ServicePackage,
@@ -62,7 +63,7 @@ export function ServiceEditor() {
         return;
       }
       try {
-        await servicesStore.set([...services, draft]);
+        await createService(draft);
         setToast('Service created');
         nav(`/admin/services/${draft.slug}`, { replace: true });
       } catch (err) {
@@ -200,6 +201,13 @@ export function ServiceEditor() {
             value={draft.visual}
             options={VISUAL_OPTIONS.map((v) => ({ value: v, label: v }))}
             onChange={(v) => update('visual', v as ServiceVisualKind)}
+          />
+          <ImageField
+            label="Card image"
+            hint="Upload an image or animated GIF, or pick one from the media library. Falls back to the generated visual above if empty."
+            value={draft.image ?? ''}
+            onChange={(v) => update('image', v || undefined)}
+            prefix="services"
           />
           <div className="adm-row adm-row--2">
             <TextField

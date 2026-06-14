@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { ImageField } from '@/admin/components/ImageField';
 import {
   ColorField,
   Field,
@@ -419,6 +420,18 @@ export function ContentAdmin() {
                   update({ testimonials });
                 }}
               />
+              <ImageField
+                label="Avatar image"
+                hint="Upload a headshot or pick one from the media library."
+                value={t.image ?? ''}
+                onChange={(v) => {
+                  const testimonials = draft.testimonials.map((x, idx) =>
+                    idx === i ? { ...x, image: v || undefined } : x,
+                  );
+                  update({ testimonials });
+                }}
+                prefix="testimonials"
+              />
             </div>
           ))}
           <button
@@ -428,7 +441,7 @@ export function ContentAdmin() {
               update({
                 testimonials: [
                   ...draft.testimonials,
-                  { id: uid('q'), quote: '', name: '', role: '', tone: '#e06820' },
+                  { id: uid('q'), quote: '', name: '', role: '', tone: '#e06820', image: undefined },
                 ],
               })
             }

@@ -64,6 +64,7 @@ class ServiceDetail(_Base):
     stat: tuple[str, str]
     hue: HexColor
     visual: str
+    image: str | None = None
     meta: list[tuple[str, str]] = Field(default_factory=list)
     deliverables: list[ServiceDeliverable] = Field(default_factory=list)
     phases: list[ServicePhase] = Field(default_factory=list)
@@ -189,6 +190,7 @@ class TestimonialItem(_Base):
     name: str
     role: str
     tone: HexColor
+    image: str | None = None
 
 
 class MarqueeItem(_Base):
@@ -380,6 +382,7 @@ class ServicePatch(_Base):
     stat: tuple[str, str] | None = None
     hue: HexColor | None = None
     visual: str | None = None
+    image: str | None = None
     meta: list[tuple[str, str]] | None = None
     deliverables: list[ServiceDeliverable] | None = None
     phases: list[ServicePhase] | None = None
