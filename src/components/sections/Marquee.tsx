@@ -1,9 +1,28 @@
-import { useContent } from '@/admin/store';
+const TECH: string[] = [
+  'React',
+  'Next.js',
+  'Vue',
+  'TypeScript',
+  'Node.js',
+  'Python',
+  'Go',
+  'Rust',
+  'AWS',
+  'Docker',
+  'Kubernetes',
+  'Vercel',
+  'Cloudflare',
+  'Prisma',
+  'Tailwind',
+  'Figma',
+  'GraphQL',
+  'PostgreSQL',
+  'Redis',
+  'Turborepo',
+];
 
 export function Marquee() {
-  const [content] = useContent();
-  const CLIENTS = content.marquee.map((m) => m.label);
-  const row = [...CLIENTS, ...CLIENTS];
+  const row = [...TECH, ...TECH];
   return (
     <section
       style={{
@@ -13,9 +32,19 @@ export function Marquee() {
         overflow: 'hidden',
       }}
     >
-      <div className="container" style={{ display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}>
-        <div className="mono" style={{ color: 'var(--fg-faint)', flexShrink: 0, maxWidth: 200 }}>
-          What we do
+      <div
+        className="container"
+        style={{ display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}
+      >
+        <div
+          className="mono"
+          style={{
+            color: 'var(--fg-faint)',
+            flexShrink: 0,
+            maxWidth: 200,
+          }}
+        >
+          Tech stack we use
         </div>
         <div
           style={{
@@ -23,8 +52,10 @@ export function Marquee() {
             minWidth: 240,
             overflow: 'hidden',
             position: 'relative',
-            maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
-            WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+            maskImage:
+              'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+            WebkitMaskImage:
+              'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
           }}
         >
           <div
