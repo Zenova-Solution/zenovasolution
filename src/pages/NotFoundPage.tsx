@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { GhostButton } from '@/components/ui/GhostButton';
 import { NeonButton } from '@/components/ui/NeonButton';
+import { scrollToTop } from '@/lib/scroll';
 
 export function NotFoundPage() {
   useEffect(() => {
-    window.__lenis?.scrollTo(0, { immediate: true }) ?? window.scrollTo({ top: 0, behavior: 'auto' });
+    scrollToTop();
   }, []);
 
   return (

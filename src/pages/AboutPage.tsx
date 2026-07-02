@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { PageHero } from '@/components/layout/PageHero';
-import { CTA } from '@/components/sections/CTA';
-import { SectionHeader } from '@/components/ui/SectionHeader';
+import { Link } from 'react-router-dom';
 import { Icon, type IconName, type IconComponent } from '@/components/icons/Icon';
+import { NeonButton } from '@/components/ui/NeonButton';
+import { GhostButton } from '@/components/ui/GhostButton';
 import { useTeam, useBrand, useContent } from '@/admin/store';
+import { scrollToTop } from '@/lib/scroll';
+import './AboutPage.css';
 
 const SOCIAL_ICON: Record<string, (s: number) => JSX.Element> = {
   twitter: (s) => (
@@ -47,489 +49,203 @@ export function AboutPage() {
   const [TEAM] = useTeam();
   const [brand] = useBrand();
   const [content] = useContent();
-  const LOCATIONS = brand.locations;
+  const LOCATIONS = brand.locations ?? [];
   const VALUES = content.about?.values ?? [];
   const ROLES = content.about?.roles ?? [];
   const TIMELINE = content.about?.timeline ?? [];
 
   useEffect(() => {
-    window.__lenis?.scrollTo(0, { immediate: true }) ?? window.scrollTo({ top: 0, behavior: 'auto' });
+    scrollToTop();
   }, []);
 
-  return (
-    <>
-      <PageHero
-        crumbs={[{ label: 'Home', to: '/' }, { label: 'About' }]}
-        eyebrow="About"
-        title={
-          <>
-            A small team
-            <br />
-            <span style={{ color: 'var(--fg-dim)' }}>doing big work.</span>
-          </>
-        }
-        sub="We're a small studio that handles design, development, and growth — all under one roof."
-        meta={[
-          ['2019', 'Founded'],
-          ['18', 'Team'],
-          ['2', 'Cities'],
-          ['8', 'Active clients'],
-        ]}
-        secondary={{ label: 'See our work', to: '/work' }}
-      />
+  const founded = TIMELINE[0]?.year ?? '2019';
 
-      <section className="sec" style={{ paddingTop: 80 }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 64 }}>
-          <div>
-            <div
-              className="mono"
-              style={{
-                color: 'var(--fg-faint)',
-                marginBottom: 18,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
-              <span style={{ width: 24, height: 1, background: 'var(--accent-2)' }} />
+  return (
+    <div className="abt">
+      <header className="abt-statement">
+        <div className="container">
+          <h1 className="abt-statement__title display">
+            <span>A small team</span>
+            <span className="abt-statement__dim">doing big work,</span>
+            <span>under one roof.</span>
+          </h1>
+          <div className="abt-statement__meta mono">
+            <span>Founded {founded}</span>
+            <span>{TEAM.length} people</span>
+            <span>{LOCATIONS.length} locations</span>
+            <span>Design · Build · Growth</span>
+          </div>
+        </div>
+      </header>
+
+      <section className="abt-story">
+        <div className="container abt-story__grid">
+          <div className="abt-story__aside">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
               Our story
             </div>
-            <h2 className="display" style={{ fontSize: 'clamp(32px,4vw,52px)', margin: 0, fontWeight: 500 }}>
+            <h2 className="abt-story__pull display">
               We built the studio
               <br />
-              <span style={{ color: 'var(--fg-dim)' }}>we wanted to hire.</span>
+              <em>we wanted to hire.</em>
             </h2>
           </div>
-          <div style={{ color: 'var(--fg-dim)', fontSize: 16, lineHeight: 1.7 }}>
-            <p style={{ margin: '0 0 18px' }}>
-              Most of our early clients told us the same story: their brand agency made a great deck, their dev shop built half a product, and their marketing vendor was promoting old messaging.
+          <div className="abt-story__body">
+            <p>
+              Most of our early clients told us the same story: their brand agency made a great deck, their
+              dev shop built half a product, and their marketing vendor was promoting old messaging.
             </p>
-            <p style={{ margin: 0 }}>
-              So we started Zenova to do all of it — design, build, and growth — with one team that stays involved from start to finish.
+            <p>
+              So we started Zenova to do all of it — design, build, and growth — with one team that stays
+              involved from start to finish.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="What we believe"
-            title={<>Three things we don&apos;t change.</>}
-            sub="These show up in every project, big or small."
-          />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 16,
-            }}
-          >
-            {VALUES.map((v) => {
-              const IconC = (Icon[v.icon as IconName] ?? Icon.Layers) as IconComponent;
-              return (
-                <div
-                  key={v.id}
-                  className="card"
-                  style={{
-                    padding: 28,
-                    borderRadius: 20,
-                    border: '1px solid var(--line)',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 14,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 12,
-                      border: `1px solid ${v.hue}40`,
-                      background: `${v.hue}1a`,
-                      color: v.hue,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <IconC size={20} />
+      {VALUES.length > 0 && (
+        <section className="abt-values">
+          <div className="container">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
+              What we believe
+            </div>
+            <div className="abt-values__list">
+              {VALUES.map((v, i) => {
+                const IconC = (Icon[v.icon as IconName] ?? Icon.Layers) as IconComponent;
+                return (
+                  <div key={v.id} className="abt-value" style={{ '--hue': v.hue } as React.CSSProperties}>
+                    <span className="abt-value__num mono">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="abt-value__icon">
+                      <IconC size={20} />
+                    </span>
+                    <div className="abt-value__text">
+                      <h3 className="abt-value__title display">{v.title}</h3>
+                      <p className="abt-value__blurb">{v.blurb}</p>
+                    </div>
                   </div>
-                  <h3 className="display" style={{ fontSize: 20, fontWeight: 500, margin: 0 }}>
-                    {v.title}
-                  </h3>
-                  <p style={{ margin: 0, color: 'var(--fg-dim)', fontSize: 15, lineHeight: 1.6 }}>
-                    {v.blurb}
-                  </p>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="The team"
-            title={<>Meet the team.</>}
-            sub="The people you meet on day one are the same people who do the work."
-          />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 16,
-            }}
-          >
-            {TEAM.map((m) => (
-              <div
-                key={m.id}
-                className="card"
-                style={{
-                  padding: '32px 24px 28px',
-                  borderRadius: 20,
-                  border: '1px solid var(--line)',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 14,
-                  position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = `${m.tone}44`;
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 32px ${m.tone}14`;
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
-                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                  (e.currentTarget as HTMLElement).style.transform = 'none';
-                }}
-              >
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: -60,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    background: `radial-gradient(circle, ${m.tone}20, transparent 60%)`,
-                    pointerEvents: 'none',
-                  }}
-                />
-                <div style={{ position: 'relative', zIndex: 1 }}>
+      {TEAM.length > 0 && (
+        <section className="abt-team">
+          <div className="container">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
+              The team — {TEAM.length} people
+            </div>
+            <div className="abt-team__grid">
+              {TEAM.map((m) => (
+                <div key={m.id} className="abt-member" style={{ '--tone': m.tone } as React.CSSProperties}>
                   {m.avatar ? (
-                    <img
-                      src={m.avatar}
-                      alt={m.name}
-                      style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        border: `3px solid ${m.tone}44`,
-                        boxShadow: `0 0 0 6px ${m.tone}14, 0 8px 28px ${m.tone}33`,
-                      }}
-                    />
+                    <img className="abt-member__avatar" src={m.avatar} alt={m.name} loading="lazy" />
                   ) : (
-                    <div
-                      style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: '50%',
-                        background: `linear-gradient(135deg, ${m.tone}, var(--accent-3))`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 600,
-                        fontSize: 24,
-                        color: '#fff',
-                        boxShadow: `0 8px 28px ${m.tone}55`,
-                      }}
-                    >
-                      {m.initials}
+                    <div className="abt-member__initials display">{m.initials}</div>
+                  )}
+                  <div className="abt-member__name display">{m.name}</div>
+                  <div className="abt-member__role">{m.role}</div>
+                  <p className="abt-member__bio">{m.bio}</p>
+                  {m.socials && m.socials.length > 0 && (
+                    <div className="abt-member__socials">
+                      {m.socials.map((s, si) => {
+                        const icon = SOCIAL_ICON[s.platform];
+                        if (!icon) return null;
+                        return (
+                          <a
+                            key={si}
+                            className="abt-member__social"
+                            href={s.platform === 'email' ? `mailto:${s.url}` : s.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={s.platform}
+                          >
+                            {icon(15)}
+                          </a>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
-                <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-                  <div className="display" style={{ fontSize: 18, fontWeight: 600 }}>
-                    {m.name}
-                  </div>
-                  <div style={{ color: m.tone, fontSize: 13, fontWeight: 500, marginTop: 4 }}>
-                    {m.role}
-                  </div>
-                </div>
-                <p
-                  style={{
-                    margin: 0,
-                    color: 'var(--fg-dim)',
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    textAlign: 'center',
-                    position: 'relative',
-                    zIndex: 1,
-                    maxWidth: 280,
-                  }}
-                >
-                  {m.bio}
-                </p>
-                {m.socials && m.socials.length > 0 && (
-                  <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: 8, justifyContent: 'center', marginTop: 4 }}>
-                    {m.socials.map((s, si) => {
-                      const icon = SOCIAL_ICON[s.platform];
-                      if (!icon) return null;
-                      return (
-                        <a
-                          key={si}
-                          href={s.platform === 'email' ? `mailto:${s.url}` : s.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={s.platform}
-                          style={{
-                            width: 34,
-                            height: 34,
-                            borderRadius: 8,
-                            border: '1px solid var(--line)',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'var(--fg-dim)',
-                            transition: 'color 0.2s, border-color 0.2s, background 0.2s',
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.color = m.tone;
-                            (e.currentTarget as HTMLElement).style.borderColor = `${m.tone}44`;
-                            (e.currentTarget as HTMLElement).style.background = `${m.tone}10`;
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.color = 'var(--fg-dim)';
-                            (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
-                            (e.currentTarget as HTMLElement).style.background = 'transparent';
-                          }}
-                        >
-                          {icon(16)}
-                        </a>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container" style={{ maxWidth: 920 }}>
-          <SectionHeader
-            align="center"
-            eyebrow="Milestones"
-            title={<>A short history.</>}
-          />
-          <div
-            style={{
-              border: '1px solid var(--line)',
-              borderRadius: 20,
-              overflow: 'hidden',
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))',
-            }}
-          >
-            {TIMELINE.map((m, i) => (
-              <div
-                key={m.id}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '120px 1fr',
-                  gap: 24,
-                  padding: '24px 28px',
-                  borderTop: i === 0 ? 'none' : '1px solid var(--line)',
-                  alignItems: 'baseline',
-                }}
-              >
-                <div
-                  className="display"
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 500,
-                    background: 'var(--grad)',
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    color: 'transparent',
-                  }}
-                >
-                  {m.year}
-                </div>
-                <div style={{ color: 'var(--fg-dim)', fontSize: 15, lineHeight: 1.6 }}>{m.what}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div
-          className="container"
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}
-        >
-          <div
-            className="card"
-            style={{
-              padding: 36,
-              borderRadius: 24,
-              border: '1px solid var(--line-strong)',
-              background: 'var(--card)',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            <div style={{ position: 'relative' }}>
-              <div className="mono" style={{ color: 'var(--fg-faint)', marginBottom: 12 }}>
-                Careers
-              </div>
-              <h2
-                className="display"
-                style={{ margin: 0, fontSize: 'clamp(28px, 3vw, 38px)', fontWeight: 500 }}
-              >
-                Want to work with us?
-              </h2>
-              <p
-                style={{
-                  margin: '18px 0 24px',
-                  color: 'var(--fg-dim)',
-                  fontSize: 15,
-                  lineHeight: 1.6,
-                  maxWidth: 380,
-                }}
-              >
-                We hire when we have the right work. Open roles below — or send us a note any time.
-              </p>
-              <div
-                style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}
-              >
-                {ROLES.map((r) => (
-                  <a
-                    key={r.id}
-                    href={r.href || '#'}
-                    onClick={(e) => {
-                      if (!r.href) e.preventDefault();
-                    }}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr auto auto',
-                      gap: 18,
-                      alignItems: 'center',
-                      padding: '14px 18px',
-                      borderRadius: 14,
-                      border: '1px solid var(--line)',
-                      background: 'rgba(0,0,0,0.18)',
-                      textDecoration: 'none',
-                      color: 'var(--fg)',
-                      fontSize: 14,
-                    }}
-                  >
-                    <span>{r.title}</span>
-                    <span
-                      className="mono"
-                      style={{
-                        color: 'var(--fg-faint)',
-                        fontSize: 11,
-                        letterSpacing: '0.1em',
-                      }}
-                    >
-                      {r.location}
-                    </span>
-                    <Icon.Arrow size={14} />
-                  </a>
-                ))}
-              </div>
-              <a
-                href={`mailto:${brand.careersEmail}`}
-                className="mono"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  color: 'var(--accent-3)',
-                }}
-              >
-                Email us: {brand.careersEmail} <Icon.Arrow size={12} />
-              </a>
+              ))}
             </div>
           </div>
+        </section>
+      )}
 
-          <div>
-            <div className="mono" style={{ color: 'var(--fg-faint)', marginBottom: 12 }}>
+      {TIMELINE.length > 0 && (
+        <section className="abt-milestones">
+          <div className="container">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
+              Milestones
+            </div>
+          </div>
+          <div className="abt-milestones__scroller" data-lenis-prevent>
+            <div className="abt-milestones__track">
+              {TIMELINE.map((m) => (
+                <div key={m.id} className="abt-milestone">
+                  <span className="abt-milestone__year display">{m.year}</span>
+                  <span className="abt-milestone__what">{m.what}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="abt-careers">
+        <div className="container abt-careers__grid">
+          <div className="abt-careers__jobs">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
+              Careers
+            </div>
+            <h2 className="abt-careers__title display">Want to work with us?</h2>
+            <p className="abt-careers__sub">
+              We hire when we have the right work. Open roles below — or send us a note any time.
+            </p>
+            <div className="abt-roles">
+              {ROLES.map((r) =>
+                r.href ? (
+                  <a key={r.id} className="abt-role" href={r.href} target="_blank" rel="noreferrer">
+                    <span className="abt-role__title">{r.title}</span>
+                    <span className="abt-role__location mono">{r.location}</span>
+                    <span className="abt-role__arrow">
+                      <Icon.Arrow size={14} />
+                    </span>
+                  </a>
+                ) : (
+                  <Link key={r.id} className="abt-role" to="/careers">
+                    <span className="abt-role__title">{r.title}</span>
+                    <span className="abt-role__location mono">{r.location}</span>
+                    <span className="abt-role__arrow">
+                      <Icon.Arrow size={14} />
+                    </span>
+                  </Link>
+                )
+              )}
+            </div>
+            <Link className="abt-careers__mail mono" to="/careers">
+              View all openings <Icon.Arrow size={12} />
+            </Link>
+          </div>
+
+          <div className="abt-locations">
+            <div className="abt-kicker mono">
+              <span className="abt-kicker__tick" />
               Where we are
             </div>
-            <h2
-              className="display"
-              style={{ margin: 0, fontSize: 'clamp(28px, 3vw, 38px)', fontWeight: 500 }}
-            >
-              Two cities,
-              <br />
-              <span style={{ color: 'var(--fg-dim)' }}>one team.</span>
-            </h2>
-            <p
-              style={{
-                margin: '18px 0 24px',
-                color: 'var(--fg-dim)',
-                fontSize: 15,
-                lineHeight: 1.6,
-                maxWidth: 420,
-              }}
-            >
-              We work across two main cities and overlap a few hours each day.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div className="abt-locations__list">
               {LOCATIONS.map((l) => (
-                <div
-                  key={l.id}
-                  className="card"
-                  style={{
-                    padding: '18px 22px',
-                    borderRadius: 16,
-                    border: '1px solid var(--line)',
-                    background:
-                      'linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr auto',
-                    gap: 14,
-                    alignItems: 'center',
-                  }}
-                >
-                  <div>
-                    <div className="display" style={{ fontSize: 18, fontWeight: 500 }}>
-                      {l.city}
-                    </div>
-                    <div
-                      style={{ color: 'var(--fg-dim)', fontSize: 13, marginTop: 4 }}
-                    >
-                      {l.detail}
-                    </div>
-                  </div>
-                  <div
-                    className="mono"
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: 999,
-                      border: '1px solid var(--line)',
-                      background: 'rgba(255,255,255,0.025)',
-                      color: 'var(--fg)',
-                      fontSize: 11,
-                    }}
-                  >
-                    {l.tz}
-                  </div>
+                <div key={l.id} className="abt-location">
+                  <span className="abt-location__city display">{l.city}</span>
+                  <span className="abt-location__detail">{l.detail}</span>
+                  <span className="abt-location__tz mono">{l.tz}</span>
                 </div>
               ))}
             </div>
@@ -537,7 +253,19 @@ export function AboutPage() {
         </div>
       </section>
 
-      <CTA />
-    </>
+      <section className="abt-cta">
+        <div className="container abt-cta__inner">
+          <h2 className="abt-cta__title display">
+            Like how
+            <br />
+            we think?
+          </h2>
+          <div className="abt-cta__actions">
+            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
+            <GhostButton text="See our work" onClick={() => { window.location.href = '/work'; }} />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
