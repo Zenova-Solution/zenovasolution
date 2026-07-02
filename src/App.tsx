@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
@@ -13,13 +13,11 @@ import { JobDetailPage } from '@/pages/JobDetailPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { ContactPage } from '@/pages/ContactPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { SignIn } from '@/pages/SignIn';
+import { Login } from '@/pages/Login';
 import { Background } from '@/components/ui/Background';
-import { AdminLogin, AuthGate } from '@/admin/pages/Login';
+import { AuthGate } from '@/components/ui/AuthGate';
 import { Overview } from '@/admin/pages/Overview';
-import { ClientLogin, ClientAuthGate } from '@/client/pages/Login';
 import { ClientOverview } from '@/client/pages/Overview';
-import { TeamLogin, TeamAuthGate } from '@/team/pages/Login';
 import { TeamOverview } from '@/team/pages/Overview';
 import { ServicesAdmin } from '@/admin/pages/ServicesAdmin';
 import { ServiceEditor } from '@/admin/pages/ServiceEditor';
@@ -74,34 +72,46 @@ export function App() {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Background />
       <Routes>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
+        {/* Unified login endpoint */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Backward compatibility: redirect old login URLs to unified login */}
+        <Route path="/signin" element={<Navigate to="/login" replace />} />
+        <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+        <Route path="/client/login" element={<Navigate to="/login" replace />} />
+        <Route path="/team/login" element={<Navigate to="/login" replace />} />
+
+        {/* Admin portal - requires admin role */}
         <Route
           path="/admin/*"
           element={
-            <AuthGate>
+            <AuthGate requiredRoles={['admin']}>
               <AdminRoutes />
             </AuthGate>
           }
         />
-        <Route path="/client/login" element={<ClientLogin />} />
+
+        {/* Client portal - requires client or admin role */}
         <Route
           path="/client/*"
           element={
-            <ClientAuthGate>
+            <AuthGate requiredRoles={['client', 'admin']}>
               <ClientRoutes />
-            </ClientAuthGate>
+            </AuthGate>
           }
         />
-        <Route path="/team/login" element={<TeamLogin />} />
+
+        {/* Team portal - requires team or admin role */}
         <Route
           path="/team/*"
           element={
-            <TeamAuthGate>
+            <AuthGate requiredRoles={['team', 'admin']}>
               <TeamRoutes />
-            </TeamAuthGate>
+            </AuthGate>
           }
         />
+
+        {/* Public routes */}
         <Route
           path="/*"
           element={
