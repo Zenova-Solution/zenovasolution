@@ -22,6 +22,7 @@ from app.db import session_scope
 from app.models import (
     BrandSettings,
     ClientProject,
+    Job,
     Project,
     Service,
     SiteContent,
@@ -31,6 +32,7 @@ from app.schemas import (
     BrandSettings as BrandSchema,
 )
 from app.schemas import (
+    JobDetail,
     ProjectDetail,
     ProjectSnapshot,
     ServiceDetail,
@@ -53,6 +55,7 @@ async def seed(force: bool) -> None:
     async with session_scope() as db:
         services_raw = _load("services")
         projects_raw = _load("projects")
+        jobs_raw = _load("jobs")
         team_raw = _load("team")
         content_raw = _load("content")
         brand_raw = _load("brand")
@@ -61,6 +64,7 @@ async def seed(force: bool) -> None:
         # Validate every fixture through Pydantic before touching the DB.
         services = [ServiceDetail.model_validate(s) for s in services_raw]
         projects = [ProjectDetail.model_validate(p) for p in projects_raw]
+        jobs = [JobDetail.model_validate(j) for j in jobs_raw]
         team = [TeamMemberSchema.model_validate(t) for t in team_raw]
         content = SiteContentSchema.model_validate(content_raw)
         brand = BrandSchema.model_validate(brand_raw)
@@ -69,6 +73,7 @@ async def seed(force: bool) -> None:
         if force:
             await db.execute(delete(Service))
             await db.execute(delete(Project))
+            await db.execute(delete(Job))
             await db.execute(delete(TeamMember))
 
         existing_services = {s.slug for s in (await db.execute(select(Service))).scalars()}
@@ -82,6 +87,12 @@ async def seed(force: bool) -> None:
             if p.slug in existing_projects and not force:
                 continue
             db.add(Project(slug=p.slug, position=idx, data=p.model_dump()))
+
+        existing_jobs = {j.slug for j in (await db.execute(select(Job))).scalars()}
+        for idx, j in enumerate(jobs):
+            if j.slug in existing_jobs and not force:
+                continue
+            db.add(Job(slug=j.slug, position=idx, data=j.model_dump()))
 
         existing_team = {t.id for t in (await db.execute(select(TeamMember))).scalars()}
         for idx, t in enumerate(team):

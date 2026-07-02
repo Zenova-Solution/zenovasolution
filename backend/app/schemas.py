@@ -126,6 +126,25 @@ class ProjectDetail(_Base):
 
 
 # ---------------------------------------------------------------------------
+# Jobs / careers
+# ---------------------------------------------------------------------------
+
+class JobDetail(_Base):
+    slug: Slug
+    title: str
+    department: str
+    location: str
+    type: str
+    summary: str
+    description: list[str] = Field(default_factory=list)
+    responsibilities: list[str] = Field(default_factory=list)
+    requirements: list[str] = Field(default_factory=list)
+    applyUrl: str = ""
+    postedAt: str
+    tone: HexColor
+
+
+# ---------------------------------------------------------------------------
 # Team
 # ---------------------------------------------------------------------------
 
@@ -417,6 +436,21 @@ class ProjectPatch(_Base):
     liveUrl: str | None = None
 
 
+class JobPatch(_Base):
+    slug: Slug | None = None
+    title: str | None = None
+    department: str | None = None
+    location: str | None = None
+    type: str | None = None
+    summary: str | None = None
+    description: list[str] | None = None
+    responsibilities: list[str] | None = None
+    requirements: list[str] | None = None
+    applyUrl: str | None = None
+    postedAt: str | None = None
+    tone: HexColor | None = None
+
+
 class TokenPair(_Base):
     access_token: str
     refresh_token: str
@@ -453,6 +487,7 @@ class RefreshRequest(_Base):
 class SiteBundle(_Base):
     services: list[ServiceDetail]
     projects: list[ProjectDetail]
+    jobs: list[JobDetail] = Field(default_factory=list)
     team: list[TeamMember]
     content: SiteContent
     brand: BrandSettings
