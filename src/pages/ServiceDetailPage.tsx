@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { NeonButton } from '@/components/ui/NeonButton';
 import { GhostButton } from '@/components/ui/GhostButton';
-import { PageHero } from '@/components/layout/PageHero';
-import { CTA } from '@/components/sections/CTA';
-import { SectionHeader } from '@/components/ui/SectionHeader';
 import { ServiceVisual } from '@/components/sections/ServiceVisual';
 import { Icon, type IconComponent } from '@/components/icons/Icon';
-import { type ServiceDetail } from '@/data/services';
 import { useServices } from '@/admin/store';
+import { scrollToTop } from '@/lib/scroll';
+import './ServiceDetailPage.css';
 
 export function ServiceDetailPage() {
   const { slug = '' } = useParams();
@@ -15,7 +14,7 @@ export function ServiceDetailPage() {
   const service = SERVICES.find((s) => s.slug === slug);
 
   useEffect(() => {
-    window.__lenis?.scrollTo(0, { immediate: true }) ?? window.scrollTo({ top: 0, behavior: 'auto' });
+    scrollToTop();
   }, [slug]);
 
   if (!service) {
@@ -23,610 +22,215 @@ export function ServiceDetailPage() {
   }
 
   const IconC = Icon[service.icon] as IconComponent;
+  const related = service.related
+    .map((r) => SERVICES.find((s) => s.slug === r))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   return (
-    <>
-      <PageHero
-        crumbs={[
-          { label: 'Home', to: '/' },
-          { label: 'Services', to: '/services' },
-          { label: service.title },
-        ]}
-        eyebrow={`Service · ${service.tag}`}
-        title={
-          <>
-            {service.title.split(' ').slice(0, -1).join(' ')}{' '}
-            <span style={{ color: 'var(--fg-dim)' }}>
-              {service.title.split(' ').slice(-1)}
-            </span>
-          </>
-        }
-        sub={service.hero}
-        meta={service.meta}
-        secondary={{ label: 'See the process', to: '/process' }}
-      />
+    <div className="sd" style={{ '--hue': service.hue } as React.CSSProperties}>
+      <header className="sd-header">
+        <div className="container">
+          <nav className="sd-crumbs mono">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <Link to="/services">Services</Link>
+            <span>/</span>
+            <span className="sd-crumbs__here">{service.title}</span>
+          </nav>
 
-      <section className="sec" style={{ paddingTop: 80 }}>
-        <div
-          className="container svc-detail-overview"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.05fr 1fr',
-            gap: 56,
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            <div
-              className="mono"
-              style={{
-                color: 'var(--fg-faint)',
-                marginBottom: 18,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
-              <span style={{ width: 24, height: 1, background: service.hue }} />
-              Overview
-            </div>
-            <h2
-              className="display"
-              style={{ fontSize: 'clamp(28px,3.4vw,42px)', margin: 0, fontWeight: 500 }}
-            >
-              {service.lede}
-            </h2>
-            <div
-              className="svc-detail-overview-bullets"
-              style={{
-                marginTop: 32,
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '14px 22px',
-                maxWidth: 520,
-              }}
-            >
-              {service.bullets.map((b) => (
-                <div
-                  key={b}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--fg)', fontSize: 15 }}
-                >
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: 7,
-                      border: `1px solid ${service.hue}40`,
-                      background: `${service.hue}1a`,
-                      color: service.hue,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Icon.Check size={12} />
-                  </span>
-                  {b}
-                </div>
-              ))}
-            </div>
+          <div className="sd-header__tag">
+            <span className="sd-header__tag-icon">
+              <IconC size={16} />
+            </span>
+            <span className="mono">{service.tag}</span>
           </div>
 
-          <div
-            style={{
-              aspectRatio: '5 / 3',
-              borderRadius: 22,
-              background: `linear-gradient(135deg, ${service.hue}33, ${service.hue}08)`,
-              border: '1px solid var(--line-strong)',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
+          <h1 className="sd-header__title display">{service.title}</h1>
+          <p className="sd-header__sub">{service.hero}</p>
+
+          {service.meta.length > 0 && (
+            <dl className="sd-spec">
+              {service.meta.map(([value, label]) => (
+                <div key={label} className="sd-spec__cell">
+                  <dt className="mono">{label}</dt>
+                  <dd className="display">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </header>
+
+      <div className="container sd-body">
+        <aside className="sd-rail">
+          <div className="sd-rail__visual">
             {service.image ? (
-              <img
-                src={service.image}
-                alt=""
-                loading="lazy"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
-              />
+              <img src={service.image} alt={service.title} loading="lazy" />
             ) : (
               <ServiceVisual kind={service.visual} hue={service.hue} active />
             )}
-            <div
-              style={{
-                position: 'absolute',
-                left: 18,
-                top: 18,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '8px 12px',
-                borderRadius: 999,
-                background: 'rgba(0,0,0,0.4)',
-                border: '1px solid var(--line)',
-                backdropFilter: 'blur(8px)',
-                color: service.hue,
-              }}
-            >
-              <IconC size={16} />
-              <span className="mono" style={{ color: 'var(--fg)' }}>
-                {service.tag}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
 
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="What you get"
-            title={<>What you get.</>}
-            sub="Every project ships with these — yours to keep and use."
-          />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 16,
-            }}
-          >
-            {service.deliverables.map((d, i) => (
-              <div
-                key={d.title}
-                className="card"
-                style={{
-                  padding: 26,
-                  borderRadius: 18,
-                  border: '1px solid var(--line)',
-                  background:
-                    'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10,
-                }}
-              >
-                <div
-                  className="mono"
-                  style={{ color: service.hue, fontSize: 12, letterSpacing: '0.1em' }}
-                >
-                  {String(i + 1).padStart(2, '0')}
-                </div>
-                <h3 className="display" style={{ margin: 0, fontSize: 20, fontWeight: 500 }}>
-                  {d.title}
-                </h3>
-                <p style={{ margin: 0, color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.6 }}>
-                  {d.blurb}
-                </p>
-              </div>
-            ))}
+          <div className="sd-rail__stat">
+            <span className="sd-rail__stat-num display">{service.stat[0]}</span>
+            <span className="sd-rail__stat-label mono">{service.stat[1]}</span>
           </div>
-        </div>
-      </section>
 
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="How we run it"
-            title={<>How it works.</>}
-            sub="Four simple phases. Each one ends with something you can see and review."
-          />
-          <div
-            style={{
-              border: '1px solid var(--line)',
-              borderRadius: 22,
-              overflow: 'hidden',
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))',
-            }}
-          >
-            {service.phases.map((p, i) => (
-              <div
-                key={p.n}
-                className="svc-detail-phase"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '80px 1.2fr 1fr',
-                  gap: 28,
-                  padding: '28px 32px',
-                  borderTop: i === 0 ? 'none' : '1px solid var(--line)',
-                  alignItems: 'baseline',
-                }}
-              >
-                <div
-                  className="display"
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 500,
-                    background: `linear-gradient(135deg, ${service.hue}, var(--accent-3))`,
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    color: 'transparent',
-                  }}
-                >
-                  {p.n}
-                </div>
-                <div>
-                  <h3 className="display" style={{ margin: 0, fontSize: 22, fontWeight: 500 }}>
-                    {p.title}
-                  </h3>
-                  <p
-                    style={{
-                      margin: '10px 0 0',
-                      color: 'var(--fg-dim)',
-                      fontSize: 15,
-                      lineHeight: 1.6,
-                      maxWidth: 540,
-                    }}
-                  >
-                    {p.blurb}
-                  </p>
-                </div>
-                <div
-                  className="svc-detail-phase__output"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '10px 14px',
-                    borderRadius: 12,
-                    border: '1px solid var(--line)',
-                    background: 'rgba(255,255,255,0.025)',
-                    color: 'var(--fg-dim)',
-                    fontSize: 13,
-                    alignSelf: 'center',
-                    justifySelf: 'start',
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: '50%',
-                      background: service.hue,
-                      boxShadow: `0 0 10px ${service.hue}`,
-                    }}
-                  />
-                  {p.out}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container svc-stack-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
-          <div>
-            <SectionHeader
-              eyebrow="Stack"
-              title={<>Tools we use.</>}
-              sub="Reliable, well-known tools. Nothing fancy for the sake of it."
-            />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {service.stack.map((s) => (
-                <span
-                  key={s}
-                  className="mono"
-                  style={{
-                    padding: '8px 14px',
-                    borderRadius: 999,
-                    border: '1px solid var(--line)',
-                    background: 'rgba(255,255,255,0.025)',
-                    color: 'var(--fg)',
-                    fontSize: 11,
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  {s}
+          <ul className="sd-rail__bullets">
+            {service.bullets.map((b) => (
+              <li key={b}>
+                <span className="sd-check">
+                  <Icon.Check size={11} />
                 </span>
-              ))}
-            </div>
-          </div>
-          <div
-            className="card"
-            style={{
-              padding: 32,
-              borderRadius: 22,
-              border: '1px solid var(--line-strong)',
-              background: `linear-gradient(135deg, ${service.hue}1a, rgba(255,255,255,0.01))`,
-              position: 'relative',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 14,
-            }}
-          >
-            <div className="mono" style={{ color: 'var(--fg-faint)' }}>
-              By the numbers
-            </div>
-            <div
-              className="display"
-              style={{
-                fontSize: 'clamp(40px, 5vw, 72px)',
-                fontWeight: 500,
-                lineHeight: 1,
-                background: `linear-gradient(90deg, ${service.hue}, var(--accent-3))`,
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                color: 'transparent',
-              }}
-            >
-              {service.stat[0]}
-            </div>
-            <div style={{ color: 'var(--fg-dim)', fontSize: 15, lineHeight: 1.5 }}>
-              {service.stat[1]}
-            </div>
-          </div>
-        </div>
-      </section>
+                {b}
+              </li>
+            ))}
+          </ul>
 
-      <section className="sec" style={{ paddingTop: 40 }}>
-        <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="Packages"
-            title={<>Pricing.</>}
-            sub="Starting prices. We’ll quote the exact scope in our intro call."
-          />
-          <div
-            className="svc-pricing-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 18,
-            }}
-          >
-            {service.packages.map((p) => (
-              <div
-                key={p.name}
-                className="card"
-                style={{
-                  padding: 32,
-                  borderRadius: 22,
-                  border: p.featured
-                    ? `1px solid ${service.hue}55`
-                    : '1px solid var(--line)',
-                  background: p.featured
-                    ? `linear-gradient(160deg, ${service.hue}18, rgba(255,255,255,0.01))`
-                    : 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 14,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                {p.featured && (
-                  <span
-                    className="mono"
-                    style={{
-                      position: 'absolute',
-                      top: 18,
-                      right: 18,
-                      padding: '4px 10px',
-                      borderRadius: 999,
-                      background: service.hue,
-                      color: '#fff',
-                      fontSize: 10,
-                    }}
-                  >
-                    Popular
+          {service.stack.length > 0 && (
+            <div className="sd-rail__stack">
+              <div className="sd-label mono">Stack</div>
+              <div className="sd-rail__chips">
+                {service.stack.map((t) => (
+                  <span key={t} className="sd-chip mono">
+                    {t}
                   </span>
-                )}
-                <div className="mono" style={{ color: 'var(--fg-faint)' }}>
-                  {p.cadence}
-                </div>
-                <h3 className="display" style={{ margin: 0, fontSize: 24, fontWeight: 500 }}>
-                  {p.name}
-                </h3>
-                <div
-                  className="display"
-                  style={{
-                    fontSize: 32,
-                    fontWeight: 500,
-                    background: `linear-gradient(90deg, ${service.hue}, var(--accent-3))`,
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    color: 'transparent',
-                  }}
-                >
-                  {p.price}
-                </div>
-                <p style={{ margin: 0, color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.55 }}>
-                  {p.fits}
-                </p>
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}
-                >
-                  {p.includes.map((it) => (
-                    <div
-                      key={it}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                        color: 'var(--fg)',
-                        fontSize: 14,
-                      }}
-                    >
-                      <span
-                        style={{
-                          width: 16,
-                          height: 16,
-                          borderRadius: 5,
-                          background: `${service.hue}22`,
-                          border: `1px solid ${service.hue}40`,
-                          color: service.hue,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Icon.Check size={10} />
-                      </span>
-                      {it}
-                    </div>
-                  ))}
-                </div>
-                <GhostButton
-                  text="Get in touch"
-                  size="xs"
-                  onClick={() => { window.location.href = '/contact'; }}
-                />
+                ))}
               </div>
-            ))}
+            </div>
+          )}
+
+          <div className="sd-rail__cta">
+            <NeonButton text="Start this project" onClick={() => { window.location.href = '/contact'; }} />
           </div>
-        </div>
-      </section>
+        </aside>
 
-      <section className="sec svc-faq" style={{ paddingTop: 40 }}>
-        <div className="container" style={{ maxWidth: 920 }}>
-          <SectionHeader
-            align="center"
-            eyebrow="FAQs"
-            title={<>Common questions.</>}
-          />
-          <div
-            style={{
-              border: '1px solid var(--line)',
-              borderRadius: 22,
-              overflow: 'hidden',
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))',
-            }}
-          >
-            {service.faqs.map((f, i) => (
-              <details
-                key={f.q}
-                style={{
-                  borderTop: i === 0 ? 'none' : '1px solid var(--line)',
-                  padding: '22px 28px',
-                }}
-              >
-                <summary
-                  style={{
-                    cursor: 'pointer',
-                    listStyle: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 16,
-                    color: 'var(--fg)',
-                    fontSize: 16,
-                    fontFamily: 'var(--font-display)',
-                  }}
-                >
-                  {f.q}
-                  <span style={{ color: service.hue }}>
-                    <Icon.Plus size={14} />
-                  </span>
-                </summary>
-                <p style={{ margin: '14px 0 0', color: 'var(--fg-dim)', fontSize: 15, lineHeight: 1.6 }}>
-                  {f.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+        <main className="sd-content">
+          <p className="sd-lede display">{service.lede}</p>
 
-      <RelatedServices current={service} />
+          {service.deliverables.length > 0 && (
+            <section className="sd-section">
+              <div className="sd-label mono">What you get</div>
+              <div className="sd-deliverables">
+                {service.deliverables.map((d, i) => (
+                  <div key={d.title} className="sd-deliverable">
+                    <span className="sd-deliverable__num mono">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className="sd-deliverable__title display">{d.title}</h3>
+                    <p className="sd-deliverable__blurb">{d.blurb}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-      <CTA />
-    </>
-  );
-}
+          {service.phases.length > 0 && (
+            <section className="sd-section">
+              <div className="sd-label mono">How it runs</div>
+              <div className="sd-phases">
+                {service.phases.map((p) => (
+                  <div key={p.n} className="sd-phase">
+                    <span className="sd-phase__num mono">{p.n}</span>
+                    <div className="sd-phase__main">
+                      <h3 className="sd-phase__title display">{p.title}</h3>
+                      <p className="sd-phase__blurb">{p.blurb}</p>
+                    </div>
+                    <div className="sd-phase__out">
+                      <span className="mono">Out →</span> {p.out}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-function RelatedServices({ current }: { current: ServiceDetail }) {
-  const [SERVICES] = useServices();
-  const items = SERVICES.filter((s) => current.related.includes(s.slug));
-  if (!items.length) return null;
+          {service.packages.length > 0 && (
+            <section className="sd-section">
+              <div className="sd-label mono">Packages</div>
+              <div className="sd-packages">
+                {service.packages.map((pkg) => (
+                  <div key={pkg.name} className={`sd-package${pkg.featured ? ' is-featured' : ''}`}>
+                    {pkg.featured && <span className="sd-package__flag mono">Popular</span>}
+                    <h3 className="sd-package__name display">{pkg.name}</h3>
+                    <div className="sd-package__price display">{pkg.price}</div>
+                    <div className="sd-package__cadence mono">{pkg.cadence}</div>
+                    <p className="sd-package__fits">{pkg.fits}</p>
+                    <ul className="sd-package__includes">
+                      {pkg.includes.map((inc) => (
+                        <li key={inc}>
+                          <span className="sd-check">
+                            <Icon.Check size={11} />
+                          </span>
+                          {inc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-  return (
-    <section className="sec" style={{ paddingTop: 40 }}>
-      <div className="container">
-        <SectionHeader
-          eyebrow="Other services"
-          title={<>Often paired with this.</>}
-          sub="These services work well together. Most projects combine two or three."
-        />
-        <div
-          className="svc-related-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 18,
-          }}
-        >
-          {items.map((s) => {
-            const IconC = Icon[s.icon] as IconComponent;
-            return (
-              <Link
-                key={s.slug}
-                to={`/services/${s.slug}`}
-                className="card"
-                style={{
-                  padding: 28,
-                  borderRadius: 20,
-                  border: '1px solid var(--line)',
-                  background:
-                    'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005))',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 14,
-                  textDecoration: 'none',
-                  color: 'var(--fg)',
-                  transition: 'transform .3s, border-color .3s',
-                }}
-              >
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    border: `1px solid ${s.hue}40`,
-                    background: `${s.hue}1a`,
-                    color: s.hue,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <IconC size={20} />
-                </div>
-                <div className="display" style={{ fontSize: 22, fontWeight: 500 }}>
-                  {s.title}
-                </div>
-                <p style={{ margin: 0, color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.55 }}>
-                  {s.short}
-                </p>
-                <div
-                  className="mono"
-                  style={{
-                    marginTop: 'auto',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    color: 'var(--fg-dim)',
-                  }}
-                >
-                  View details <Icon.Arrow size={12} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+          {service.faqs.length > 0 && (
+            <section className="sd-section">
+              <div className="sd-label mono">Questions</div>
+              <div className="sd-faqs">
+                {service.faqs.map((f) => (
+                  <div key={f.q} className="sd-faq">
+                    <h3 className="sd-faq__q display">{f.q}</h3>
+                    <p className="sd-faq__a">{f.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </main>
       </div>
-    </section>
+
+      {related.length > 0 && (
+        <section className="sd-related">
+          <div className="container">
+            <div className="sd-label mono">Pairs well with</div>
+            <div className="sd-related__list">
+              {related.map((r) => {
+                const RIcon = Icon[r.icon] as IconComponent;
+                return (
+                  <Link
+                    key={r.slug}
+                    to={`/services/${r.slug}`}
+                    className="sd-related__row"
+                    style={{ '--hue': r.hue } as React.CSSProperties}
+                  >
+                    <span className="sd-related__icon">
+                      <RIcon size={18} />
+                    </span>
+                    <span className="sd-related__text">
+                      <span className="sd-related__title display">{r.title}</span>
+                      <span className="sd-related__short">{r.short}</span>
+                    </span>
+                    <span className="sd-related__arrow">
+                      <Icon.ArrowUpRight size={18} />
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="sd-cta">
+        <div className="container sd-cta__inner">
+          <h2 className="sd-cta__title display">
+            Ready when
+            <br />
+            you are.
+          </h2>
+          <div className="sd-cta__actions">
+            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
+            <GhostButton text="See the process" onClick={() => { window.location.href = '/process'; }} />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

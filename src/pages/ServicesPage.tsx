@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
-import { PageHero } from '@/components/layout/PageHero';
-import { Services } from '@/components/sections/Services';
-import { CTA } from '@/components/sections/CTA';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
-import { SectionHeader } from '@/components/ui/SectionHeader';
+import { ServiceVisual } from '@/components/sections/ServiceVisual';
+import { NeonButton } from '@/components/ui/NeonButton';
+import { GhostButton } from '@/components/ui/GhostButton';
+import { useServices } from '@/admin/store';
+import { scrollToTop } from '@/lib/scroll';
+import './ServicesPage.css';
 
 interface Pillar {
   tag: string;
@@ -34,133 +37,99 @@ const PILLARS: Pillar[] = [
 ];
 
 export function ServicesPage() {
+  const [SERVICES] = useServices();
+  const [hovered, setHovered] = useState<string | null>(null);
   useEffect(() => {
-    window.__lenis?.scrollTo(0, { immediate: true }) ?? window.scrollTo({ top: 0, behavior: 'auto' });
+    scrollToTop();
   }, []);
 
-  return (
-    <>
-      <PageHero
-        crumbs={[{ label: 'Home', to: '/' }, { label: 'Services' }]}
-        eyebrow="Services"
-        title={
-          <>
-            Five services.
-            <br />
-            <span style={{ color: 'var(--fg-dim)' }}>One team.</span>
-          </>
-        }
-        sub="Everything you need to design, build, and grow your business — without juggling agencies."
-        meta={[
-          ['5', 'Services'],
-          ['20+', 'Projects shipped'],
-          ['4.9 / 5', 'Client rating'],
-          ['6 – 10 wks', 'Typical build'],
-        ]}
-        secondary={{ label: 'See our process', to: '/process' }}
-      />
+  const count = String(SERVICES.length).padStart(2, '0');
 
-      <section className="sec" style={{ paddingTop: 80 }}>
+  return (
+    <div className="svx">
+      <header className="svx-hero">
         <div className="container">
-          <SectionHeader
-            align="center"
-            eyebrow="What we do"
-            title={<>Three areas, one team.</>}
-            sub="Most projects combine two or three. Scroll down to see all five services in detail."
-          />
-          <div
-            className="svc-pillars-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 20,
-            }}
-          >
-            {PILLARS.map((p) => (
-              <div
-                key={p.tag}
-                className="card"
-                style={{
-                  padding: 32,
-                  borderRadius: 20,
-                  border: '1px solid var(--line)',
-                  background: `linear-gradient(160deg, ${p.hue}18, rgba(255,255,255,0.02))`,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 16,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: -40,
-                    right: -40,
-                    width: 160,
-                    height: 160,
-                    borderRadius: '50%',
-                    background: `radial-gradient(circle, ${p.hue}33, transparent 60%)`,
-                    filter: 'blur(20px)',
-                    pointerEvents: 'none',
-                  }}
-                />
-                <span
-                  className="mono"
-                  style={{
-                    alignSelf: 'flex-start',
-                    padding: '6px 12px',
-                    borderRadius: 999,
-                    border: `1px solid ${p.hue}55`,
-                    background: `${p.hue}15`,
-                    color: p.hue,
-                    fontSize: 11,
-                    letterSpacing: '0.1em',
-                    position: 'relative',
-                  }}
-                >
-                  {p.tag}
-                </span>
-                <h3
-                  className="display"
-                  style={{ fontSize: 24, fontWeight: 500, margin: 0, position: 'relative' }}
-                >
-                  {p.title}
-                </h3>
-                <p
-                  style={{
-                    margin: 0,
-                    color: 'var(--fg-dim)',
-                    fontSize: 15,
-                    lineHeight: 1.6,
-                    position: 'relative',
-                  }}
-                >
-                  {p.blurb}
-                </p>
-                <div
-                  className="mono"
-                  style={{
-                    marginTop: 'auto',
-                    paddingTop: 18,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    color: 'var(--fg-dim)',
-                    fontSize: 12,
-                    position: 'relative',
-                  }}
-                >
-                  See all services <Icon.Chevron size={12} dir="down" />
-                </div>
-              </div>
-            ))}
+          <div className="svx-hero__kicker mono">
+            <span className="svx-hero__tick" />
+            Services — index of {count}
           </div>
+          <h1 className="svx-hero__title display">
+            Every discipline
+            <br />
+            <em>under one roof.</em>
+          </h1>
+          <p className="svx-hero__sub">
+            Design, build, and grow your business without juggling agencies. Pick a service below — most
+            projects combine two or three.
+          </p>
+        </div>
+      </header>
+
+      <div className="svx-pillars">
+        <div className="container svx-pillars__row">
+          {PILLARS.map((p) => (
+            <div key={p.tag} className="svx-pillar" style={{ '--hue': p.hue } as React.CSSProperties}>
+              <span className="svx-pillar__tag mono">{p.tag}</span>
+              <span className="svx-pillar__title display">{p.title}</span>
+              <span className="svx-pillar__blurb">{p.blurb}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section className="svx-index">
+        <div className="container">
+          {SERVICES.map((s, i) => (
+            <Link
+              key={s.slug}
+              to={`/services/${s.slug}`}
+              className="svx-row"
+              style={{ '--hue': s.hue } as React.CSSProperties}
+              onMouseEnter={() => setHovered(s.slug)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <span className="svx-row__num mono">{String(i + 1).padStart(2, '0')}</span>
+              <span className="svx-row__main">
+                <span className="svx-row__title display">{s.title}</span>
+                <span className="svx-row__short">{s.short}</span>
+              </span>
+              <span className="svx-row__meta mono">
+                <span className="svx-row__tag">{s.tag}</span>
+                <span className="svx-row__stat">
+                  {s.stat[0]} {s.stat[1]}
+                </span>
+              </span>
+              <span className="svx-row__arrow">
+                <Icon.ArrowUpRight size={22} />
+              </span>
+              <span className="svx-row__preview" aria-hidden="true">
+                {s.image ? (
+                  <img src={s.image} alt="" loading="lazy" />
+                ) : (
+                  <ServiceVisual kind={s.visual} hue={s.hue} active={hovered === s.slug} />
+                )}
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <Services />
-      <CTA />
-    </>
+      <section className="svx-cta">
+        <div className="container svx-cta__inner">
+          <h2 className="svx-cta__title display">
+            Not sure where
+            <br />
+            to start?
+          </h2>
+          <p className="svx-cta__sub">
+            Tell us what you&rsquo;re trying to do — we&rsquo;ll tell you what we&rsquo;d build, honestly.
+          </p>
+          <div className="svx-cta__actions">
+            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
+            <GhostButton text="See our process" onClick={() => { window.location.href = '/process'; }} />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
