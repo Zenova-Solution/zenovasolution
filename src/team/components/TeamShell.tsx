@@ -168,7 +168,7 @@ export function TeamShell({
 
   const handleLogout = () => {
     teamLogout();
-    window.location.href = '/team/login';
+    window.location.href = '/login';
   };
 
   return (

@@ -168,7 +168,7 @@ export function ClientShell({
 
   const handleLogout = () => {
     clientLogout();
-    window.location.href = '/client/login';
+    window.location.href = '/login';
   };
 
   return (
