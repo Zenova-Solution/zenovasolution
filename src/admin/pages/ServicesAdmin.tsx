@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { Toast } from '@/admin/components/Form';
+import { Icon, type IconName } from '@/components/icons/Icon';
 import { createService, deleteService, servicesStore, useServices } from '@/admin/store';
 import type { ServiceDetail } from '@/data/services';
 
-const ICON_OPTIONS = ['Code', 'Spark', 'Rocket', 'Layers', 'Pen', 'Compass', 'Grid'];
+const ICON_OPTIONS = ['Code', 'Spark', 'Rocket', 'Layers', 'Pen', 'Compass', 'Grid', 'AppDev', 'Bot', 'Automation'];
 const VISUAL_OPTIONS = ['browser', 'curve', 'rocket', 'kanban', 'editor'];
 
 function emptyService(): ServiceDetail {
@@ -123,23 +124,26 @@ export function ServicesAdmin() {
             style={{ gridTemplateColumns: '40px 1.4fr 0.8fr 0.6fr 0.6fr 220px' }}
           >
             <div className="adm-list__cell adm-list__cell--lead">
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 8,
-                  background: `${s.hue}22`,
-                  border: `1px solid ${s.hue}55`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: s.hue,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 10,
-                }}
-              >
-                {s.icon.slice(0, 2)}
-              </div>
+              {(() => {
+                const IconC = Icon[s.icon as IconName];
+                return (
+                  <div
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 8,
+                      background: `${s.hue}22`,
+                      border: `1px solid ${s.hue}55`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: s.hue,
+                    }}
+                  >
+                    {IconC ? <IconC size={14} /> : <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10 }}>{s.icon.slice(0, 2)}</span>}
+                  </div>
+                );
+              })()}
             </div>
             <div className="adm-list__cell adm-list__cell--primary">
               <div style={{ fontSize: 14, fontWeight: 500 }}>{s.title}</div>

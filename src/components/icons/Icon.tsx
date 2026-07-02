@@ -161,9 +161,46 @@ const Clock = ({ size = 20 }: IconProps) => (
   </svg>
 );
 
+const AppDev = ({ size = 22 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...stroke} strokeWidth="1.5">
+    <rect x="5" y="2" width="14" height="20" rx="2" />
+    <path d="M9 9.5 6.5 12 9 14.5" />
+    <path d="M15 9.5 17.5 12 15 14.5" />
+    <circle cx="12" cy="18" r="0.8" />
+  </svg>
+);
+
+const Bot = ({ size = 22 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...stroke} strokeWidth="1.5">
+    <rect x="3" y="6" width="18" height="14" rx="3" />
+    <path d="M12 3v3" />
+    <circle cx="12" cy="3" r="1.5" />
+    <circle cx="8" cy="11" r="1.5" />
+    <circle cx="16" cy="11" r="1.5" />
+    <path d="M8 16c1.33 1.33 6.67 1.33 8 0" />
+  </svg>
+);
+
+const Automation = ({ size = 22 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...stroke} strokeWidth="1.5">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="M4.93 4.93l1.41 1.41" />
+    <path d="M17.66 17.66l1.41 1.41" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="M6.34 17.66l-1.41 1.41" />
+    <path d="M19.07 4.93l-1.41 1.41" />
+  </svg>
+);
+
 export const Icon = {
   Arrow,
   ArrowUpRight,
+  AppDev,
+  Bot,
+  Automation,
   Code,
   Spark,
   Rocket,

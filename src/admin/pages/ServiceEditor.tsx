@@ -19,7 +19,7 @@ import type {
   ServicePhase,
   ServiceFAQ,
 } from '@/data/services';
-import type { IconName } from '@/components/icons/Icon';
+import { Icon, type IconName } from '@/components/icons/Icon';
 import type { ServiceVisualKind } from '@/components/sections/ServiceVisual';
 import { ICON_OPTIONS, VISUAL_OPTIONS, emptyService } from './ServicesAdmin';
 
@@ -141,7 +141,18 @@ export function ServiceEditor() {
             <Select
               label="Icon"
               value={draft.icon}
-              options={ICON_OPTIONS.map((i) => ({ value: i, label: i }))}
+              options={ICON_OPTIONS.map((name) => {
+                const IconC = Icon[name as IconName];
+                return {
+                  value: name,
+                  label: name,
+                  icon: IconC ? (
+                    <span style={{ color: draft.hue, display: 'inline-flex' }}>
+                      <IconC size={20} />
+                    </span>
+                  ) : undefined,
+                };
+              })}
               onChange={(v) => update('icon', v as IconName)}
             />
             <ColorField label="Accent hue" value={draft.hue} onChange={(v) => update('hue', v)} />

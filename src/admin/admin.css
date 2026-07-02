@@ -670,7 +670,7 @@
 .adm-select:focus {
   outline: none;
   border-color: var(--accent-2);
-  background: rgba(109, 76, 255, 0.05);
+  background: color-mix(in srgb, var(--accent-1) 5%, transparent);
 }
 
 .adm-textarea {
@@ -1171,7 +1171,7 @@
 .adm-drop:hover,
 .adm-drop.is-over {
   border-color: var(--accent, #e06820);
-  background: rgba(109, 76, 255, 0.06);
+  background: color-mix(in srgb, var(--accent-1) 6%, transparent);
 }
 
 .adm-drop code {
