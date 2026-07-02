@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import {
   ColorField,
@@ -112,9 +113,7 @@ export function ServiceEditor() {
           <button onClick={() => nav('/admin/services')} className="adm-btn">
             Cancel
           </button>
-          <button onClick={save} className="adm-btn adm-btn--primary">
-            Save
-          </button>
+          <Button onClick={save}>Save</Button>
         </>
       }
     >

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { clientLogin, isClientAuthed } from '@/client/store';
 
 export function ClientLogin() {
@@ -81,14 +82,13 @@ export function ClientLogin() {
           />
           {error && <p style={{ color: '#ff6b6b', fontSize: 13, margin: 0 }}>{error}</p>}
         </div>
-        <button
+        <Button
           type="submit"
-          className="adm-btn adm-btn--primary"
-          style={{ justifyContent: 'center' }}
+          className="w-full"
           disabled={busy || !email || !password}
         >
           {busy ? 'Signing in…' : 'Continue'}
-        </button>
+        </Button>
         <p
           style={{
             fontSize: 11,

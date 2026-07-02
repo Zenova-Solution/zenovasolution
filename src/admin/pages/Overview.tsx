@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { Icon } from '@/components/icons/Icon';
 import { useServices, useProjects, useTeam, useContent } from '@/admin/store';
 
 export function Overview() {
@@ -30,12 +32,12 @@ export function Overview() {
       sub="A working snapshot of every editable surface across the marketing site."
       actions={
         <>
-          <Link to="/" className="adm-btn">
-            ↗ View site
+          <Link to="/" className="adm-btn" target="_blank" rel="noreferrer">
+            <Icon.ArrowUpRight size={16} /> View site
           </Link>
-          <Link to="/admin/content" className="adm-btn adm-btn--primary">
-            Edit content
-          </Link>
+          <Button asChild>
+            <Link to="/admin/content">Edit content</Link>
+          </Button>
         </>
       }
     >

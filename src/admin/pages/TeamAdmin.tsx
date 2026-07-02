@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { ColorField, TextArea, TextField, Toast } from '@/admin/components/Form';
 import { ImageField } from '@/admin/components/ImageField';
@@ -98,13 +99,12 @@ export function TeamAdmin() {
               Discard
             </button>
           )}
-          <button
-            className="adm-btn adm-btn--primary"
+          <Button
             onClick={save}
             disabled={!dirty || saving}
           >
             {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
-          </button>
+          </Button>
           <button
             className="adm-btn"
             onClick={() => {

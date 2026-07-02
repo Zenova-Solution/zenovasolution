@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { login } from '@/admin/store';
 import { ApiError } from '@/lib/api';
 import { hasRole, isAuthed, logout } from '@/lib/session';
@@ -101,14 +102,13 @@ export function AdminLogin() {
             <p style={{ color: '#ff6b6b', fontSize: 13, margin: 0 }}>{error}</p>
           )}
         </div>
-        <button
+        <Button
           type="submit"
-          className="adm-btn adm-btn--primary"
-          style={{ justifyContent: 'center' }}
+          className="w-full"
           disabled={busy || !email || !password}
         >
           {busy ? 'Signing in…' : 'Continue'}
-        </button>
+        </Button>
         <a
           href="/"
           style={{

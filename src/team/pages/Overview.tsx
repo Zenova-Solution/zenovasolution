@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@/admin/components/Button';
 import { TeamShell } from '@/team/components/TeamShell';
 import { DateField, Field, Select, TextField, Toast } from '@/admin/components/Form';
 import { Dropdown } from '@/components/ui/inputs';
@@ -129,13 +130,12 @@ export function TeamOverview() {
               Discard
             </button>
           )}
-          <button
-            className="adm-btn adm-btn--primary"
+          <Button
             onClick={save}
             disabled={!dirty || saving}
           >
             {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
-          </button>
+          </Button>
           <button className="adm-btn" onClick={handleReset}>
             Reset demo data
           </button>
@@ -456,14 +456,12 @@ function ActivityComposer({ snap, sessionUserName, onPosted, onError }: Composer
         )}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className="adm-btn adm-btn--primary"
+          <Button
             onClick={post}
             disabled={!ready}
           >
             {posting ? 'Posting…' : 'Post update'}
-          </button>
+          </Button>
           {what && !posting && (
             <button type="button" className="adm-btn" onClick={() => setWhat('')}>
               Clear

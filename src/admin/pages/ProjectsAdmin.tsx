@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { projectsStore, useProjects } from '@/admin/store';
 import type { ProjectDetail } from '@/data/projects';
@@ -125,9 +126,9 @@ export function ProjectsAdmin() {
           >
             Reset
           </button>
-          <Link to="/admin/projects/new" className="adm-btn adm-btn--primary">
-            + New case study
-          </Link>
+          <Button asChild>
+            <Link to="/admin/projects/new">+ New case study</Link>
+          </Button>
         </>
       }
     >

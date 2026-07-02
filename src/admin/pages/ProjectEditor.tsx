@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import {
   ColorField,
@@ -108,9 +109,7 @@ export function ProjectEditor() {
           <button onClick={() => nav('/admin/projects')} className="adm-btn">
             Cancel
           </button>
-          <button onClick={save} className="adm-btn adm-btn--primary">
-            Save
-          </button>
+          <Button onClick={save}>Save</Button>
         </>
       }
     >

@@ -19,6 +19,7 @@ import {
   type AboutValue,
   type SiteContent,
 } from '@/admin/store';
+import { Button } from '@/admin/components/Button';
 import { Icon } from '@/components/icons/Icon';
 
 type Tab = 'hero' | 'cta' | 'faq' | 'testimonials' | 'marquee' | 'about';
@@ -98,13 +99,12 @@ export function ContentAdmin() {
               Discard
             </button>
           )}
-          <button
-            className="adm-btn adm-btn--primary"
+          <Button
             onClick={save}
             disabled={!dirty || saving}
           >
             {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
-          </button>
+          </Button>
           <button
             className="adm-btn"
             onClick={() => {

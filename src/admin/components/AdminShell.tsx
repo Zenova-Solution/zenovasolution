@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Icon } from '@/components/icons/Icon';
 import { currentUser, logout } from '@/admin/store';
 
 import { LogoMark } from "@/components/layout/Logo";
@@ -317,10 +318,7 @@ export function AdminShell({
               title="View site"
             >
               <span className="admin-nav-link__icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 17 17 7" />
-                  <path d="M7 7h10v10" />
-                </svg>
+                <Icon.ArrowUpRight size={18} />
               </span>
               <span className="admin-nav-link__label">View site</span>
             </Link>

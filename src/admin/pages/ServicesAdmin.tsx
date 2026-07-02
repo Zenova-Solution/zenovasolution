@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { Toast } from '@/admin/components/Form';
 import { Icon, type IconName } from '@/components/icons/Icon';
@@ -99,9 +100,9 @@ export function ServicesAdmin() {
           >
             Reset
           </button>
-          <Link to="/admin/services/new" className="adm-btn adm-btn--primary">
-            + New service
-          </Link>
+          <Button asChild>
+            <Link to="/admin/services/new">+ New service</Link>
+          </Button>
         </>
       }
     >

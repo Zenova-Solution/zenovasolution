@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { invoiceStore, useInvoice, useCompanyInfo } from '@/admin/invoices/store';
 import { generateInvoicePDF } from '@/admin/invoices/pdfGenerator';
@@ -102,9 +103,7 @@ export function InvoiceEditor() {
             </svg>
             Download PDF
           </button>
-          <button className="adm-btn adm-btn--primary" onClick={save}>
-            Save Invoice
-          </button>
+          <Button onClick={save}>Save Invoice</Button>
         </>
       }
     >
@@ -363,14 +362,14 @@ export function InvoiceEditor() {
                 </svg>
                 Preview Invoice
               </button>
-              <button className="adm-btn adm-btn--primary" onClick={downloadPDF} style={{ justifyContent: 'center' }}>
+              <Button onClick={downloadPDF}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
                 Download PDF
-              </button>
+              </Button>
             </div>
           </div>
 

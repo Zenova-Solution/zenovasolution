@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { Toast } from '@/admin/components/Form';
 import { Dropdown } from '@/components/ui/inputs';
@@ -219,13 +220,13 @@ export function MediaAdmin() {
             >
               Copy existing URL
             </button>
-            <button
-              className="adm-btn adm-btn--sm adm-btn--primary"
+            <Button
+              size="sm"
               onClick={onConfirmDuplicate}
               disabled={uploading}
             >
               Upload as new copy
-            </button>
+            </Button>
             <button
               className="adm-btn adm-btn--sm adm-btn--ghost"
               onClick={() => setPendingDup(null)}

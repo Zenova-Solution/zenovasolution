@@ -740,7 +740,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  height: 36px;
+  padding: 0 16px;
   border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--card);
@@ -762,17 +763,7 @@
   border-color: var(--line-strong);
 }
 
-.adm-btn--primary {
-  background: var(--grad);
-  border-color: transparent;
-  border: 0px solid transparent;
-  color: #fff;
-  box-shadow: 0 4px 14px var(--adm-shadow);
-}
 
-.adm-btn--primary:hover {
-  filter: brightness(1.1);
-}
 
 .adm-btn--danger {
   color: var(--adm-danger-text);

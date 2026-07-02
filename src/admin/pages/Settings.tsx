@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { Field, TextField, Toast } from '@/admin/components/Form';
 import {
@@ -93,13 +94,12 @@ export function Settings() {
               Discard
             </button>
           )}
-          <button
-            className="adm-btn adm-btn--primary"
+          <Button
             onClick={save}
             disabled={!dirty || saving}
           >
             {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
-          </button>
+          </Button>
           <button className="adm-btn" onClick={handleExport}>
             ↓ Export JSON
           </button>

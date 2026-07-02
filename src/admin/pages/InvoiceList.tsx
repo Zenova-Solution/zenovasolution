@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { invoiceStore, useInvoices, useCompanyInfo } from '@/admin/invoices/store';
 import { emptyInvoice, formatCurrency, totalOf, formatDate } from '@/admin/invoices/types';
@@ -109,9 +110,7 @@ export function InvoiceList() {
             </svg>
             Company
           </button>
-          <button className="adm-btn adm-btn--primary" onClick={createNew}>
-            + New Invoice
-          </button>
+          <Button onClick={createNew}>+ New Invoice</Button>
         </>
       }
     >
@@ -173,9 +172,7 @@ export function InvoiceList() {
               : 'Try adjusting your search or filters.'}
           </div>
           {invoices.length === 0 && (
-            <button className="adm-btn adm-btn--primary" onClick={createNew}>
-              + Create Invoice
-            </button>
+          <Button onClick={createNew}>Create invoice</Button>
           )}
         </div>
       ) : (
@@ -344,9 +341,7 @@ export function InvoiceList() {
                   <button className="adm-btn" onClick={() => setShowSettings(false)}>
                     Cancel
                   </button>
-                  <button className="adm-btn adm-btn--primary" onClick={saveCompanySettings}>
-                    Save Settings
-                  </button>
+                  <Button onClick={saveCompanySettings}>Save Settings</Button>
                 </div>
               </div>
             </div>
