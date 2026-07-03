@@ -42,7 +42,7 @@ export function Home({ rotateMs, showMarquee, showTestimonials }: HomeProps) {
       {showMarquee && <Marquee />}
       <Services />
       <Process />
-      <LiveProgress />
+      {/* <LiveProgress /> */}
       <Work />
       {showTestimonials && <Testimonials />}
       <FAQ />
