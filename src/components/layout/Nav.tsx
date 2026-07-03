@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Logo } from './Logo';
 import { Icon } from '@/components/icons/Icon';
 import type { Theme } from '@/types/tweaks';
-import { applyTheme, getInitialTheme } from '@/lib/theme';
+import { applyTheme, getInitialTheme, subscribeTheme, toggleTheme } from '@/lib/theme';
 
 const NAV_LINKS = [
   { label: 'Services', to: '/services' },
@@ -14,7 +14,6 @@ const NAV_LINKS = [
   { label: 'About', to: '/about' },
 ];
 
-const THEME_CYCLE: Theme[] = ['dark', 'light'];
 const THEME_LABELS: Record<Theme, string> = {
   dark: 'Dark',
   light: 'Light',
@@ -29,6 +28,9 @@ export function Nav() {
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  // Sync when a portal or another tab flips the theme.
+  useEffect(() => subscribeTheme(setTheme), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -53,10 +55,7 @@ export function Nav() {
   }, [menuOpen]);
 
   const cycleTheme = () => {
-    setTheme((prev) => {
-      const idx = THEME_CYCLE.indexOf(prev);
-      return THEME_CYCLE[(idx + 1) % THEME_CYCLE.length];
-    });
+    setTheme((prev) => toggleTheme(prev));
   };
 
   return (

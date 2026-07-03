@@ -4,11 +4,10 @@ import { Icon } from '@/components/icons/Icon';
 import { currentUser, logout } from '@/admin/store';
 
 import { LogoMark } from "@/components/layout/Logo";
+import type { Theme } from '@/types/tweaks';
+import { applyTheme, getInitialTheme, subscribeTheme, toggleTheme } from '@/lib/theme';
 
 const COLLAPSE_KEY = 'zenova.admin.sidebar.collapsed';
-const THEME_KEY = 'zenova.theme';
-
-type Theme = 'dark' | 'light';
 
 function readStoredCollapsed(): boolean {
   if (typeof window === 'undefined') return false;
@@ -18,31 +17,6 @@ function readStoredCollapsed(): boolean {
 function writeStoredCollapsed(v: boolean) {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0');
-}
-
-function readStoredTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
-  const stored = window.localStorage.getItem(THEME_KEY);
-  if (stored === 'light' || stored === 'dark') return stored;
-  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-}
-
-function applyTheme(next: Theme) {
-  const root = document.documentElement;
-  const apply = () => {
-    root.setAttribute('data-theme', next);
-    try {
-      window.localStorage.setItem(THEME_KEY, next);
-    } catch {
-      /* private mode */
-    }
-  };
-  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
-  if (typeof doc.startViewTransition === 'function') {
-    doc.startViewTransition(apply);
-  } else {
-    apply();
-  }
 }
 
 function initialsOf(name: string | undefined, email: string | undefined): string {
@@ -186,7 +160,7 @@ export function AdminShell({
   const location = useLocation();
   const [collapsed, setCollapsedRaw] = useState<boolean>(readStoredCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme>(readStoredTheme);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const user = currentUser();
@@ -196,23 +170,14 @@ export function AdminShell({
     writeStoredCollapsed(v);
   };
 
-  const toggleTheme = () => {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+  const handleToggleTheme = () => {
+    const next = toggleTheme(theme);
     applyTheme(next);
     setTheme(next);
   };
 
   // Re-sync theme state if another tab (or the public site) flips it.
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === THEME_KEY && (e.newValue === 'dark' || e.newValue === 'light')) {
-        setTheme(e.newValue);
-        document.documentElement.setAttribute('data-theme', e.newValue);
-      }
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  useEffect(() => subscribeTheme(setTheme), []);
 
   // Close user menu on outside click + Esc.
   useEffect(() => {
@@ -379,7 +344,7 @@ export function AdminShell({
               <button
                 type="button"
                 className="admin-topbar__icon-btn"
-                onClick={toggleTheme}
+                onClick={handleToggleTheme}
                 aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
                 title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               >

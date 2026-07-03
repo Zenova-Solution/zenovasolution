@@ -37,6 +37,7 @@ import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { useTweaks } from '@/hooks/useTweaks';
 import { applyPalette } from '@/lib/palette';
 import { applyTheme, getInitialTheme } from '@/lib/theme';
+import type { Theme } from '@/types/tweaks';
 import { hydrateSite } from '@/admin/store';
 
 // Tweaks panel ships only in dev builds — lazy import is tree-shaken in prod.
@@ -57,15 +58,19 @@ export function App() {
 
   // On mount, honor the user's stored theme choice; only follow t.theme when
   // the dev tweaks panel actually changes it (never clobber storage with the
-  // static default).
-  const themeInitialized = useRef(false);
+  // static default). Tracking the previous value — not a ran-once flag — keeps
+  // StrictMode's double-invoke from writing the default over a stored choice.
+  const prevTweakTheme = useRef<Theme | null>(null);
   useEffect(() => {
-    if (!themeInitialized.current) {
-      themeInitialized.current = true;
+    if (prevTweakTheme.current === null) {
+      prevTweakTheme.current = t.theme;
       applyTheme(getInitialTheme());
       return;
     }
-    applyTheme(t.theme);
+    if (prevTweakTheme.current !== t.theme) {
+      prevTweakTheme.current = t.theme;
+      applyTheme(t.theme);
+    }
   }, [t.theme]);
 
   return (
