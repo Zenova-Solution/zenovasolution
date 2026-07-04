@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ServiceVisual } from './ServiceVisual';
+import { ServiceMedia } from './ServiceMedia';
 import { Icon } from '@/components/icons/Icon';
 import { useServices } from '@/admin/store';
 import type { ServiceDetail } from '@/data/services';
@@ -48,17 +49,13 @@ function ServiceVisualFull({ s, active }: { s: ServiceDetail; active: boolean })
         overflow: 'hidden',
       }}
     >
-      {s.image ? (
-        <img
-          src={s.image}
+      {s.image || s.video ? (
+        <ServiceMedia
+          image={s.image}
+          video={s.video}
           alt=""
           loading="lazy"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
+          objectFit="cover"
         />
       ) : (
         <ServiceVisual kind={s.visual} hue={s.hue} active={active} />

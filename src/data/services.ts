@@ -36,6 +36,8 @@ export interface ServiceDetail {
   visual: ServiceVisualKind;
   /** Optional hero image / animated GIF for the service card and detail page. */
   image?: string;
+  /** Optional hero video (mp4, webm) for the service card and detail page. Falls back to `image` as poster. */
+  video?: string;
   meta: Array<[string, string]>;
   deliverables: Array<{ title: string; blurb: string }>;
   phases: ServicePhase[];

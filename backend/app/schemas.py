@@ -65,6 +65,7 @@ class ServiceDetail(_Base):
     hue: HexColor
     visual: str
     image: str | None = None
+    video: str | None = None
     meta: list[tuple[str, str]] = Field(default_factory=list)
     deliverables: list[ServiceDeliverable] = Field(default_factory=list)
     phases: list[ServicePhase] = Field(default_factory=list)
@@ -402,6 +403,7 @@ class ServicePatch(_Base):
     hue: HexColor | None = None
     visual: str | None = None
     image: str | None = None
+    video: str | None = None
     meta: list[tuple[str, str]] | None = None
     deliverables: list[ServiceDeliverable] | None = None
     phases: list[ServicePhase] | None = None

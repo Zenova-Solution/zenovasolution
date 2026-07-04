@@ -12,6 +12,7 @@ import {
   Field,
 } from '@/admin/components/Form';
 import { ImageField } from '@/admin/components/ImageField';
+import { VideoField } from '@/admin/components/VideoField';
 import { Toggle } from '@/components/ui/inputs';
 import { createService, patchService, useServices } from '@/admin/store';
 import type {
@@ -217,6 +218,13 @@ export function ServiceEditor() {
             hint="Upload an image or animated GIF, or pick one from the media library. Falls back to the generated visual above if empty."
             value={draft.image ?? ''}
             onChange={(v) => update('image', v || undefined)}
+            prefix="services"
+          />
+          <VideoField
+            label="Hero video"
+            hint="Upload an MP4/WebM video, or pick one from the media library. Plays automatically with the image above as poster."
+            value={draft.video ?? ''}
+            onChange={(v) => update('video', v || undefined)}
             prefix="services"
           />
           <div className="adm-row adm-row--2">

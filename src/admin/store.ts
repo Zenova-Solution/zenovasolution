@@ -841,6 +841,21 @@ export async function uploadImage(
   });
 }
 
+export async function uploadVideo(
+  file: File,
+  opts: { prefix?: string; force?: boolean } = {},
+): Promise<UploadedImage> {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('prefix', opts.prefix ?? 'services');
+  if (opts.force) fd.append('force', 'true');
+  return api<UploadedImage>('/admin/uploads/image', {
+    method: 'POST',
+    formData: fd,
+    auth: true,
+  });
+}
+
 export async function listUploads(prefix?: string): Promise<UploadListResponse> {
   const q = prefix ? `?prefix=${encodeURIComponent(prefix)}` : '';
   return api<UploadListResponse>(`/admin/uploads${q}`, { auth: true });

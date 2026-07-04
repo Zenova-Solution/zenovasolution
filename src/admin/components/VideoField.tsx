@@ -1,120 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Field } from './Form';
+import { uploadVideo } from '@/admin/store';
 import { ApiError } from '@/lib/api';
-import {
-  listUploads,
-  uploadImage,
-  type UploadListItem,
-} from '@/admin/store';
+import { bumpLibraryCache, useLibrary } from './ImageField';
 
-/**
- * One reusable image input. It combines three ways to set a URL:
- *
- *   1. Type / paste any URL into the text input.
- *   2. Pick an already-uploaded image from the dropdown (server-side list).
- *   3. Upload a new file — same name as an existing one triggers a confirm
- *      that re-uploads with ``(1)`` / ``(2)`` suffix.
- */
-
-let libraryCache: { items: UploadListItem[]; loadedAt: number } | null = null;
-const subs = new Set<() => void>();
-const CACHE_MS = 60_000;
-
-async function ensureLibrary(force = false): Promise<UploadListItem[]> {
-  if (!force && libraryCache && Date.now() - libraryCache.loadedAt < CACHE_MS) {
-    return libraryCache.items;
-  }
-  const res = await listUploads();
-  libraryCache = { items: res.items, loadedAt: Date.now() };
-  subs.forEach((s) => s());
-  return res.items;
-}
-
-export function useLibrary(): {
-  items: UploadListItem[];
-  loading: boolean;
-  error: string | null;
-  refresh: () => Promise<void>;
-} {
-  const [items, setItems] = useState<UploadListItem[]>(libraryCache?.items ?? []);
-  const [loading, setLoading] = useState(!libraryCache);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const tick = () => {
-      if (libraryCache) setItems(libraryCache.items);
-    };
-    subs.add(tick);
-
-    (async () => {
-      try {
-        const fresh = await ensureLibrary();
-        if (!cancelled) setItems(fresh);
-      } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : 'Failed to load media library.');
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-      subs.delete(tick);
-    };
-  }, []);
-
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const fresh = await ensureLibrary(true);
-      setItems(fresh);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load media library.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { items, loading, error, refresh };
-}
-
-export function bumpLibraryCache(item?: UploadListItem) {
-  if (!libraryCache) return;
-  if (item) {
-    libraryCache = {
-      items: [item, ...libraryCache.items.filter((it) => it.key !== item.key)],
-      loadedAt: Date.now(),
-    };
-    subs.forEach((s) => s());
-  } else {
-    libraryCache = null;
-  }
-}
-
-export interface ImageFieldProps {
+export interface VideoFieldProps {
   label?: string;
   hint?: string;
   value: string;
   onChange: (next: string) => void;
-  /** R2 folder used for new uploads. */
   prefix?: string;
-  /** Set ``false`` to suppress the small preview below the input (e.g. when the
-   * caller already shows a larger thumbnail). Defaults to ``true``. */
   showPreview?: boolean;
 }
 
-export function ImageField({
-  label = 'Image URL',
-  hint = 'Paste a URL, pick an existing image, or upload a new file (max 10 MB).',
+export function VideoField({
+  label = 'Video URL',
+  hint = 'Paste a URL, pick an existing video, or upload a new file (max 100 MB).',
   value,
   onChange,
-  prefix = 'projects',
+  prefix = 'services',
   showPreview = true,
-}: ImageFieldProps) {
+}: VideoFieldProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -123,33 +29,15 @@ export function ImageField({
   const [error, setError] = useState<string | null>(null);
   const { items, loading, refresh } = useLibrary();
 
-  useEffect(() => {
-    if (!pickerOpen) return;
-    const onDoc = (e: MouseEvent) => {
-      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
-        setPickerOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setPickerOpen(false);
-    };
-    document.addEventListener('mousedown', onDoc);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDoc);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [pickerOpen]);
-
-  const filtered = pickerFilter
-    ? items.filter((it) => it.name.toLowerCase().includes(pickerFilter.toLowerCase()))
-    : items;
+  const videoItems = items.filter(
+    (it) => it.content_type.startsWith('video/'),
+  );
 
   const handleFile = async (file: File, force = false) => {
     setBusy(true);
     setError(null);
     try {
-      const res = await uploadImage(file, { prefix, force });
+      const res = await uploadVideo(file, { prefix, force });
       onChange(res.url);
       bumpLibraryCache({
         url: res.url,
@@ -165,8 +53,8 @@ export function ImageField({
           | { existing_key?: string; existing_url?: string }
           | undefined;
         const useExisting = window.confirm(
-          `An image named "${file.name}" already exists.\n\n` +
-            'OK: reuse the existing image.\n' +
+          `A file named "${file.name}" already exists.\n\n` +
+            'OK: reuse the existing file.\n' +
             'Cancel: upload as a new copy with a (1)/(2) suffix.',
         );
         if (useExisting && details?.existing_url) {
@@ -182,6 +70,10 @@ export function ImageField({
       setBusy(false);
     }
   };
+
+  const filtered = pickerFilter
+    ? videoItems.filter((it) => it.name.toLowerCase().includes(pickerFilter.toLowerCase()))
+    : videoItems;
 
   return (
     <Field label={label} hint={hint}>
@@ -200,13 +92,13 @@ export function ImageField({
             className="adm-btn adm-btn--sm"
             onClick={() => {
               setPickerOpen((o) => !o);
-              if (!libraryCache) void refresh();
+              if (!items.length) void refresh();
             }}
             aria-haspopup="listbox"
             aria-expanded={pickerOpen}
-            title="Choose an existing image"
+            title="Choose an existing video"
           >
-            Library ({items.length}) ▾
+            Library ({videoItems.length}) ▾
           </button>
           {pickerOpen && (
             <div className="adm-image-picker__panel" role="listbox">
@@ -229,12 +121,12 @@ export function ImageField({
                   ↻
                 </button>
               </div>
-              {loading && items.length === 0 ? (
+              {loading && videoItems.length === 0 ? (
                 <div className="adm-image-picker__empty">Loading…</div>
               ) : filtered.length === 0 ? (
                 <div className="adm-image-picker__empty">
-                  {items.length === 0
-                    ? 'No uploads yet. Use the Upload button to add one.'
+                  {videoItems.length === 0
+                    ? 'No videos yet. Use the Upload button to add one.'
                     : 'No matches.'}
                 </div>
               ) : (
@@ -254,11 +146,7 @@ export function ImageField({
                           aria-selected={isActive}
                         >
                           <span className="adm-image-picker__thumb">
-                            {it.content_type.startsWith('video/') ? (
-                              <video src={it.url} style={{ width: 48, height: 36, objectFit: 'cover' }} />
-                            ) : (
-                              <img src={it.url} alt="" loading="lazy" />
-                            )}
+                            <video src={it.url} style={{ width: 48, height: 36, objectFit: 'cover' }} />
                           </span>
                           <span className="adm-image-picker__meta">
                             <span className="adm-image-picker__name" title={it.name}>
@@ -291,7 +179,7 @@ export function ImageField({
         <input
           ref={fileRef}
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/avif,image/gif,image/svg+xml"
+          accept="video/mp4,video/webm,video/ogg,video/quicktime"
           style={{ display: 'none' }}
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -302,11 +190,11 @@ export function ImageField({
       </div>
       {showPreview && value && (
         <div className="adm-image-field__preview">
-          {value.match(/\.(mp4|webm|ogv|mov)(\?|$)/i) ? (
-            <video src={value} style={{ maxHeight: 180, width: '100%', objectFit: 'contain' }} />
-          ) : (
-            <img src={value} alt="" />
-          )}
+          <video
+            src={value}
+            controls
+            style={{ maxHeight: 240, width: '100%', objectFit: 'contain' }}
+          />
         </div>
       )}
       {error && <p style={{ color: '#ff6b6b', fontSize: 12, margin: '6px 0 0' }}>{error}</p>}

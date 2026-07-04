@@ -26,7 +26,7 @@ from app.config import get_settings
 from app.errors import AppError
 from app.logging import logger
 
-_ALLOWED_TYPES = {
+_ALLOWED_IMAGE_TYPES = {
     "image/jpeg": ".jpg",
     "image/png": ".png",
     "image/webp": ".webp",
@@ -34,6 +34,15 @@ _ALLOWED_TYPES = {
     "image/avif": ".avif",
     "image/svg+xml": ".svg",
 }
+
+_ALLOWED_VIDEO_TYPES = {
+    "video/mp4": ".mp4",
+    "video/webm": ".webm",
+    "video/ogg": ".ogv",
+    "video/quicktime": ".mov",
+}
+
+_ALLOWED_TYPES = {**_ALLOWED_IMAGE_TYPES, **_ALLOWED_VIDEO_TYPES}
 
 # Anything outside this set is collapsed to '-' in the stored filename.
 _SAFE_NAME = re.compile(r"[^a-zA-Z0-9._\- ()]+")
@@ -68,7 +77,7 @@ class UploadTooLarge(AppError):
 class UnsupportedMedia(AppError):
     status_code = 415
     code = "unsupported_media"
-    message = "Only common image types are accepted."
+    message = "Only common image and video types are accepted."
 
 
 class DuplicateUpload(AppError):

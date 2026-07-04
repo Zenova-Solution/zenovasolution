@@ -165,7 +165,7 @@ export function MediaAdmin() {
           </div>
           <span style={{ flex: 1 }} />
           <span style={{ fontSize: 12, color: 'var(--fg-faint)' }}>
-            {items.length} {items.length === 1 ? 'image' : 'images'}
+            {items.length} {items.length === 1 ? 'file' : 'files'}
           </span>
         </div>
 
@@ -182,15 +182,15 @@ export function MediaAdmin() {
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/ogg"
             style={{ display: 'none' }}
             onChange={(e) => onPick(e.target.files)}
           />
           <div style={{ fontSize: 14, fontWeight: 500 }}>
-            {uploading ? 'Uploading…' : 'Click or drop an image here'}
+            {uploading ? 'Uploading…' : 'Click or drop an image or video here'}
           </div>
           <div style={{ fontSize: 12, color: 'var(--fg-faint)', marginTop: 4 }}>
-            Up to 10 MB · jpg, png, webp, gif, avif, svg · saved as <code>{prefix}/&lt;filename&gt;</code>
+            Up to 10 MB · jpg, png, webp, gif, avif, svg, mp4, webm · saved as <code>{prefix}/&lt;filename&gt;</code>
           </div>
         </label>
       </div>
@@ -243,7 +243,7 @@ export function MediaAdmin() {
         </div>
       ) : items.length === 0 ? (
         <div className="adm-card" style={{ textAlign: 'center', color: 'var(--fg-faint)' }}>
-          No images yet. Upload one above to get started.
+          No files yet. Upload one above to get started.
         </div>
       ) : (
         <div className="adm-media-grid">
@@ -256,7 +256,9 @@ export function MediaAdmin() {
                 className="adm-media-card__thumb"
                 title={`Open ${item.name}`}
               >
-                {item.content_type.startsWith('image/svg') ? (
+                {item.content_type.startsWith('video/') ? (
+                  <video src={item.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : item.content_type.startsWith('image/svg') ? (
                   <img src={item.url} alt={item.name} />
                 ) : (
                   <img src={item.url} alt={item.name} loading="lazy" />
@@ -267,6 +269,7 @@ export function MediaAdmin() {
                   {item.name}
                 </div>
                 <div className="adm-media-card__meta">
+                  <span>{item.content_type.startsWith('video/') ? '🎬' : '🖼️'}</span>
                   <span>{formatBytes(item.size)}</span>
                   <span>·</span>
                   <span>{formatWhen(item.uploaded_at)}</span>

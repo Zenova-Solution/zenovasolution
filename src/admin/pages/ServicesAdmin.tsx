@@ -24,6 +24,7 @@ function emptyService(): ServiceDetail {
     hue: '#ff813a',
     visual: 'browser',
     image: undefined,
+    video: undefined,
     meta: [
       ['', ''],
       ['', ''],

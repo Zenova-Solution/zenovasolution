@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { GhostButton } from '@/components/ui/GhostButton';
 import { ServiceVisual } from '@/components/sections/ServiceVisual';
+import { ServiceMedia } from '@/components/sections/ServiceMedia';
 import { Icon, type IconComponent } from '@/components/icons/Icon';
 import { useServices } from '@/admin/store';
 import { scrollToTop } from '@/lib/scroll';
@@ -64,8 +65,8 @@ export function ServiceDetailPage() {
       <div className="container sd-body">
         <aside className="sd-rail">
           <div className="sd-rail__visual">
-            {service.image ? (
-              <img src={service.image} alt={service.title} loading="lazy" />
+            {service.image || service.video ? (
+              <ServiceMedia image={service.image} video={service.video} alt={service.title} loading="lazy" objectFit="cover" />
             ) : (
               <ServiceVisual kind={service.visual} hue={service.hue} active />
             )}

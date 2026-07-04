@@ -60,7 +60,7 @@ async def upload(
     prefix: str = Form("projects"),
     force: bool = Form(False),
 ) -> UploadResult:
-    """Upload an image.
+    """Upload an image or video.
 
     By default the object's key is derived from the uploaded filename so the
     library stays human-readable and clients can detect re-uploads. If a key

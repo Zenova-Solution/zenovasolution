@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
 import { ServiceVisual } from '@/components/sections/ServiceVisual';
+import { ServiceMedia } from '@/components/sections/ServiceMedia';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { GhostButton } from '@/components/ui/GhostButton';
 import { useServices } from '@/admin/store';
@@ -103,8 +104,8 @@ export function ServicesPage() {
                 <Icon.ArrowUpRight size={22} />
               </span>
               <span className="svx-row__preview" aria-hidden="true">
-                {s.image ? (
-                  <img src={s.image} alt="" loading="lazy" />
+                {s.image || s.video ? (
+                  <ServiceMedia image={s.image} video={s.video} alt="" loading="lazy" objectFit="cover" />
                 ) : (
                   <ServiceVisual kind={s.visual} hue={s.hue} active={hovered === s.slug} />
                 )}
