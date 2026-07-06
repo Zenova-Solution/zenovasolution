@@ -1,6 +1,7 @@
 import { GhostButton } from '@/components/ui/GhostButton';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { RotatingWords } from '@/components/ui/RotatingWords';
+import { AvailabilityPill } from '@/components/ui/AvailabilityPill';
 import { useContent } from '@/admin/store';
 
 interface HeroProps {
@@ -59,30 +60,11 @@ export function Hero({ rotateMs }: HeroProps) {
       <div style={{ maxWidth: 1100, width: '100%', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         <div
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '8px 16px',
-            borderRadius: 999,
-            border: '1px solid var(--line-strong)',
-            background: 'rgba(255,255,255,0.02)',
-            backdropFilter: 'blur(16px)',
-            fontSize: 13,
-            color: 'var(--fg-dim)',
             marginBottom: 32,
             animation: 'fade-up .9s cubic-bezier(.2,.7,.2,1) both',
           }}
         >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: 'var(--accent-1)',
-              animation: 'pulse-dot 2s ease-in-out infinite',
-            }}
-          />
-          {content.hero.badge}
+          <AvailabilityPill text={content.hero.badge} />
         </div>
 
         <h1
@@ -167,6 +149,16 @@ export function Hero({ rotateMs }: HeroProps) {
               </div>
             </div>
           ))}
+        </div>
+
+        <div
+          style={{
+            marginTop: 48,
+            display: 'flex',
+            justifyContent: 'center',
+            animation: 'fade-up 1.3s cubic-bezier(.2,.7,.2,1) both .55s',
+          }}
+        >
         </div>
       </div>
 
