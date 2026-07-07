@@ -228,7 +228,7 @@ export function ServiceDetailPage() {
           </h2>
           <div className="sd-cta__actions">
             <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
-            <GhostButton text="See the process" onClick={() => { window.location.href = '/process'; }} />
+            <GhostButton text="See the process" onClick={() => { window.location.href = '/services'; }} />
           </div>
         </div>
       </section>

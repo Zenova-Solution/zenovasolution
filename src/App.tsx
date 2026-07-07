@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
 import { ServicesPage } from '@/pages/ServicesPage';
 import { ServiceDetailPage } from '@/pages/ServiceDetailPage';
-import { ProcessPage } from '@/pages/ProcessPage';
+import { PricingPage } from '@/pages/PricingPage';
 import { WorkPage } from '@/pages/WorkPage';
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 import { CareersPage } from '@/pages/CareersPage';
@@ -149,7 +149,7 @@ function PublicLayout({
   useSmoothScroll();
   const location = useLocation();
   const isKnownPath =
-    /^\/(services|process|work|about|contact|careers)?(\/.*)?$/.test(location.pathname);
+    /^\/(services|pricing|work|about|contact|careers)?(\/.*)?$/.test(location.pathname);
   return (
     <>
       <Nav />
@@ -186,7 +186,8 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
         />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/services/:slug" element={<ServiceDetailPage />} />
-        <Route path="/process" element={<ProcessPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/process" element={<Navigate to="/services" replace />} />
         <Route path="/work" element={<WorkPage />} />
         <Route path="/work/:slug" element={<ProjectDetailPage />} />
         <Route path="/careers" element={<CareersPage />} />

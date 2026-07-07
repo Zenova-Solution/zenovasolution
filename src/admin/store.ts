@@ -24,6 +24,9 @@ import {
 import { SERVICES as DEFAULT_SERVICES, type ServiceDetail } from '@/data/services';
 import { PROJECTS as DEFAULT_PROJECTS, type ProjectDetail } from '@/data/projects';
 import { JOBS as DEFAULT_JOBS, type JobDetail } from '@/data/jobs';
+import { PRICING as DEFAULT_PRICING, type PricingService } from '@/data/pricing';
+
+export type { PricingPlan, PricingService } from '@/data/pricing';
 
 type Listener = () => void;
 type Status = 'idle' | 'loading' | 'ready' | 'error';
@@ -190,6 +193,8 @@ export interface SiteContent {
   about: AboutContent;
   footer?: FooterContent;
   legal?: LegalContent;
+  /** Rate cards for the /pricing page — one entry per service tab. */
+  pricing?: PricingService[];
 }
 
 export interface BrandSettings {
@@ -369,7 +374,7 @@ export const DEFAULT_CONTENT: SiteContent = {
         links: [
           { id: 'fl6', label: 'About', href: '/about' },
           { id: 'fl7', label: 'Work', href: '/work' },
-          { id: 'fl8', label: 'Process', href: '/process' },
+          { id: 'fl8', label: 'Pricing', href: '/pricing' },
           { id: 'fl9', label: 'Contact', href: '/contact' },
         ],
       },
@@ -444,6 +449,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       ],
     },
   },
+  pricing: DEFAULT_PRICING,
 };
 
 const DEFAULT_BRAND: BrandSettings = {

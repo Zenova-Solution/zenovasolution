@@ -8,7 +8,7 @@ import { applyTheme, getInitialTheme, subscribeTheme, toggleTheme } from '@/lib/
 
 const NAV_LINKS = [
   { label: 'Services', to: '/services' },
-  { label: 'Process', to: '/process' },
+  { label: 'Pricing', to: '/pricing' },
   { label: 'Work', to: '/work' },
   { label: 'Careers', to: '/careers' },
   { label: 'About', to: '/about' },

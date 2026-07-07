@@ -317,6 +317,28 @@ class AboutContent(_Base):
     timeline: list[AboutMilestone] = Field(default_factory=list)
 
 
+class PricingPlan(_Base):
+    """One card on the /pricing page. Mirrors ``src/data/pricing.ts``."""
+
+    id: str
+    name: str
+    info: str = ""
+    price: str
+    timeline: str = ""
+    features: list[str] = Field(default_factory=list)
+    cta: str = "Start this project"
+    highlighted: bool = False
+
+
+class PricingService(_Base):
+    """One service tab on the /pricing page with its rate card."""
+
+    slug: Slug
+    label: str
+    hue: HexColor
+    plans: list[PricingPlan] = Field(default_factory=list)
+
+
 class SiteContent(_Base):
     hero: HeroContent
     cta: CTAContent
@@ -330,6 +352,7 @@ class SiteContent(_Base):
     about: AboutContent = Field(default_factory=AboutContent)
     footer: FooterContent | None = None
     legal: LegalContent | None = None
+    pricing: list[PricingService] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -465,6 +488,7 @@ class SiteContentPatch(_Base):
     about: AboutContent | None = None
     footer: FooterContent | None = None
     legal: LegalContent | None = None
+    pricing: list[PricingService] | None = None
 
 
 class TeamMemberPatch(_Base):
