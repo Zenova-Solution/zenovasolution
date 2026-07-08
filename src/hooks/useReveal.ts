@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 
 /**
  * Adds an `.in` class to every element matching `.reveal` once it scrolls into
- * view. Re-runs whenever any dep changes so newly-mounted reveals are wired up.
+ * view. A MutationObserver picks up `.reveal` elements mounted after the
+ * effect runs (route changes, store hydration, list filters), so a single
+ * call at the layout level covers every page.
  */
 export function useReveal(deps: ReadonlyArray<unknown> = []): void {
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -18,8 +19,16 @@ export function useReveal(deps: ReadonlyArray<unknown> = []): void {
       },
       { threshold: 0.12 },
     );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const observeAll = () => {
+      document.querySelectorAll('.reveal:not(.in)').forEach((el) => io.observe(el));
+    };
+    observeAll();
+    const mo = new MutationObserver(observeAll);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }

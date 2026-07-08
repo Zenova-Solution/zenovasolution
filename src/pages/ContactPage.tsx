@@ -34,22 +34,22 @@ export function ContactPage() {
   return (
     <section className="ct-split">
       <div className="ct-intro">
-        <div className="ct-kicker mono">
+        <div className="ct-kicker mono reveal">
           <span className="ct-kicker__tick" />
           Contact — replies within 24h
         </div>
 
-        <h1 className="ct-title display">
+        <h1 className="ct-title display reveal reveal-blur reveal-d1">
           Let&rsquo;s
           <br />
           talk<span className="gradient-text">.</span>
         </h1>
 
-        <p className="ct-sub">
+        <p className="ct-sub reveal reveal-d2">
           No pitch decks, no pressure &mdash; just a genuine conversation about what you&rsquo;re building.
         </p>
 
-        <div className="ct-details">
+        <div className="ct-details reveal reveal-d3">
           {details.map((d) => (
             <div key={d.label} className="ct-detail">
               <span className="ct-detail__icon">{Icon[d.icon]({ size: 18 })}</span>
@@ -80,7 +80,7 @@ export function ContactPage() {
         )}
       </div>
 
-      <div className="ct-pane">
+      <div className="ct-pane reveal reveal-d2">
         <div className="ct-pane__tag mono">Form / 01</div>
 
         {submitted ? (

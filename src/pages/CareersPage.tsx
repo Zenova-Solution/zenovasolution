@@ -44,22 +44,22 @@ export function CareersPage() {
     <div className="car">
       <header className="car-hero">
         <div className="container">
-          <div className="car-hero__kicker mono">
+          <div className="car-hero__kicker mono reveal">
             <span className="car-hero__tick" />
             Careers — {count} open {sorted.length === 1 ? 'role' : 'roles'}
           </div>
-          <h1 className="car-hero__title display">
+          <h1 className="car-hero__title display reveal reveal-blur reveal-d1">
             Build the work
             <br />
             <em>you&rsquo;re proud of.</em>
           </h1>
-          <p className="car-hero__sub">
+          <p className="car-hero__sub reveal reveal-d2">
             One team, design to launch. If you like owning your work end-to-end and shipping fast,
             we&rsquo;d love to talk. Open roles below.
           </p>
 
           {sorted.length > 0 && (
-            <nav className="car-filters mono" aria-label="Filter roles by department">
+            <nav className="car-filters mono reveal reveal-d3" aria-label="Filter roles by department">
               {filters.map((f) => {
                 const n = counts.get(f) ?? 0;
                 const on = filter === f;
@@ -84,12 +84,12 @@ export function CareersPage() {
         <div className="container">
           {jobs.length > 0 ? (
             <div className="car-grid">
-              {jobs.map((j) => (
+              {jobs.map((j, i) => (
                 <Link
                   key={j.slug}
                   to={`/careers/${j.slug}`}
-                  className="car-card"
-                  style={{ '--tone': j.tone } as React.CSSProperties}
+                  className="car-card reveal"
+                  style={{ '--tone': j.tone, '--reveal-delay': `${(i % 3) * 0.08}s` } as React.CSSProperties}
                 >
                   <div className="car-card__top mono">
                     <span className="car-card__dept">{j.department}</span>
@@ -129,7 +129,7 @@ export function CareersPage() {
       </section>
 
       <section className="car-cta">
-        <div className="container car-cta__inner">
+        <div className="container car-cta__inner reveal">
           <h2 className="car-cta__title display">
             Don&rsquo;t see
             <br />

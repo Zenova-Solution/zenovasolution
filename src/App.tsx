@@ -33,6 +33,7 @@ import { InvoiceList } from '@/admin/pages/InvoiceList';
 import { InvoiceEditor } from '@/admin/pages/InvoiceEditor';
 import { TWEAK_DEFAULTS } from '@/config/tweaks';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
+import { useReveal } from '@/hooks/useReveal';
 import { useTweaks } from '@/hooks/useTweaks';
 import { applyPalette } from '@/lib/palette';
 import { applyTheme, getInitialTheme } from '@/lib/theme';
@@ -147,6 +148,7 @@ function PublicLayout({
   showTestimonials,
 }: PublicLayoutProps) {
   useSmoothScroll();
+  useReveal();
   const location = useLocation();
   const isKnownPath =
     /^\/(services|pricing|work|about|contact|careers)?(\/.*)?$/.test(location.pathname);

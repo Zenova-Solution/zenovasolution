@@ -10,6 +10,7 @@ interface SectionHeaderProps {
 export function SectionHeader({ eyebrow, title, sub, align = 'left' }: SectionHeaderProps) {
   return (
     <div
+      className="reveal reveal-blur"
       style={{
         maxWidth: align === 'center' ? 760 : 880,
         margin: align === 'center' ? '0 auto 64px' : '0 0 64px',

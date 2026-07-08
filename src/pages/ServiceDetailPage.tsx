@@ -39,18 +39,18 @@ export function ServiceDetailPage() {
             <span className="sd-crumbs__here">{service.title}</span>
           </nav>
 
-          <div className="sd-header__tag">
+          <div className="sd-header__tag reveal">
             <span className="sd-header__tag-icon">
               <IconC size={16} />
             </span>
             <span className="mono">{service.tag}</span>
           </div>
 
-          <h1 className="sd-header__title display">{service.title}</h1>
-          <p className="sd-header__sub">{service.hero}</p>
+          <h1 className="sd-header__title display reveal reveal-blur reveal-d1">{service.title}</h1>
+          <p className="sd-header__sub reveal reveal-d2">{service.hero}</p>
 
           {service.meta.length > 0 && (
-            <dl className="sd-spec">
+            <dl className="sd-spec reveal reveal-d3">
               {service.meta.map(([value, label]) => (
                 <div key={label} className="sd-spec__cell">
                   <dt className="mono">{label}</dt>
@@ -63,7 +63,7 @@ export function ServiceDetailPage() {
       </header>
 
       <div className="container sd-body">
-        <aside className="sd-rail">
+        <aside className="sd-rail reveal">
           <div className="sd-rail__visual">
             {service.image || service.video ? (
               <ServiceMedia image={service.image} video={service.video} alt={service.title} loading="lazy" objectFit="cover" />
@@ -107,10 +107,10 @@ export function ServiceDetailPage() {
         </aside>
 
         <main className="sd-content">
-          <p className="sd-lede display">{service.lede}</p>
+          <p className="sd-lede display reveal reveal-d1">{service.lede}</p>
 
           {service.deliverables.length > 0 && (
-            <section className="sd-section">
+            <section className="sd-section reveal">
               <div className="sd-label mono">What you get</div>
               <div className="sd-deliverables">
                 {service.deliverables.map((d, i) => (
@@ -125,7 +125,7 @@ export function ServiceDetailPage() {
           )}
 
           {service.phases.length > 0 && (
-            <section className="sd-section">
+            <section className="sd-section reveal">
               <div className="sd-label mono">How it runs</div>
               <div className="sd-phases">
                 {service.phases.map((p) => (
@@ -145,7 +145,7 @@ export function ServiceDetailPage() {
           )}
 
           {service.packages.length > 0 && (
-            <section className="sd-section">
+            <section className="sd-section reveal">
               <div className="sd-label mono">Packages</div>
               <div className="sd-packages">
                 {service.packages.map((pkg) => (
@@ -172,7 +172,7 @@ export function ServiceDetailPage() {
           )}
 
           {service.faqs.length > 0 && (
-            <section className="sd-section">
+            <section className="sd-section reveal">
               <div className="sd-label mono">Questions</div>
               <div className="sd-faqs">
                 {service.faqs.map((f) => (
@@ -190,8 +190,8 @@ export function ServiceDetailPage() {
       {related.length > 0 && (
         <section className="sd-related">
           <div className="container">
-            <div className="sd-label mono">Pairs well with</div>
-            <div className="sd-related__list">
+            <div className="sd-label mono reveal">Pairs well with</div>
+            <div className="sd-related__list reveal reveal-d1">
               {related.map((r) => {
                 const RIcon = Icon[r.icon] as IconComponent;
                 return (
@@ -220,7 +220,7 @@ export function ServiceDetailPage() {
       )}
 
       <section className="sd-cta">
-        <div className="container sd-cta__inner">
+        <div className="container sd-cta__inner reveal">
           <h2 className="sd-cta__title display">
             Ready when
             <br />

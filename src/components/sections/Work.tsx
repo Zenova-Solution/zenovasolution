@@ -149,13 +149,13 @@ export function Work() {
           sub="A few examples of what we’ve built and grown."
         />
 
-        <div className="ember-ledger">
+        <div className="ember-ledger reveal reveal-d1">
           {projects.map((p, i) => (
             <EmberRow key={p.slug} project={p} index={i} reduced={reduced} />
           ))}
         </div>
 
-        <div className="ember-ledger__footer">
+        <div className="ember-ledger__footer reveal reveal-d2">
           <GhostButton text="See all projects" onClick={() => navigate('/work')} />
         </div>
       </div>

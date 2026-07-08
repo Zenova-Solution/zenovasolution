@@ -55,16 +55,16 @@ export function WorkPage() {
     <div className="wrk">
       <header className="wrk-masthead">
         <div className="container">
-          <div className="wrk-masthead__kicker mono">
+          <div className="wrk-masthead__kicker mono reveal">
             <span className="wrk-masthead__tick" />
             Selected work
           </div>
-          <h1 className="wrk-masthead__title display">
+          <h1 className="wrk-masthead__title display reveal reveal-blur reveal-d1">
             Proof,
             <br />
             <em>not promises.</em>
           </h1>
-          <nav className="wrk-filters mono" aria-label="Filter projects">
+          <nav className="wrk-filters mono reveal reveal-d2" aria-label="Filter projects">
             {FILTERS.map((f) => {
               const n = counts.get(f) ?? 0;
               const on = filter === f;
@@ -89,7 +89,7 @@ export function WorkPage() {
           <div className="container">
             <Link
               to={`/work/${featured.slug}`}
-              className="wrk-featured__card"
+              className="wrk-featured__card reveal"
               style={{ '--tone': featured.tone } as React.CSSProperties}
               onMouseEnter={() => setHovered(featured.slug)}
               onMouseLeave={() => setHovered(null)}
@@ -134,7 +134,7 @@ export function WorkPage() {
               <Link
                 key={p.slug}
                 to={`/work/${p.slug}`}
-                className={`wrk-row${i % 2 === 1 ? ' wrk-row--flip' : ''}`}
+                className={`wrk-row reveal${i % 2 === 1 ? ' wrk-row--flip' : ''}`}
                 style={{ '--tone': p.tone } as React.CSSProperties}
                 onMouseEnter={() => setHovered(p.slug)}
                 onMouseLeave={() => setHovered(null)}
@@ -176,7 +176,7 @@ export function WorkPage() {
       )}
 
       <section className="wrk-cta">
-        <div className="container wrk-cta__inner">
+        <div className="container wrk-cta__inner reveal">
           <h2 className="wrk-cta__title display">
             Your project
             <br />

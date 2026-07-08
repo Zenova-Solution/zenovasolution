@@ -9,7 +9,7 @@ export function CTA() {
     <section id="contact" className="sec" style={{ paddingBottom: 80 }}>
       <div className="container">
         <div
-          className="cta-card"
+          className="cta-card reveal"
           style={{
             position: 'relative',
             overflow: 'hidden',

@@ -120,7 +120,7 @@ export function Services() {
     <section id="services" className="sec" style={{ position: 'relative', padding: '120px 0 140px' }}>
       <div className="svc-header-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
         {/* Section heading */}
-        <div style={{ marginBottom: 60 }}>
+        <div className="reveal reveal-blur" style={{ marginBottom: 60 }}>
           <div
             className="mono"
             style={{
@@ -142,7 +142,7 @@ export function Services() {
         </div>
 
         {/* Expanding panels */}
-        <div className="svc-panels" data-mode={canExpand ? 'panels' : 'stack'}>
+        <div className="svc-panels reveal reveal-d1" data-mode={canExpand ? 'panels' : 'stack'}>
           {SERVICES.map((s, i) => (
             <ServicePanel
               key={s.slug}

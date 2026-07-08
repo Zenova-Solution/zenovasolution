@@ -53,14 +53,14 @@ export function JobDetailPage() {
             <span className="jd-crumbs__here">{job.title}</span>
           </nav>
 
-          <div className="jd-header__tag">
+          <div className="jd-header__tag reveal">
             <span className="mono">{job.department}</span>
           </div>
 
-          <h1 className="jd-header__title display">{job.title}</h1>
-          <p className="jd-header__sub">{job.summary}</p>
+          <h1 className="jd-header__title display reveal reveal-blur reveal-d1">{job.title}</h1>
+          <p className="jd-header__sub reveal reveal-d2">{job.summary}</p>
 
-          <dl className="jd-spec">
+          <dl className="jd-spec reveal reveal-d3">
             {specs.map(([label, value]) => (
               <div key={label} className="jd-spec__cell">
                 <dt className="mono">{label}</dt>
@@ -72,7 +72,7 @@ export function JobDetailPage() {
       </header>
 
       <div className="container jd-body">
-        <aside className="jd-rail">
+        <aside className="jd-rail reveal">
           <div className="jd-rail__card">
             <div className="jd-label mono">Ready to apply?</div>
             <p className="jd-rail__blurb">
@@ -89,7 +89,7 @@ export function JobDetailPage() {
 
         <main className="jd-content">
           {job.description.length > 0 && (
-            <section className="jd-section">
+            <section className="jd-section reveal reveal-d1">
               {job.description.map((p, i) => (
                 <p key={i} className="jd-lede">
                   {p}
@@ -99,7 +99,7 @@ export function JobDetailPage() {
           )}
 
           {job.responsibilities.length > 0 && (
-            <section className="jd-section">
+            <section className="jd-section reveal">
               <div className="jd-label mono">What you&rsquo;ll do</div>
               <ul className="jd-list">
                 {job.responsibilities.map((r) => (
@@ -115,7 +115,7 @@ export function JobDetailPage() {
           )}
 
           {job.requirements.length > 0 && (
-            <section className="jd-section">
+            <section className="jd-section reveal">
               <div className="jd-label mono">What we&rsquo;re looking for</div>
               <ul className="jd-list">
                 {job.requirements.map((r) => (
@@ -133,7 +133,7 @@ export function JobDetailPage() {
       </div>
 
       <section className="jd-cta">
-        <div className="container jd-cta__inner">
+        <div className="container jd-cta__inner reveal">
           <h2 className="jd-cta__title display">
             Sound like
             <br />

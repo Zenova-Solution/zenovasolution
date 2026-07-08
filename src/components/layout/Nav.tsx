@@ -73,6 +73,7 @@ export function Nav() {
       }}
     >
       <div
+        className="nav-shell-enter"
         style={{
           width: '100%',
           maxWidth: scrolled ? 920 : 1200,
@@ -91,7 +92,7 @@ export function Nav() {
         }}
       >
         <Link to="/" style={{ display: 'inline-flex' }} onClick={() => setMenuOpen(false)}>
-          <Logo size={25} />
+          <Logo size={25} animate />
         </Link>
         <div className="nav-links" style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
           {NAV_LINKS.map((l) => {

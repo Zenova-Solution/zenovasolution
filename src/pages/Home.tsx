@@ -7,7 +7,6 @@ import { Work } from '@/components/sections/Work';
 import Testimonials from '@/components/ui/testimonials-demo';
 import { FAQ } from '@/components/sections/FAQ';
 import { CTA } from '@/components/sections/CTA';
-import { useReveal } from '@/hooks/useReveal';
 
 interface HomeProps {
   rotateMs: number;
@@ -15,8 +14,7 @@ interface HomeProps {
   showTestimonials: boolean;
 }
 
-export function Home({ rotateMs, showMarquee, showTestimonials }: HomeProps) {
-  useReveal([showMarquee, showTestimonials]);
+export function Home({ rotateMs, showTestimonials }: HomeProps) {
   const location = useLocation();
 
   useEffect(() => {

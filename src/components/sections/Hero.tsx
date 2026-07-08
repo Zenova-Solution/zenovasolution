@@ -61,7 +61,7 @@ export function Hero({ rotateMs }: HeroProps) {
         <div
           style={{
             marginBottom: 32,
-            animation: 'fade-up .9s cubic-bezier(.2,.7,.2,1) both',
+            animation: 'fade-up 1.2s cubic-bezier(.2,.7,.2,1) both .2s',
           }}
         >
           <AvailabilityPill text={content.hero.badge} />
@@ -69,13 +69,13 @@ export function Hero({ rotateMs }: HeroProps) {
 
         <h1
           className="display hero-headline"
-          style={{ margin: 0, animation: 'fade-up 1s cubic-bezier(.2,.7,.2,1) both' }}
+          style={{ margin: 0, animation: 'fade-up 1.4s cubic-bezier(.2,.7,.2,1) both .35s' }}
         >
           {content.hero.headline}
         </h1>
         <div
           className="hero-rotating-row"
-          style={{ animation: 'fade-up 1s cubic-bezier(.2,.7,.2,1) both .05s' }}
+          style={{ animation: 'fade-up 1.4s cubic-bezier(.2,.7,.2,1) both .5s' }}
         >
           <RotatingWords words={SERVICES} intervalMs={rotateMs} />
         </div>
@@ -90,7 +90,7 @@ export function Hero({ rotateMs }: HeroProps) {
             marginLeft: 'auto',
             marginRight: 'auto',
             lineHeight: 1.55,
-            animation: 'fade-up 1.1s cubic-bezier(.2,.7,.2,1) both .15s',
+            animation: 'fade-up 1.4s cubic-bezier(.2,.7,.2,1) both .7s',
           }}
         >
           {content.hero.sub}
@@ -104,7 +104,7 @@ export function Hero({ rotateMs }: HeroProps) {
             gap: 12,
             flexWrap: 'wrap',
             justifyContent: 'center',
-            animation: 'fade-up 1.2s cubic-bezier(.2,.7,.2,1) both .3s',
+            animation: 'fade-up 1.4s cubic-bezier(.2,.7,.2,1) both .9s',
           }}
         >
           <NeonButton
@@ -136,7 +136,7 @@ export function Hero({ rotateMs }: HeroProps) {
             padding: '24px 0',
             borderTop: '1px solid var(--line)',
             borderBottom: '1px solid var(--line)',
-            animation: 'fade-up 1.3s cubic-bezier(.2,.7,.2,1) both .45s',
+            animation: 'fade-up 1.5s cubic-bezier(.2,.7,.2,1) both 1.1s',
           }}
         >
           {STATS.map((stat) => (
@@ -156,7 +156,7 @@ export function Hero({ rotateMs }: HeroProps) {
             marginTop: 48,
             display: 'flex',
             justifyContent: 'center',
-            animation: 'fade-up 1.3s cubic-bezier(.2,.7,.2,1) both .55s',
+            animation: 'fade-up 1.5s cubic-bezier(.2,.7,.2,1) both 1.2s',
           }}
         >
         </div>

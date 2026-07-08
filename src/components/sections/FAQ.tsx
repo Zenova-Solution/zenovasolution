@@ -126,6 +126,7 @@ export function FAQ() {
         />
 
         <div
+          className="reveal reveal-d1"
           style={{
             maxWidth: 920,
             margin: '0 auto',
@@ -147,6 +148,7 @@ export function FAQ() {
         </div>
 
         <div
+          className="reveal reveal-d2"
           style={{
             marginTop: 48,
             display: 'flex',

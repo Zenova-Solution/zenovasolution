@@ -67,13 +67,13 @@ export function ProjectDetailPage() {
             <span>/</span>
             <span className="pd-crumbs__here">{project.client}</span>
           </nav>
-          <div className="pd-hero__kicker mono">
+          <div className="pd-hero__kicker mono reveal">
             {project.category} · {project.year} · {project.industry}
           </div>
-          <h1 className="pd-hero__client display">{project.client}</h1>
-          <p className="pd-hero__lede">{project.hero}</p>
+          <h1 className="pd-hero__client display reveal reveal-blur reveal-d1">{project.client}</h1>
+          <p className="pd-hero__lede reveal reveal-d2">{project.hero}</p>
 
-          <div className="pd-hero__metrics">
+          <div className="pd-hero__metrics reveal reveal-d3">
             <div className="pd-hero__headline-metric">
               <span className="pd-metric display">{project.metric[0]}</span>
               <span className="pd-metric__label mono">{project.metric[1]}</span>

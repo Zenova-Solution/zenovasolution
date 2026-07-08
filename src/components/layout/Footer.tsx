@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Logo } from './Logo';
 import { Icon } from '@/components/icons/Icon';
+import { ParticleWordmark } from '@/components/ui/ParticleWordmark';
 import { DEFAULT_CONTENT, useBrand, useContent } from '@/admin/store';
 
 export function Footer() {
@@ -118,32 +119,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: 80,
-          position: 'relative',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 16px',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          className="display"
-          style={{
-            fontSize: 'clamp(80px, 22vw, 320px)',
-            lineHeight: 0.9,
-            fontWeight: 700,
-            letterSpacing: '-0.05em',
-            color: 'var(--fg)',
-            maskImage: 'linear-gradient(180deg, rgba(0,0,0,0.65) 10%, transparent 95%)',
-            WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0.65) 10%, transparent 95%)',
-          }}
-        >
-          ZENOVA
-        </div>
-      </div>
+      <ParticleWordmark />
     </footer>
   );
 }

@@ -69,12 +69,12 @@ export function AboutPage() {
     <div className="abt">
       <header className="abt-statement">
         <div className="container">
-          <h1 className="abt-statement__title display">
+          <h1 className="abt-statement__title display reveal reveal-blur">
             <span>A small team</span>
             <span className="abt-statement__dim">doing big work,</span>
             <span>under one roof.</span>
           </h1>
-          <div className="abt-statement__meta mono">
+          <div className="abt-statement__meta mono reveal reveal-d1">
             <span>Founded {founded}</span>
             <span>{TEAM.length} people</span>
             <span>{LOCATIONS.length} locations</span>
@@ -85,7 +85,7 @@ export function AboutPage() {
 
       <section className="abt-story">
         <div className="container abt-story__grid">
-          <div className="abt-story__aside">
+          <div className="abt-story__aside reveal reveal-blur">
             <div className="abt-kicker mono">
               <span className="abt-kicker__tick" />
               Our story
@@ -96,7 +96,7 @@ export function AboutPage() {
               <em>we wanted to hire.</em>
             </h2>
           </div>
-          <div className="abt-story__body">
+          <div className="abt-story__body reveal reveal-d1">
             <p>
               Most of our early clients told us the same story: their brand agency made a great deck, their
               dev shop built half a product, and their marketing vendor was promoting old messaging.
@@ -112,11 +112,11 @@ export function AboutPage() {
       {VALUES.length > 0 && (
         <section className="abt-values">
           <div className="container">
-            <div className="abt-kicker mono">
+            <div className="abt-kicker mono reveal">
               <span className="abt-kicker__tick" />
               What we believe
             </div>
-            <div className="abt-values__list">
+            <div className="abt-values__list reveal reveal-d1">
               {VALUES.map((v, i) => {
                 const IconC = (Icon[v.icon as IconName] ?? Icon.Layers) as IconComponent;
                 return (
@@ -140,11 +140,11 @@ export function AboutPage() {
       {TEAM.length > 0 && (
         <section className="abt-team">
           <div className="container">
-            <div className="abt-kicker mono">
+            <div className="abt-kicker mono reveal">
               <span className="abt-kicker__tick" />
               The team — {TEAM.length} people
             </div>
-            <div className="abt-team__grid">
+            <div className="abt-team__grid reveal reveal-d1">
               {TEAM.map((m) => (
                 <div key={m.id} className="abt-member" style={{ '--tone': m.tone } as React.CSSProperties}>
                   {m.avatar ? (
@@ -185,7 +185,7 @@ export function AboutPage() {
       {TIMELINE.length > 0 && (
         <section className="abt-milestones">
           <div className="container">
-            <div className="abt-kicker mono">
+            <div className="abt-kicker mono reveal">
               <span className="abt-kicker__tick" />
               Milestones
             </div>
@@ -205,7 +205,7 @@ export function AboutPage() {
 
       <section className="abt-careers">
         <div className="container abt-careers__grid">
-          <div className="abt-careers__jobs">
+          <div className="abt-careers__jobs reveal">
             <div className="abt-kicker mono">
               <span className="abt-kicker__tick" />
               Careers
@@ -240,7 +240,7 @@ export function AboutPage() {
             </Link>
           </div>
 
-          <div className="abt-locations">
+          <div className="abt-locations reveal reveal-d1">
             <div className="abt-kicker mono">
               <span className="abt-kicker__tick" />
               Where we are
@@ -259,7 +259,7 @@ export function AboutPage() {
       </section>
 
       <section className="abt-cta">
-        <div className="container abt-cta__inner">
+        <div className="container abt-cta__inner reveal">
           <h2 className="abt-cta__title display">
             Like how
             <br />

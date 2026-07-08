@@ -157,16 +157,16 @@ export function ServicesPage() {
     <div className="svx">
       <header className="svx-hero">
         <div className="container">
-          <div className="svx-hero__kicker mono">
+          <div className="svx-hero__kicker mono reveal">
             <span className="svx-hero__tick" />
             Services — index of {count}
           </div>
-          <h1 className="svx-hero__title display">
+          <h1 className="svx-hero__title display reveal reveal-blur reveal-d1">
             Every discipline
             <br />
             <em>under one roof.</em>
           </h1>
-          <p className="svx-hero__sub">
+          <p className="svx-hero__sub reveal reveal-d2">
             Design, build, and grow your business without juggling agencies. Pick a service below — most
             projects combine two or three.
           </p>
@@ -175,8 +175,12 @@ export function ServicesPage() {
 
       <div className="svx-pillars">
         <div className="container svx-pillars__row">
-          {PILLARS.map((p) => (
-            <div key={p.tag} className="svx-pillar" style={{ '--hue': p.hue } as React.CSSProperties}>
+          {PILLARS.map((p, i) => (
+            <div
+              key={p.tag}
+              className="svx-pillar reveal"
+              style={{ '--hue': p.hue, '--reveal-delay': `${i * 0.08}s` } as React.CSSProperties}
+            >
               <span className="svx-pillar__tag mono">{p.tag}</span>
               <span className="svx-pillar__title display">{p.title}</span>
               <span className="svx-pillar__blurb">{p.blurb}</span>
@@ -191,7 +195,7 @@ export function ServicesPage() {
             <Link
               key={s.slug}
               to={`/services/${s.slug}`}
-              className="svx-row"
+              className="svx-row reveal"
               style={{ '--hue': s.hue } as React.CSSProperties}
               onMouseEnter={() => setHovered(s.slug)}
               onMouseLeave={() => setHovered(null)}
@@ -224,16 +228,16 @@ export function ServicesPage() {
 
       <section className="prc-intro" id="process">
         <div className="container">
-          <div className="prc-intro__kicker mono">
+          <div className="prc-intro__kicker mono reveal">
             <span className="prc-intro__tick" />
             Our process — 4 phases · 8 weeks
           </div>
-          <h2 className="prc-intro__title display">
+          <h2 className="prc-intro__title display reveal reveal-blur reveal-d1">
             A simple process,
             <br />
             <em>documented.</em>
           </h2>
-          <p className="prc-intro__sub">
+          <p className="prc-intro__sub reveal reveal-d2">
             Four phases. Clear deliverables. Weekly demos. This is the exact playbook every project runs
             on — no surprises, no mystery sprints.
           </p>
@@ -267,7 +271,7 @@ export function ServicesPage() {
                 ref={(el) => {
                   blockRefs.current[i] = el;
                 }}
-                className="prc-step"
+                className="prc-step reveal"
                 style={{ '--hue': p.hue } as React.CSSProperties}
               >
                 <div className="prc-step__head">
@@ -314,9 +318,13 @@ export function ServicesPage() {
 
       <section className="prc-faq">
         <div className="container">
-          <div className="prc-faq__label mono">Common questions</div>
-          {PROCESS_FAQS.map((f) => (
-            <div key={f.q} className="prc-faq__row">
+          <div className="prc-faq__label mono reveal">Common questions</div>
+          {PROCESS_FAQS.map((f, i) => (
+            <div
+              key={f.q}
+              className="prc-faq__row reveal"
+              style={{ '--reveal-delay': `${(i % 2) * 0.08}s` } as React.CSSProperties}
+            >
               <h3 className="prc-faq__q display">{f.q}</h3>
               <p className="prc-faq__a">{f.a}</p>
             </div>
@@ -325,7 +333,7 @@ export function ServicesPage() {
       </section>
 
       <section className="svx-cta">
-        <div className="container svx-cta__inner">
+        <div className="container svx-cta__inner reveal">
           <h2 className="svx-cta__title display">
             Not sure where
             <br />

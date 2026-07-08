@@ -72,7 +72,7 @@ export function Process() {
         />
       </div>
 
-      <div className="orbital-stage" onClick={() => setOpenId(null)}>
+      <div className="orbital-stage reveal reveal-d1" onClick={() => setOpenId(null)}>
         <div className="orbital-ambient" />
         <div
           className="orbital-ring orbital-ring--outer"
@@ -89,7 +89,6 @@ export function Process() {
           const rad = (angle * Math.PI) / 180;
           const x = radius * Math.cos(rad);
           const y = radius * Math.sin(rad);
-          const depth = (1 + Math.sin(rad)) / 2; // 0 at the top of the ring, 1 at the bottom
           const isOpen = openId === s.id;
           const StepIcon = ICONS[s.icon] ?? Icon.Compass;
           const next = steps[(i + 1) % steps.length];
@@ -101,7 +100,7 @@ export function Process() {
               style={{
                 transform: `translate(${x}px, ${y}px)`,
                 zIndex: isOpen ? 200 : 100 + Math.round(50 * Math.sin(rad)),
-                opacity: isOpen ? 1 : openId ? 0.35 : 0.45 + 0.55 * depth,
+                opacity: isOpen ? 1 : openId ? 0.35 : 1,
               }}
             >
               <div className="orbital-halo" />

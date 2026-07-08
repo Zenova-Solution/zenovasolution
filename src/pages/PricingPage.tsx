@@ -108,16 +108,16 @@ export function PricingPage() {
     <div className="pcx">
       <header className="pcx-hero">
         <div className="container">
-          <div className="pcx-hero__kicker mono">
+          <div className="pcx-hero__kicker mono reveal">
             <span className="pcx-hero__tick" />
             Pricing — project-based · one-time
           </div>
-          <h1 className="pcx-hero__title display">
+          <h1 className="pcx-hero__title display reveal reveal-blur reveal-d1">
             One project.
             <br />
             <em>One price.</em>
           </h1>
-          <p className="pcx-hero__sub">
+          <p className="pcx-hero__sub reveal reveal-d2">
             No retainers, no hourly surprises. Every engagement is scoped once, priced once, and
             shipped as a project. Pick a service to see its rate card.
           </p>

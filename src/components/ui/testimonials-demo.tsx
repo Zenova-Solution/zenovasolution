@@ -1,6 +1,5 @@
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { motion } from "motion/react";
 import { DEFAULT_CONTENT, useContent } from "@/admin/store";
 
 function splitIntoColumns<T>(items: T[], columnCount: number): T[][] {
@@ -33,31 +32,24 @@ export const Testimonials = () => {
   return (
     <section id="testimonials" className="sec">
       <div className="container z-10 mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-        >
-          <SectionHeader
-            align="center"
-            eyebrow={header.eyebrow}
-            title={
-              <>
-                {header.title}
-                {header.titleAccent && (
-                  <>
-                    <br />
-                    <span style={{ color: 'var(--fg-dim)' }}>{header.titleAccent}</span>
-                  </>
-                )}
-              </>
-            }
-            sub={header.sub}
-          />
-        </motion.div>
+        <SectionHeader
+          align="center"
+          eyebrow={header.eyebrow}
+          title={
+            <>
+              {header.title}
+              {header.titleAccent && (
+                <>
+                  <br />
+                  <span style={{ color: 'var(--fg-dim)' }}>{header.titleAccent}</span>
+                </>
+              )}
+            </>
+          }
+          sub={header.sub}
+        />
 
-        <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+        <div className="reveal reveal-d1 flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
           <TestimonialsColumn
             testimonials={secondColumn}
