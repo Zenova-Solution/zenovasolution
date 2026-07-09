@@ -27,6 +27,7 @@ jobs:
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
       NODE_OPTIONS: '--trace-deprecation'
+      CUSTOM_DOMAIN: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
