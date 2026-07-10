@@ -450,9 +450,28 @@ class ProjectSnapshot(_Base):
 # Auth
 # ---------------------------------------------------------------------------
 
+Password = Annotated[str, StringConstraints(min_length=8, max_length=200)]
+UserName = Annotated[str, StringConstraints(min_length=1, max_length=120)]
+
+
 class LoginRequest(_Base):
     email: EmailStr
-    password: Annotated[str, StringConstraints(min_length=8, max_length=200)]
+    password: Password
+
+
+class UserCreate(_Base):
+    email: EmailStr
+    name: UserName
+    role: Role = "client"
+    password: Password
+
+
+class UserPatch(_Base):
+    email: EmailStr | None = None
+    name: UserName | None = None
+    role: Role | None = None
+    is_active: bool | None = None
+    password: Password | None = None  # write-only; presence means "set a new password"
 
 
 # ---------------------------------------------------------------------------

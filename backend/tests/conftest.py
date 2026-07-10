@@ -6,7 +6,6 @@ Set ``TEST_DATABASE_URL`` to override. Migrations run once per session.
 
 from __future__ import annotations
 
-import asyncio
 import os
 from collections.abc import AsyncIterator
 
@@ -25,18 +24,21 @@ os.environ.setdefault(
         "postgresql+asyncpg://postgres:postgres@localhost:5432/zenova_test",
     ),
 )
-os.environ.setdefault("CORS_ORIGINS", "http://localhost:5173")
+# JSON, not a bare string: pydantic-settings decodes complex env fields with
+# json.loads before the csv field_validator ever runs.
+os.environ.setdefault("CORS_ORIGINS", '["http://localhost:5173"]')
 
 from app.db import dispose_engine, get_engine, get_sessionmaker  # noqa: E402
+from app.limiter import limiter  # noqa: E402
 from app.main import create_app  # noqa: E402
 from app.models import Base  # noqa: E402
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture(autouse=True)
+def _reset_rate_limits() -> None:
+    # The limiter is module-level with in-memory storage, so hits accumulate
+    # across tests (every test logs in via /auth/login, limit 10/minute).
+    limiter.reset()
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)

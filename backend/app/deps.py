@@ -21,7 +21,7 @@ from fastapi import Depends, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
-from app.errors import AuthError
+from app.errors import AuthError, ForbiddenError
 from app.models import AdminUser
 from app.security import decode_token
 
@@ -62,10 +62,9 @@ def require_any_role(*allowed: str):
 
     async def _gate(user: Annotated[AdminUser, Depends(get_current_user)]) -> AdminUser:
         if user.role not in allowed:
-            raise AuthError(
-                f"This endpoint requires one of: {', '.join(allowed)}.",
-                code="forbidden",
-            )
+            # 403, not 401: the token is valid — the role just isn't allowed.
+            # A 401 here would trigger the frontend's pointless token refresh.
+            raise ForbiddenError(f"This endpoint requires one of: {', '.join(allowed)}.")
         return user
 
     return _gate

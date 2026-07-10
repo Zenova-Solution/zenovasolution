@@ -14,11 +14,12 @@ import {
   setTokens,
 } from './auth';
 
-// const BASE_URL = (() => {
-//   const env = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '');
-//   return env || '/api/v1';
-// })();
-const BASE_URL = 'https://zenova-api.onrender.com/api/v1';
+// VITE_API_URL overrides the deployed backend (e.g. http://localhost:8000/api/v1
+// during local development against a local API).
+const BASE_URL = (() => {
+  const env = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '');
+  return env || 'https://zenova-api.onrender.com/api/v1';
+})();
 export class ApiError extends Error {
   constructor(
     message: string,

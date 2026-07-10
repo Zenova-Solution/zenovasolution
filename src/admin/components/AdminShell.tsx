@@ -128,6 +128,18 @@ const NAV: NavItem[] = [
     ),
   },
   {
+    to: '/admin/users',
+    label: 'Users',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="10" cy="8" r="3.25" />
+        <path d="M3 20c1.4-3.2 4-5 7-5 1.2 0 2.35.27 3.4.8" />
+        <path d="M18 14v6" />
+        <path d="M15 17h6" />
+      </svg>
+    ),
+  },
+  {
     to: '/admin/settings',
     label: 'Settings',
     icon: (
@@ -198,10 +210,13 @@ export function AdminShell({
     };
   }, [userMenuOpen]);
 
-  // Close the mobile drawer when navigating between pages.
-  useEffect(() => {
+  // Close the mobile drawer when navigating between pages. Adjusted during
+  // render (not in an effect) so the drawer never paints open on the new page.
+  const [drawerPath, setDrawerPath] = useState(location.pathname);
+  if (drawerPath !== location.pathname) {
+    setDrawerPath(location.pathname);
     setMobileOpen(false);
-  }, [location.pathname]);
+  }
 
   // Esc closes the drawer; lock background scroll while it's open.
   useEffect(() => {

@@ -31,6 +31,7 @@ import { Settings as AdminSettings } from '@/admin/pages/Settings';
 import { InputsShowcase } from '@/admin/pages/InputsShowcase';
 import { InvoiceList } from '@/admin/pages/InvoiceList';
 import { InvoiceEditor } from '@/admin/pages/InvoiceEditor';
+import { UsersAdmin } from '@/admin/pages/UsersAdmin';
 import { TWEAK_DEFAULTS } from '@/config/tweaks';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { useReveal } from '@/hooks/useReveal';
@@ -217,6 +218,7 @@ function AdminRoutes() {
       <Route path="media" element={<MediaAdmin />} />
       <Route path="invoices" element={<InvoiceList />} />
       <Route path="invoices/:id" element={<InvoiceEditor />} />
+      <Route path="users" element={<UsersAdmin />} />
       <Route path="settings" element={<AdminSettings />} />
       <Route path="inputs" element={<InputsShowcase />} />
     </Routes>
