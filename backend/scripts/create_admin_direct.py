@@ -38,13 +38,13 @@ async def create_admin_users():
     
     users_to_create = [
         {
-            "email": "tanvir@zenovasolution.xyz",
+            "email": "tanvir@zenova.agency",
             "name": "Tanvir Admin",
             "password": "12345678",
             "role": "admin",
         },
         {
-            "email": "zisan@zenovasolution.xyz",
+            "email": "zisan@zenova.agency",
             "name": "Zisan Admin",
             "password": "12345678",
             "role": "admin",
