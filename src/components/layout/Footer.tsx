@@ -4,6 +4,16 @@ import { Icon } from '@/components/icons/Icon';
 import { ParticleWordmark } from '@/components/ui/ParticleWordmark';
 import { DEFAULT_CONTENT, useBrand, useContent } from '@/admin/store';
 
+const PLATFORM_ICON: Record<string, keyof typeof Icon> = {
+  twitter: 'TwitterX',
+  linkedin: 'LinkedIn',
+  github: 'GitHub',
+  dribbble: 'Dribbble',
+  youtube: 'YouTube',
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+};
+
 export function Footer() {
   const [content] = useContent();
   const [brand] = useBrand();
@@ -66,7 +76,7 @@ export function Footer() {
                     e.currentTarget.style.borderColor = 'var(--line)';
                   }}
                 >
-                  {Icon[s.platform as keyof typeof Icon]?.({ size: 16 }) ?? (
+                  {Icon[PLATFORM_ICON[s.platform]]?.({ size: 16 }) ?? (
                     <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)' }}>
                       {s.platform.slice(0, 2).toUpperCase()}
                     </span>
