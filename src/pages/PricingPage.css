@@ -1,4 +1,5 @@
-/* ── Pricing: project rate card ── */
+/* ── Pricing: page chrome (hero, tabs, panel, trust, faq, note) ──
+   The rate card itself lives in components/pricing/pricing-card.css. */
 
 /* Hero — same editorial register as the services hero */
 .pcx-hero {
@@ -71,6 +72,7 @@
   font-weight: 500;
   white-space: nowrap;
   color: var(--fg-dim);
+  cursor: pointer;
   transition: color 0.25s;
 }
 .pcx-tab:hover {
@@ -109,135 +111,136 @@
   margin-bottom: 26px;
   border-bottom: 1px solid var(--line);
 }
-.pcx-grid {
-  display: grid;
-  /* auto-fit keeps the layout sane if the admin adds or removes plans */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-  align-items: stretch;
-}
 
-/* Card */
-.pcx-card {
-  position: relative;
+/* Trust strip — flat-rate assurances */
+.pcx-trust {
+  padding: 40px 0 8px;
+}
+.pcx-trust__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  padding-top: 34px;
+  border-top: 1px solid var(--line);
+}
+.pcx-trust__item {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 18px;
   background: var(--card);
 }
-.pcx-card.is-hot {
-  border-color: color-mix(in srgb, var(--hue, var(--accent-1)) 55%, transparent);
-  box-shadow: 0 24px 70px color-mix(in srgb, var(--hue, var(--accent-1)) 10%, transparent);
+.pcx-trust__icon {
+  display: inline-flex;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  color: var(--accent-1);
+  background: var(--grad-soft);
+  border: 1px solid var(--line-strong);
 }
-.pcx-card__flag {
-  position: absolute;
-  top: -11px;
-  right: 20px;
-  z-index: 2;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--grad);
-  color: #fff;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-.pcx-card__head {
-  padding: 26px 24px 22px;
-  border-bottom: 1px solid var(--line);
-  border-radius: 19px 19px 0 0;
-}
-.pcx-card.is-hot .pcx-card__head {
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--hue, var(--accent-1)) 10%, transparent),
-    transparent 65%
-  );
-}
-.pcx-card__name {
-  margin: 0;
-  font-size: 18px;
+.pcx-trust__title {
+  font-family: var(--font-display);
+  font-size: 15px;
   font-weight: 500;
+  letter-spacing: -0.01em;
 }
-.pcx-card__info {
-  margin: 8px 0 0;
+.pcx-trust__body {
+  margin: 5px 0 0;
   font-size: 13px;
   line-height: 1.55;
   color: var(--fg-dim);
 }
-.pcx-card__price {
-  margin-top: 18px;
-  font-size: clamp(30px, 2.6vw, 38px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--hue, var(--accent-1));
+
+/* FAQ — editorial two-column, native details accordion */
+.pcx-faq {
+  padding: 72px 0 24px;
 }
-.pcx-card__terms {
-  margin-top: 10px;
+.pcx-faq__inner {
+  display: grid;
+  grid-template-columns: minmax(240px, 330px) 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.pcx-faq__head {
+  position: sticky;
+  top: 120px;
+}
+.pcx-faq__label {
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--fg-faint);
+  letter-spacing: 0.14em;
+  color: var(--accent-1);
 }
-.pcx-card__features {
-  list-style: none;
-  margin: 0;
-  padding: 22px 24px;
+.pcx-faq__title {
+  margin: 14px 0 0;
+  font-size: clamp(30px, 3.4vw, 48px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+.pcx-faq__sub {
+  margin: 16px 0 0;
+  max-width: 320px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+.pcx-faq__list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.pcx-card__features li {
+.pcx-faq__item {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  padding: 0 22px;
+  transition: border-color 0.25s;
+}
+.pcx-faq__item:hover,
+.pcx-faq__item[open] {
+  border-color: var(--line-strong);
+}
+.pcx-faq__q {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13.5px;
-  line-height: 1.5;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--fg);
 }
-.pcx-card__check {
+.pcx-faq__q::-webkit-details-marker {
+  display: none;
+}
+.pcx-faq__chevron {
   display: inline-flex;
   flex: none;
-  margin-top: 2px;
-  color: var(--hue, var(--accent-1));
+  color: var(--fg-faint);
+  transition: transform 0.28s ease, color 0.25s;
 }
-.pcx-card__foot {
-  margin-top: auto;
-  padding: 2px 24px 24px;
+.pcx-faq__item[open] .pcx-faq__chevron {
+  transform: rotate(180deg);
+  color: var(--accent-1);
 }
-.pcx-card__cta {
-  width: 100%;
-  justify-content: center;
-  height: 48px;
-  border-radius: 14px;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Border trail — masked ring with a travelling ember spark */
-.pcx-trail {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid transparent;
-  -webkit-mask-image: linear-gradient(transparent, transparent), linear-gradient(#000, #000);
-  mask-image: linear-gradient(transparent, transparent), linear-gradient(#000, #000);
-  -webkit-mask-clip: padding-box, border-box;
-  mask-clip: padding-box, border-box;
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-.pcx-trail__spark {
-  position: absolute;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--hue, var(--accent-1));
-  box-shadow:
-    0 0 60px 30px color-mix(in srgb, var(--hue, var(--accent-1)) 55%, transparent),
-    0 0 100px 60px color-mix(in srgb, var(--hue, var(--accent-1)) 28%, transparent);
+.pcx-faq__a {
+  margin: 0;
+  padding: 0 0 22px;
+  max-width: 60ch;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--fg-dim);
 }
 
 /* Closing note band */
@@ -280,10 +283,16 @@
 }
 
 /* Responsive */
-@media (max-width: 900px) {
-  .pcx-grid {
+@media (max-width: 820px) {
+  .pcx-faq__inner {
     grid-template-columns: 1fr;
-    max-width: 480px;
+    gap: 28px;
+  }
+  .pcx-faq__head {
+    position: static;
+  }
+  .pcx-faq__sub {
+    max-width: none;
   }
 }
 @media (max-width: 720px) {
@@ -293,6 +302,9 @@
   .pcx-tabs {
     padding: 8px 0 32px;
   }
+  .pcx-faq {
+    padding: 56px 0 16px;
+  }
   .pcx-note {
     margin-top: 48px;
     padding: 72px 0 96px;
@@ -300,8 +312,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pcx-tab,
-  .pcx-card {
+  .pcx-tab {
+    transition: none;
+  }
+  .pcx-faq__chevron {
     transition: none;
   }
 }

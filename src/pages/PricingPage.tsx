@@ -1,78 +1,49 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '@/components/icons/Icon';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { GhostButton } from '@/components/ui/GhostButton';
+import { PricingCard } from '@/components/pricing/PricingCard';
 import { useContent } from '@/admin/store';
-import { PRICING, type PricingPlan } from '@/data/pricing';
+import { PRICING } from '@/data/pricing';
 import { scrollToTop } from '@/lib/scroll';
 import './PricingPage.css';
 
-/** Ember spark that travels the card border — port of the BorderTrail effect. */
-function BorderTrail({ size = 64 }: { size?: number }) {
-  return (
-    <div className="pcx-trail" aria-hidden="true">
-      <motion.div
-        className="pcx-trail__spark"
-        style={{ width: size, offsetPath: 'rect(0 auto auto 0 round 20px)' }}
-        animate={{ offsetDistance: ['0%', '100%'] }}
-        transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
-      />
-    </div>
-  );
-}
+/** Assurances that apply to every engagement — reinforces the flat-rate promise. */
+const TRUST: Array<{ icon: keyof typeof Icon; title: string; body: string }> = [
+  { icon: 'Check', title: 'Fixed quote', body: 'One number, agreed after scoping. It only moves if the scope does.' },
+  { icon: 'Clock', title: 'No retainers', body: 'Project-based, not open-ended. No hourly surprises on the invoice.' },
+  { icon: 'Spark', title: 'Senior team', body: 'The people who scope your project are the ones who build it.' },
+  { icon: 'Rocket', title: 'Support included', body: 'Every tier ships with a post-launch support window baked in.' },
+];
 
-interface PricingCardProps {
-  plan: PricingPlan;
-  hue: string;
-  reduceMotion: boolean;
-}
-
-function PricingCard({ plan, hue, reduceMotion }: PricingCardProps) {
-  return (
-    <motion.article
-      className={`pcx-card${plan.highlighted ? ' is-hot' : ''}`}
-      style={{ '--hue': hue } as React.CSSProperties}
-      variants={{
-        hidden: reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 },
-        show: {
-          opacity: 1,
-          y: 0,
-          transition: reduceMotion ? { duration: 0 } : { duration: 0.35, ease: [0.2, 0.7, 0.2, 1] },
-        },
-      }}
-    >
-      {plan.highlighted && !reduceMotion && <BorderTrail />}
-      {plan.highlighted && <span className="pcx-card__flag mono">Popular</span>}
-      <div className="pcx-card__head">
-        <h3 className="pcx-card__name display">{plan.name}</h3>
-        <p className="pcx-card__info">{plan.info}</p>
-        <div className="pcx-card__price display">{plan.price}</div>
-        <div className="pcx-card__terms mono">One-time · {plan.timeline}</div>
-      </div>
-      <ul className="pcx-card__features">
-        {plan.features.map((f) => (
-          <li key={f}>
-            <span className="pcx-card__check">
-              <Icon.Check size={15} />
-            </span>
-            {f}
-          </li>
-        ))}
-      </ul>
-      <div className="pcx-card__foot">
-        <Link to="/contact" className={`${plan.highlighted ? 'btn-primary' : 'btn-ghost'} pcx-card__cta`}>
-          {plan.cta}
-        </Link>
-      </div>
-    </motion.article>
-  );
-}
+/** Pricing-specific FAQ. Hardcoded on purpose — kept simple, no CMS field. */
+const PRICING_FAQ: Array<{ q: string; a: string }> = [
+  {
+    q: 'What does the price actually include?',
+    a: 'Everything needed to ship the scope we agree on — strategy, design, build, and launch. If it is in the scope, it is in the price. No line-item surprises.',
+  },
+  {
+    q: 'Why one-time pricing instead of monthly retainers?',
+    a: 'We scope, price, and ship each engagement as a project. You own the outcome and are never locked into an open-ended monthly bill.',
+  },
+  {
+    q: 'What if my project does not fit a listed tier?',
+    a: 'Most do not fit exactly — the rate cards are honest starting points. Book a scoping call and we will shape a fixed quote around your actual needs.',
+  },
+  {
+    q: 'Can the price change mid-project?',
+    a: 'Only if the scope does. The number we agree on after scoping is fixed; any new request gets its own small, clearly-quoted add-on.',
+  },
+  {
+    q: 'How do payments work?',
+    a: 'Typically split across milestones — a deposit to start, then staged payments as we ship. The full schedule is laid out in your proposal.',
+  },
+];
 
 export function PricingPage() {
   const [content] = useContent();
-  // Rate cards come from the admin content store (Site content → Pricing);
+  // Rate cards come from the admin content store (Admin → Pricing);
   // fall back to the bundled defaults until it's hydrated/populated.
   const pricing = content.pricing?.length ? content.pricing : PRICING;
 
@@ -185,6 +156,52 @@ export function PricingPage() {
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
+
+      <section className="pcx-trust">
+        <div className="container">
+          <div className="pcx-trust__grid">
+            {TRUST.map((t) => {
+              const Ico = Icon[t.icon];
+              return (
+                <div key={t.title} className="pcx-trust__item reveal reveal-blur">
+                  <span className="pcx-trust__icon">
+                    <Ico size={18} />
+                  </span>
+                  <div>
+                    <div className="pcx-trust__title">{t.title}</div>
+                    <p className="pcx-trust__body">{t.body}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="pcx-faq">
+        <div className="container pcx-faq__inner">
+          <div className="pcx-faq__head">
+            <div className="pcx-faq__label mono">FAQ</div>
+            <h2 className="pcx-faq__title display">Pricing, answered.</h2>
+            <p className="pcx-faq__sub">
+              The questions we get before every scoping call. If yours isn&rsquo;t here, just ask.
+            </p>
+          </div>
+          <div className="pcx-faq__list">
+            {PRICING_FAQ.map((item) => (
+              <details key={item.q} className="pcx-faq__item">
+                <summary className="pcx-faq__q">
+                  <span>{item.q}</span>
+                  <span className="pcx-faq__chevron" aria-hidden="true">
+                    <Icon.Chevron size={16} />
+                  </span>
+                </summary>
+                <p className="pcx-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

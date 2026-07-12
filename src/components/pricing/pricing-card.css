@@ -1,0 +1,165 @@
+/* ── Shared pricing rate card ──
+   Rendered on the public /pricing page and the admin Pricing preview. */
+
+.pcx-grid {
+  display: grid;
+  /* auto-fit keeps the layout sane if the admin adds or removes plans */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* Card */
+.pcx-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.35s, box-shadow 0.35s;
+}
+.pcx-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--hue, var(--accent-1)) 40%, var(--line));
+  box-shadow: 0 22px 60px color-mix(in srgb, var(--hue, var(--accent-1)) 9%, transparent);
+}
+.pcx-card.is-hot {
+  border-color: color-mix(in srgb, var(--hue, var(--accent-1)) 55%, transparent);
+  box-shadow: 0 24px 70px color-mix(in srgb, var(--hue, var(--accent-1)) 12%, transparent);
+}
+.pcx-card.is-hot:hover {
+  box-shadow: 0 30px 80px color-mix(in srgb, var(--hue, var(--accent-1)) 16%, transparent);
+}
+.pcx-card__flag {
+  position: absolute;
+  top: -11px;
+  right: 20px;
+  z-index: 2;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--grad);
+  color: #fff;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--hue, var(--accent-1)) 40%, transparent);
+}
+.pcx-card__head {
+  padding: 26px 24px 22px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 19px 19px 0 0;
+}
+.pcx-card.is-hot .pcx-card__head {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--hue, var(--accent-1)) 10%, transparent),
+    transparent 65%
+  );
+}
+.pcx-card__name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+.pcx-card__info {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  min-height: 40px;
+}
+.pcx-card__price {
+  margin-top: 18px;
+  font-size: clamp(30px, 2.6vw, 38px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--hue, var(--accent-1));
+}
+.pcx-card__terms {
+  margin-top: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-faint);
+}
+.pcx-card__features {
+  list-style: none;
+  margin: 0;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pcx-card__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.pcx-card__check {
+  display: inline-flex;
+  flex: none;
+  margin-top: 2px;
+  color: var(--hue, var(--accent-1));
+}
+.pcx-card__foot {
+  margin-top: auto;
+  padding: 2px 24px 24px;
+}
+.pcx-card__cta {
+  width: 100%;
+  justify-content: center;
+  height: 48px;
+  border-radius: 14px;
+  font-size: 14px;
+  text-align: center;
+}
+/* Inert CTA inside the admin preview — looks the part, doesn't act. */
+.pcx-card__cta--static {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Border trail — masked ring with a travelling ember spark */
+.pcx-trail {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  -webkit-mask-image: linear-gradient(transparent, transparent), linear-gradient(#000, #000);
+  mask-image: linear-gradient(transparent, transparent), linear-gradient(#000, #000);
+  -webkit-mask-clip: padding-box, border-box;
+  mask-clip: padding-box, border-box;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.pcx-trail__spark {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--hue, var(--accent-1));
+  box-shadow:
+    0 0 60px 30px color-mix(in srgb, var(--hue, var(--accent-1)) 55%, transparent),
+    0 0 100px 60px color-mix(in srgb, var(--hue, var(--accent-1)) 28%, transparent);
+}
+
+@media (max-width: 900px) {
+  .pcx-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcx-card {
+    transition: none;
+  }
+  .pcx-card:hover {
+    transform: none;
+  }
+}
