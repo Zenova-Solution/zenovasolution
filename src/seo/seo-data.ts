@@ -34,7 +34,7 @@ export interface SeoMeta {
 export const SITE = {
   url: 'https://zenova.agency',
   name: 'Zenova',
-  legalName: 'Zenova Solutions, Inc.',
+  legalName: 'Zenova, Inc.',
   description:
     'Zenova combines design, development, marketing, and startup support into one seamless partnership for ambitious modern businesses.',
   logo: 'https://zenova.agency/assets/zenova-logo.png',

@@ -108,7 +108,7 @@ export function Nav() {
                   borderRadius: 999,
                   fontSize: 14,
                   fontWeight: 500,
-                  color: active ? '#ff813a' : 'var(--fg-dim)',
+                  color: active ? (theme === 'light' ? '#000' : '#ff813a') : 'var(--fg-dim)',
                   transition: 'color .2s',
                   textDecoration: 'none',
                 }}
@@ -129,32 +129,37 @@ export function Nav() {
                       width: '100%',
                       zIndex: 0,
                       borderRadius: 999,
-                      backgroundColor: theme === 'light' ? 'rgb(255 129 58 / 15%)' : undefined,
                     }}
                   >
                     <div style={{
                       position: 'absolute', top: -2, left: '50%', transform: 'translateX(-50%)',
-                      width: 32, height: 4, backgroundColor: '#ff813a',
+                      width: 32, height: 4,
+                      backgroundColor: theme === 'light' ? '#000' : '#ff813a',
                       borderTopLeftRadius: 999, borderTopRightRadius: 999,
-                      boxShadow: theme === 'light' ? 'none' : '0 0 12px rgba(255,129,58,0.8)'
+                      boxShadow: theme === 'light' ? '0 0 12px rgba(0,0,0,0.5)' : '0 0 12px rgba(255,129,58,0.8)'
                     }} />
-                    {theme !== 'light' && (
+                    {(
                       <>
                         <div style={{
                           position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)',
-                          width: 48, height: 24, backgroundColor: 'rgba(255,129,58,0.3)',
+                          width: 48, height: 24,
+                          backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.15)' : 'rgba(255,129,58,0.3)',
                           borderRadius: 999, filter: 'blur(8px)'
                         }} />
                         <div style={{
                           position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
                           width: 72, height: '100%',
-                          background: 'linear-gradient(to bottom, rgba(255,129,58,0.2), rgba(255,129,58,0.05), transparent)',
+                          background: theme === 'light'
+                            ? 'linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0.03), transparent)'
+                            : 'linear-gradient(to bottom, rgba(255,129,58,0.2), rgba(255,129,58,0.05), transparent)',
                           filter: 'blur(8px)'
                         }} />
                         <div style={{
                           position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
                           width: 32, height: '100%',
-                          background: 'linear-gradient(to bottom, rgba(255,129,58,0.4), rgba(255,129,58,0.1), transparent)',
+                          background: theme === 'light'
+                            ? 'linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.06), transparent)'
+                            : 'linear-gradient(to bottom, rgba(255,129,58,0.4), rgba(255,129,58,0.1), transparent)',
                           filter: 'blur(4px)'
                         }} />
                       </>

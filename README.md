@@ -82,3 +82,7 @@ choice to `localStorage` under the key `zenova.theme`.
 - `_legacy/` contains the pre-refactor sources (`Zenova.html`,
   `zenova-bundle.jsx`, etc.). It's safe to delete once you've verified the
   port; it's already in `.gitignore`.
+
+
+
+claude --resume f391840a-6dde-41e4-878b-fd0e054adfbb 
