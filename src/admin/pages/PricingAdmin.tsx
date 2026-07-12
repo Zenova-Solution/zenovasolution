@@ -4,7 +4,7 @@ import { useReducedMotion } from 'framer-motion';
 import { AdminShell } from '@/admin/components/AdminShell';
 import { Button } from '@/admin/components/Button';
 import { useConfirm } from '@/admin/components/confirm-context';
-import { ColorField, Field, StringList, TextArea, TextField, Toast } from '@/admin/components/Form';
+import { Field, StringList, TextArea, TextField, Toast } from '@/admin/components/Form';
 import { Toggle } from '@/components/ui/inputs';
 import { Icon } from '@/components/icons/Icon';
 import { PricingCard } from '@/components/pricing/PricingCard';
@@ -12,6 +12,7 @@ import {
   contentStore,
   patchContent,
   useContent,
+  useServices,
   type PricingPlan,
   type PricingService,
 } from '@/admin/store';
@@ -33,17 +34,9 @@ function emptyPricingPlan(): PricingPlan {
   };
 }
 
-function emptyPricingService(): PricingService {
-  return {
-    slug: uid('ps'),
-    label: 'New service',
-    hue: '#ff813a',
-    plans: [emptyPricingPlan(), emptyPricingPlan(), emptyPricingPlan()],
-  };
-}
-
 export function PricingAdmin() {
   const [content] = useContent();
+  const [services] = useServices();
   const confirm = useConfirm();
   const reduceMotion = useReducedMotion() ?? false;
 
@@ -65,9 +58,14 @@ export function PricingAdmin() {
   }
 
   const dirty = JSON.stringify(draft) !== JSON.stringify(published);
-  const sel = Math.min(selected, Math.max(draft.length - 1, 0));
-  const svc = draft[sel];
+  const sel = Math.min(selected, Math.max(services.length - 1, 0));
+  const currentService = services[sel];
+  const currentPricing = currentService
+    ? draft.find((p) => p.slug === currentService.slug)
+    : undefined;
+  const currentPlans = currentPricing?.plans ?? [];
 
+  // Stats — based on draft (all pricing data, not just current service)
   const totalPlans = draft.reduce((n, s) => n + s.plans.length, 0);
   const popular = draft.reduce((n, s) => n + s.plans.filter((p) => p.highlighted).length, 0);
   const incomplete = draft.reduce(
@@ -75,48 +73,63 @@ export function PricingAdmin() {
     0,
   );
 
-  const patchService = (i: number, delta: Partial<PricingService>) =>
-    setDraft((d) => d.map((x, idx) => (idx === i ? { ...x, ...delta } : x)));
-  const patchPlan = (pi: number, delta: Partial<PricingPlan>) =>
+  /** Patch a specific plan within the current service's pricing. */
+  const patchPlan = (pi: number, delta: Partial<PricingPlan>) => {
+    const slug = currentService?.slug;
+    if (!slug) return;
     setDraft((d) =>
-      d.map((x, idx) =>
-        idx === sel
+      d.map((x, i) =>
+        i === d.findIndex((p) => p.slug === slug)
           ? { ...x, plans: x.plans.map((p, j) => (j === pi ? { ...p, ...delta } : p)) }
           : x,
       ),
     );
-
-  const moveService = (dir: -1 | 1) => {
-    const j = sel + dir;
-    if (j < 0 || j >= draft.length) return;
-    const next = draft.slice();
-    [next[sel], next[j]] = [next[j], next[sel]];
-    setDraft(next);
-    setSelected(j);
   };
 
-  const addService = () => {
-    setDraft((d) => [...d, emptyPricingService()]);
-    setSelected(draft.length);
+  const addPlan = () => {
+    const slug = currentService?.slug;
+    if (!slug) return;
+    const plan = emptyPricingPlan();
+    setDraft((d) => {
+      const idx = d.findIndex((x) => x.slug === slug);
+      if (idx >= 0) {
+        return d.map((x, i) => (i === idx ? { ...x, plans: [...x.plans, plan] } : x));
+      }
+      return [
+        ...d,
+        {
+          slug,
+          label: currentService!.title,
+          hue: currentService!.hue,
+          plans: [plan],
+        },
+      ];
+    });
   };
 
-  const removeService = async () => {
+  const removePlan = (pi: number) => {
+    const slug = currentService?.slug;
+    if (!slug) return;
+    setDraft((d) =>
+      d.map((x) =>
+        x.slug === slug ? { ...x, plans: x.plans.filter((_, idx) => idx !== pi) } : x,
+      ),
+    );
+  };
+
+  const clearPricing = async () => {
+    if (!currentService) return;
     if (
       !(await confirm({
-        title: `Remove the "${svc.label}" tab?`,
-        body: 'This removes the pricing tab and all of its plans.',
-        confirmLabel: 'Remove tab',
+        title: `Remove pricing for "${currentService.title}"?`,
+        body: 'This removes all rate cards for this service tab. The tab itself stays on /pricing — it just won\'t show any plans.',
+        confirmLabel: 'Remove pricing',
         danger: true,
       }))
     )
       return;
-    setDraft((d) => d.filter((_, idx) => idx !== sel));
-    setSelected(Math.max(sel - 1, 0));
+    setDraft((d) => d.filter((x) => x.slug !== currentService.slug));
   };
-
-  const addPlan = () => patchService(sel, { plans: [...svc.plans, emptyPricingPlan()] });
-  const removePlan = (pi: number) =>
-    patchService(sel, { plans: svc.plans.filter((_, idx) => idx !== pi) });
 
   const save = async () => {
     setSaving(true);
@@ -136,7 +149,7 @@ export function PricingAdmin() {
     <AdminShell
       crumbs={[{ label: 'Pricing' }]}
       title="Pricing"
-      sub="Rate cards shown on the public /pricing page. Edit on the left, preview on the right, then Save to publish."
+      sub="Rate cards shown on the public /pricing page. Select a service tab, edit its plans on the left, preview on the right, then Save to publish. Tab labels and accent colors are managed in Services."
       actions={
         <>
           <Link to="/pricing" className="adm-btn" target="_blank" rel="noreferrer">
@@ -148,7 +161,7 @@ export function PricingAdmin() {
             </button>
           )}
           <Button onClick={save} disabled={!dirty || saving}>
-            {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
+            {saving ? 'Saving\u2026' : dirty ? 'Save changes' : 'Saved'}
           </Button>
         </>
       }
@@ -156,8 +169,8 @@ export function PricingAdmin() {
       <div className="pxa-stats">
         <div className="adm-stat">
           <div className="adm-stat__label">Service tabs</div>
-          <div className="adm-stat__num">{draft.length}</div>
-          <div className="adm-stat__delta">Shown on /pricing</div>
+          <div className="adm-stat__num">{services.length}</div>
+          <div className="adm-stat__delta">From Services manager</div>
         </div>
         <div className="adm-stat">
           <div className="adm-stat__label">Pricing tiers</div>
@@ -177,69 +190,38 @@ export function PricingAdmin() {
       </div>
 
       <div className="adm-tabs">
-        {draft.map((s, i) => (
+        {services.map((s, i) => (
           <button
             key={s.slug}
             className={`adm-tab${sel === i ? ' is-active' : ''}`}
+            style={{ '--hue': s.hue } as React.CSSProperties}
             onClick={() => setSelected(i)}
           >
-            {s.label || 'Untitled'}
+            {s.title}
           </button>
         ))}
-        <button className="adm-btn adm-btn--sm" onClick={addService}>
-          + Add service tab
-        </button>
       </div>
 
-      {!svc ? (
+      {!currentService ? (
         <div className="adm-card pxa-empty">
-          <p>No pricing tabs yet. Add one to start building your rate cards.</p>
-          <button className="adm-btn" onClick={addService}>
-            + Add your first service tab
-          </button>
+          <p>No services exist yet. Add one in the Services manager to start building rate cards.</p>
         </div>
       ) : (
         <div className="pxa-workspace">
           <div className="pxa-editor">
             <div className="adm-card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: 8,
-                  flexWrap: 'wrap',
-                }}
-              >
-                <div className="adm-label">Service tab</div>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button className="adm-btn adm-btn--sm" onClick={() => moveService(-1)} disabled={sel === 0}>
-                    ← Move
-                  </button>
-                  <button
-                    className="adm-btn adm-btn--sm"
-                    onClick={() => moveService(1)}
-                    disabled={sel === draft.length - 1}
-                  >
-                    Move →
-                  </button>
-                  <button className="adm-btn adm-btn--sm adm-btn--danger" onClick={removeService}>
-                    Remove tab
-                  </button>
-                </div>
+              <div className="adm-label">
+                Plans for{' '}
+                <span style={{ color: currentService.hue }}>{currentService.title}</span>
               </div>
-              <div className="adm-row adm-row--2">
-                <TextField label="Tab label" value={svc.label} onChange={(v) => patchService(sel, { label: v })} />
-                <ColorField
-                  label="Accent color"
-                  hint="Tints the tab pill, prices, and check marks for this service."
-                  value={svc.hue}
-                  onChange={(v) => patchService(sel, { hue: v })}
-                />
-              </div>
+              {currentPlans.length === 0 && (
+                <p className="pxa-empty__plans">
+                  No plans yet. Add a card to start building rate cards for this service.
+                </p>
+              )}
             </div>
 
-            {svc.plans.map((p, pi) => (
+            {currentPlans.map((p, pi) => (
               <div key={p.id} className="adm-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div className="adm-label">Card {pi + 1}</div>
@@ -257,7 +239,7 @@ export function PricingAdmin() {
                   />
                   <TextField
                     label="Timeline"
-                    hint="Shown after “One-time ·”."
+                    hint="Shown after \u201cOne-time \u00b7\u201d."
                     value={p.timeline}
                     onChange={(v) => patchPlan(pi, { timeline: v })}
                   />
@@ -275,7 +257,7 @@ export function PricingAdmin() {
                     <Toggle
                       checked={!!p.highlighted}
                       onChange={(v) => patchPlan(pi, { highlighted: v })}
-                      label="Badge + glow — mark one card per tab"
+                      label="Badge + glow \u2014 mark one card per tab"
                     />
                   </Field>
                 </div>
@@ -285,20 +267,29 @@ export function PricingAdmin() {
             <button className="adm-btn" style={{ alignSelf: 'flex-start' }} onClick={addPlan}>
               + Add card
             </button>
+
+            {currentPlans.length > 0 && (
+              <button className="adm-btn adm-btn--danger" style={{ alignSelf: 'flex-start' }} onClick={clearPricing}>
+                Remove all pricing for this tab
+              </button>
+            )}
           </div>
 
           <aside className="pxa-preview">
             <div className="pxa-preview__bar">
               <span>Live preview</span>
-              <span className="pxa-preview__hue" style={{ color: svc.hue }}>
-                {svc.label || 'Untitled'}
+              <span className="pxa-preview__hue" style={{ color: currentService.hue }}>
+                {currentService.title}
               </span>
             </div>
-            <div className="pxa-preview__stage" style={{ '--hue': svc.hue } as React.CSSProperties}>
-              {svc.plans.length ? (
+            <div
+              className="pxa-preview__stage"
+              style={{ '--hue': currentService.hue } as React.CSSProperties}
+            >
+              {currentPlans.length ? (
                 <div className="pcx-grid">
-                  {svc.plans.map((p) => (
-                    <PricingCard key={p.id} plan={p} hue={svc.hue} reduceMotion={reduceMotion} preview />
+                  {currentPlans.map((p) => (
+                    <PricingCard key={p.id} plan={p} hue={currentService.hue} reduceMotion={reduceMotion} preview />
                   ))}
                 </div>
               ) : (
