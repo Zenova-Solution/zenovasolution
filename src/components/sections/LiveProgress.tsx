@@ -104,7 +104,7 @@ export function LiveProgress() {
             >
               <div>
                 <div className="mono" style={{ color: 'var(--fg-faint)', fontSize: 11 }}>
-                  northwind.zenova.bd
+                  northwind.zenova.agency
                 </div>
                 <div
                   className="display"

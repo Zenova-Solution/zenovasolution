@@ -42,7 +42,7 @@ export function Footer() {
         }}
       />
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 1fr) repeat(3, auto)', gap: 140, justifyContent: 'end' }}>
+        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: `minmax(200px, 1fr) repeat(${footer.columns.length}, auto)`, gap: 140, justifyContent: 'end' }}>
           <div>
             <Logo size={25} />
             <p style={{ color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.55, marginTop: 22, maxWidth: 320 }}>

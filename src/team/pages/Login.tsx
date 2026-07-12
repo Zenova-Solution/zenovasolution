@@ -55,7 +55,7 @@ export function TeamLogin() {
             type="email"
             className="adm-input"
             value={email}
-            placeholder="you@zenova.bd"
+            placeholder="you@zenova.agency"
             autoComplete="username"
             autoFocus
             required

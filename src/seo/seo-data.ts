@@ -41,7 +41,7 @@ export const SITE = {
   /** Absolute URL to the 1200×630 social share card. */
   ogImage: 'https://zenova.agency/uploads/og-card.png',
   locale: 'en_US',
-  email: 'hello@zenova.bd',
+  email: 'hello@zenova.agency',
   /** Declared brand profiles (rendered in the site footer). Confirm/extend. */
   sameAs: [
     'https://www.instagram.com/zenova.agency',
@@ -174,6 +174,38 @@ const MAIN_ROUTES: SeoMeta[] = [
     breadcrumb: [
       { name: 'Home', path: '/' },
       { name: 'Careers', path: '/careers' },
+    ],
+  },
+  {
+    path: '/privacy',
+    title: 'Privacy Policy | Zenova',
+    description:
+      'How Zenova collects, uses, shares, and protects your personal information — including your rights, cookies, data retention, and security.',
+    h1: 'Privacy Policy',
+    intro:
+      'How Zenova collects, uses, and protects your personal information when you visit our website or engage our design, development, and marketing services.',
+    index: true,
+    changefreq: 'yearly',
+    priority: 0.3,
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Privacy Policy', path: '/privacy' },
+    ],
+  },
+  {
+    path: '/terms',
+    title: 'Terms & Conditions | Zenova',
+    description:
+      'The terms governing your use of the Zenova website and services — engagements, fees, intellectual property, liability, and more.',
+    h1: 'Terms & Conditions',
+    intro:
+      'The terms that govern your use of the Zenova website and our design, development, marketing, and startup services.',
+    index: true,
+    changefreq: 'yearly',
+    priority: 0.3,
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Terms & Conditions', path: '/terms' },
     ],
   },
 ];

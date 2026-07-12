@@ -12,6 +12,7 @@ import { CareersPage } from '@/pages/CareersPage';
 import { JobDetailPage } from '@/pages/JobDetailPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { ContactPage } from '@/pages/ContactPage';
+import { LegalPage } from '@/pages/LegalPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { Login } from '@/pages/Login';
 import { AuthGate } from '@/components/ui/AuthGate';
@@ -26,6 +27,8 @@ import { JobsAdmin } from '@/admin/pages/JobsAdmin';
 import { JobEditor } from '@/admin/pages/JobEditor';
 import { TeamAdmin } from '@/admin/pages/TeamAdmin';
 import { ContentAdmin } from '@/admin/pages/ContentAdmin';
+import { PricingAdmin } from '@/admin/pages/PricingAdmin';
+import { LegalAdmin } from '@/admin/pages/LegalAdmin';
 import { MediaAdmin } from '@/admin/pages/MediaAdmin';
 import { Settings as AdminSettings } from '@/admin/pages/Settings';
 import { InputsShowcase } from '@/admin/pages/InputsShowcase';
@@ -158,7 +161,7 @@ function PublicLayout({
   useReveal();
   const location = useLocation();
   const isKnownPath =
-    /^\/(services|pricing|work|about|contact|careers)?(\/.*)?$/.test(location.pathname);
+    /^\/(services|pricing|work|about|contact|careers|privacy|terms)?(\/.*)?$/.test(location.pathname);
   return (
     <>
       <Nav />
@@ -203,6 +206,8 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
         <Route path="/careers/:slug" element={<JobDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<LegalPage doc="privacy" />} />
+        <Route path="/terms" element={<LegalPage doc="terms" />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
@@ -221,6 +226,8 @@ function AdminRoutes() {
       <Route path="jobs/:slug" element={<JobEditor />} />
       <Route path="team" element={<TeamAdmin />} />
       <Route path="content" element={<ContentAdmin />} />
+      <Route path="pricing" element={<PricingAdmin />} />
+      <Route path="legal" element={<LegalAdmin />} />
       <Route path="media" element={<MediaAdmin />} />
       <Route path="invoices" element={<InvoiceList />} />
       <Route path="invoices/:id" element={<InvoiceEditor />} />

@@ -49,7 +49,7 @@ export function ContactPage() {
     }
   };
 
-  const email = brand?.contactEmail ?? 'hello@zenova.bd';
+  const email = brand?.contactEmail ?? 'hello@zenova.agency';
   const phone = brand?.phone ?? '+1 (555) 123-4567';
   const address = brand?.address ?? '123 Atlantic Ave, Brooklyn, NY 11201';
   const locations = brand?.locations ?? [];

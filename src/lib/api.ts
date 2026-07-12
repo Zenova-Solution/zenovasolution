@@ -1,7 +1,7 @@
 /**
  * Typed fetch client for the Zenova FastAPI backend.
  *
- * - Reads VITE_API_URL (e.g. https://api.zenova.bd) — falls back to /api/v1.
+ * - Reads VITE_API_URL (e.g. https://api.zenova.agency) — falls back to /api/v1.
  * - Attaches the admin bearer token from auth storage when present.
  * - Normalises error responses ({ error: { code, message } }) into ApiError.
  * - Auto-refreshes the access token once on 401 if a refresh token exists.
