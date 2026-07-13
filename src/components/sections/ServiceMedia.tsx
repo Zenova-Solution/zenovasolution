@@ -42,6 +42,8 @@ export function ServiceMedia({
         muted
         loop
         playsInline
+        aria-hidden="true"
+        tabIndex={-1}
         onCanPlay={notify}
         onEnded={notify}
         className={className}

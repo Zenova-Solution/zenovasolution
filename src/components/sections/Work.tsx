@@ -94,7 +94,7 @@ function EmberRow({
               </div>
             )}
 
-            <Link to={`/work/${project.slug}`} className="mono ember-row__cta">
+            <Link to={`/work/${project.slug}`} className="mono ember-row__cta" aria-label={`View ${project.client} case study`}>
               View case study <span aria-hidden>→</span>
             </Link>
           </motion.div>

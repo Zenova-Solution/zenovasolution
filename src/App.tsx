@@ -165,11 +165,13 @@ function PublicLayout({
   return (
     <>
       <Nav />
-      <AnimatedRoutes
-        rotateMs={rotateMs}
-        showMarquee={showMarquee}
-        showTestimonials={showTestimonials}
-      />
+      <main id="main-content">
+        <AnimatedRoutes
+          rotateMs={rotateMs}
+          showMarquee={showMarquee}
+          showTestimonials={showTestimonials}
+        />
+      </main>
       {isKnownPath && <Footer />}
     </>
   );

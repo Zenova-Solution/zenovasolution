@@ -56,12 +56,24 @@ export function Footer() {
               {footer.tagline}
             </p>
             <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-              {socials.map((s) => (
+              {socials.map((s) => {
+                const labelMap: Record<string, string> = {
+                  twitter: `Follow Zenova on X (Twitter)`,
+                  x: `Follow Zenova on X (Twitter)`,
+                  linkedin: `Visit Zenova on LinkedIn`,
+                  github: `Visit Zenova on GitHub`,
+                  dribbble: `View Zenova on Dribbble`,
+                  youtube: `Visit Zenova on YouTube`,
+                  instagram: `Follow Zenova on Instagram`,
+                  facebook: `Visit Zenova on Facebook`,
+                };
+                return (
                 <a
                   key={s.platform}
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={labelMap[s.platform] ?? `Visit Zenova on ${s.platform}`}
                   style={{
                     width: 36,
                     height: 36,
@@ -89,7 +101,8 @@ export function Footer() {
                     </span>
                   )}
                 </a>
-              ))}
+                );
+              })}
             </div>
           </div>
           {footer.columns.map((c) => (
