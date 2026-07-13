@@ -90,6 +90,10 @@ export function RichTextEditor({
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Record<string, boolean>>({});
   const [block, setBlock] = useState('p');
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [linkText, setLinkText] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
+  const savedRangeRef = useRef<Range | null>(null);
 
   // Push external value changes into the DOM without clobbering the caret while
   // the user is typing (our own edits come back equal, so this no-ops then).
@@ -193,22 +197,60 @@ export function RichTextEditor({
 
   const setBlockFormat = (tag: string) => exec('formatBlock', `<${tag}>`);
 
-  const addLink = () => {
-    const url = window.prompt('Link URL (https://…)');
-    if (url == null) return;
-    const trimmed = url.trim();
-    if (!trimmed) return;
-    ref.current?.focus();
+  const openLinkModal = () => {
     const sel = window.getSelection();
-    if (sel && sel.toString()) {
-      document.execCommand('createLink', false, trimmed);
+    if (sel && sel.rangeCount > 0 && ref.current?.contains(sel.anchorNode)) {
+      savedRangeRef.current = sel.getRangeAt(0).cloneRange();
+      setLinkText(sel.toString());
+    } else {
+      savedRangeRef.current = null;
+      setLinkText('');
+    }
+    setLinkUrl('');
+    setShowLinkModal(true);
+  };
+
+  const handleInsertLink = () => {
+    const url = linkUrl.trim();
+    if (!url) return;
+
+    const el = ref.current;
+    if (!el) return;
+    const savedScroll = el.scrollTop;
+
+    el.focus();
+
+    const sel = window.getSelection();
+    if (savedRangeRef.current && sel) {
+      sel.removeAllRanges();
+      sel.addRange(savedRangeRef.current);
+    }
+
+    const text = linkText.trim();
+    if (text && sel && sel.toString()) {
+      document.execCommand(
+        'insertHTML',
+        false,
+        `<a href="${escapeAttr(url)}">${escapeHtml(text)}</a>`,
+      );
+    } else if (sel && sel.toString()) {
+      document.execCommand('createLink', false, url);
+    } else if (text) {
+      document.execCommand(
+        'insertHTML',
+        false,
+        `<a href="${escapeAttr(url)}">${escapeHtml(text)}</a>`,
+      );
     } else {
       document.execCommand(
         'insertHTML',
         false,
-        `<a href="${escapeAttr(trimmed)}">${escapeHtml(trimmed)}</a>`,
+        `<a href="${escapeAttr(url)}">${escapeHtml(url)}</a>`,
       );
     }
+
+    el.scrollTop = savedScroll;
+    setShowLinkModal(false);
     emit();
   };
 
@@ -292,17 +334,10 @@ export function RichTextEditor({
 
         <span className="rte__sep" />
 
-        <TB label="Insert link" onClick={addLink}>
+        <TB label="Insert link" onClick={openLinkModal}>
           <Ico>
             <path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1" />
             <path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1" />
-          </Ico>
-        </TB>
-        <TB label="Remove link" onClick={() => exec('unlink')}>
-          <Ico>
-            <path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1" />
-            <path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1" />
-            <line x1="3" y1="3" x2="21" y2="21" />
           </Ico>
         </TB>
         <TB label="Horizontal divider" onClick={() => exec('insertHorizontalRule')}>
@@ -337,6 +372,50 @@ export function RichTextEditor({
         onFocus={onFocus}
         onPaste={handlePaste}
       />
+
+      {showLinkModal && (
+        <div className="rte__modal-overlay" onClick={() => setShowLinkModal(false)}>
+          <div className="rte__modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="rte__modal-title">Insert Link</h3>
+            <label className="rte__modal-field">
+              <span>Text (optional)</span>
+              <input
+                type="text"
+                value={linkText}
+                onChange={(e) => setLinkText(e.target.value)}
+                placeholder="Link text"
+                autoFocus
+              />
+            </label>
+            <label className="rte__modal-field">
+              <span>Link</span>
+              <input
+                type="text"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="https://… or /path"
+                onKeyDown={(e) => { if (e.key === 'Enter') handleInsertLink(); }}
+              />
+            </label>
+            <div className="rte__modal-actions">
+              <button
+                type="button"
+                className="rte__modal-btn rte__modal-btn--cancel"
+                onClick={() => setShowLinkModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="rte__modal-btn rte__modal-btn--primary"
+                onClick={handleInsertLink}
+              >
+                Insert Link
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
