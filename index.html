@@ -12,18 +12,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" as="style" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" as="style" />
     <link
       href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    </noscript>
+
+    <style>
+      @keyframes spin { to { transform: rotate(360deg); } }
+      html, body { margin: 0; padding: 0; background: #0a0a0a; }
+    </style>
 
     <script>
-      // SPA redirect decoder — pairs with public/404.html for GitHub Pages.
-      // If we arrived via /?/path encoding, rewrite back to the real path.
       (function (l) {
         if (l.search[1] === '/') {
           var decoded = l.search

@@ -1,0 +1,29 @@
+# Zenova
+
+Zenova is a marketing and delivery website for a modern agency. This file is written for AI agents and other automated browsers that need a concise map of the public site.
+
+## Primary pages
+
+- [Home](/)
+- [Services](/services)
+- [Pricing](/pricing)
+- [Work](/work)
+- [About](/about)
+- [Careers](/careers)
+- [Contact](/contact)
+
+## Reference pages
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)
+
+## Notes for crawlers and agents
+
+- Prefer the public marketing pages listed above.
+- The login and workspace routes are not part of the public content surface: `/login`, `/admin/*`, `/client/*`, and `/team/*`.
+- Public content is a single-page React app with route-based pages rendered by the client.
+- For the most representative entry point, start at the home page and follow the page links above.
+
+## Site summary
+
+Zenova presents agency services, pricing, work samples, hiring information, and contact details. The public experience is optimized for humans first, but the pages above are the stable URLs most useful for AI browsing, indexing, and evaluation.

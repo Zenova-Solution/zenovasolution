@@ -66,6 +66,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
+
+main > section:not(#top) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
 a {
   color: inherit;
   text-decoration: none;

@@ -1,5 +1,5 @@
-import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/icons/Icon';
 
 export type ApplyButtonSize = 'sm' | 'md' | 'lg';
 
@@ -78,7 +78,7 @@ export function ApplyButton({
         )}
         aria-hidden="true"
       >
-        <ArrowUpRight size={s.icon} />
+        <Icon.ArrowUpRight size={s.icon} />
       </span>
     </button>
   );

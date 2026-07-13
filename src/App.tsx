@@ -3,39 +3,6 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
-import { ServicesPage } from '@/pages/ServicesPage';
-import { ServiceDetailPage } from '@/pages/ServiceDetailPage';
-import { PricingPage } from '@/pages/PricingPage';
-import { WorkPage } from '@/pages/WorkPage';
-import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
-import { CareersPage } from '@/pages/CareersPage';
-import { JobDetailPage } from '@/pages/JobDetailPage';
-import { AboutPage } from '@/pages/AboutPage';
-import { ContactPage } from '@/pages/ContactPage';
-import { LegalPage } from '@/pages/LegalPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
-import { Login } from '@/pages/Login';
-import { AuthGate } from '@/components/ui/AuthGate';
-import { Overview } from '@/admin/pages/Overview';
-import { ClientOverview } from '@/client/pages/Overview';
-import { TeamOverview } from '@/team/pages/Overview';
-import { ServicesAdmin } from '@/admin/pages/ServicesAdmin';
-import { ServiceEditor } from '@/admin/pages/ServiceEditor';
-import { ProjectsAdmin } from '@/admin/pages/ProjectsAdmin';
-import { ProjectEditor } from '@/admin/pages/ProjectEditor';
-import { JobsAdmin } from '@/admin/pages/JobsAdmin';
-import { JobEditor } from '@/admin/pages/JobEditor';
-import { TeamAdmin } from '@/admin/pages/TeamAdmin';
-import { ContentAdmin } from '@/admin/pages/ContentAdmin';
-import { PricingAdmin } from '@/admin/pages/PricingAdmin';
-import { LegalAdmin } from '@/admin/pages/LegalAdmin';
-import { MediaAdmin } from '@/admin/pages/MediaAdmin';
-import { Settings as AdminSettings } from '@/admin/pages/Settings';
-import { InputsShowcase } from '@/admin/pages/InputsShowcase';
-import { InvoiceList } from '@/admin/pages/InvoiceList';
-import { InvoiceEditor } from '@/admin/pages/InvoiceEditor';
-import { UsersAdmin } from '@/admin/pages/UsersAdmin';
-import { Inbox } from '@/admin/pages/Inbox';
 import { TWEAK_DEFAULTS } from '@/config/tweaks';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { useReveal } from '@/hooks/useReveal';
@@ -43,30 +10,46 @@ import { useTweaks } from '@/hooks/useTweaks';
 import { applyPalette } from '@/lib/palette';
 import { applyTheme, getInitialTheme } from '@/lib/theme';
 import type { Theme } from '@/types/tweaks';
-import { hydrateSite } from '@/admin/store';
 import { ConfirmProvider } from '@/admin/components/ConfirmProvider';
 import { SeoManager } from '@/seo/SeoManager';
 
-// Tweaks panel ships only in dev builds — lazy import is tree-shaken in prod.
+const ServicesPage = lazy(() => import('@/pages/ServicesPage').then(m => ({ default: m.ServicesPage })));
+const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage').then(m => ({ default: m.ServiceDetailPage })));
+const PricingPage = lazy(() => import('@/pages/PricingPage').then(m => ({ default: m.PricingPage })));
+const WorkPage = lazy(() => import('@/pages/WorkPage').then(m => ({ default: m.WorkPage })));
+const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then(m => ({ default: m.ProjectDetailPage })));
+const CareersPage = lazy(() => import('@/pages/CareersPage').then(m => ({ default: m.CareersPage })));
+const JobDetailPage = lazy(() => import('@/pages/JobDetailPage').then(m => ({ default: m.JobDetailPage })));
+const AboutPage = lazy(() => import('@/pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const ContactPage = lazy(() => import('@/pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const LegalPage = lazy(() => import('@/pages/LegalPage').then(m => ({ default: m.LegalPage })));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const Login = lazy(() => import('@/pages/Login').then(m => ({ default: m.Login })));
+const AuthGate = lazy(() => import('@/components/ui/AuthGate').then(m => ({ default: m.AuthGate })));
+
 const ZenovaTweaks = import.meta.env.DEV
   ? lazy(() => import('@/dev/ZenovaTweaks').then((m) => ({ default: m.ZenovaTweaks })))
   : null;
+
+function PageLoader() {
+  return <div style={{ minHeight: '100vh' }} />;
+}
+
+const AdminRoutesLazy = lazy(() => import('@/admin/AdminRoutes'));
+const ClientRoutesLazy = lazy(() => import('@/client/ClientRoutes'));
+const TeamRoutesLazy = lazy(() => import('@/team/TeamRoutes'));
 
 export function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
   useEffect(() => {
-    void hydrateSite();
-  }, []);
-
-  useEffect(() => {
     applyPalette(t.palette);
   }, [t.palette]);
 
-  // On mount, honor the user's stored theme choice; only follow t.theme when
-  // the dev tweaks panel actually changes it (never clobber storage with the
-  // static default). Tracking the previous value — not a ran-once flag — keeps
-  // StrictMode's double-invoke from writing the default over a stored choice.
+  useEffect(() => {
+    import('@/admin/store').then(m => m.hydrateSite()).catch(() => {});
+  }, []);
+
   const prevTweakTheme = useRef<Theme | null>(null);
   useEffect(() => {
     if (prevTweakTheme.current === null) {
@@ -85,46 +68,45 @@ export function App() {
       <SeoManager />
       <ConfirmProvider>
       <Routes>
-        {/* Unified login endpoint */}
-        <Route path="/login" element={<Login />} />
-
-        {/* Backward compatibility: redirect old login URLs to unified login */}
+        <Route path="/login" element={
+          <Suspense fallback={<PageLoader />}>
+            <Login />
+          </Suspense>
+        } />
         <Route path="/signin" element={<Navigate to="/login" replace />} />
         <Route path="/admin/login" element={<Navigate to="/login" replace />} />
-        <Route path="/client/login" element={<Navigate to="/login" replace />} />
         <Route path="/team/login" element={<Navigate to="/login" replace />} />
-
-        {/* Admin portal - requires admin role */}
+        <Route path="/client/login" element={<Navigate to="/login" replace />} />
         <Route
           path="/admin/*"
           element={
-            <AuthGate requiredRoles={['admin']}>
-              <AdminRoutes />
-            </AuthGate>
+            <Suspense fallback={<PageLoader />}>
+              <AuthGate requiredRoles={['admin']}>
+                <AdminRoutesLazy />
+              </AuthGate>
+            </Suspense>
           }
         />
-
-        {/* Client portal - requires client or admin role */}
         <Route
           path="/client/*"
           element={
-            <AuthGate requiredRoles={['client', 'admin']}>
-              <ClientRoutes />
-            </AuthGate>
+            <Suspense fallback={<PageLoader />}>
+              <AuthGate requiredRoles={['client', 'admin']}>
+                <ClientRoutesLazy />
+              </AuthGate>
+            </Suspense>
           }
         />
-
-        {/* Team portal - requires team or admin role */}
         <Route
           path="/team/*"
           element={
-            <AuthGate requiredRoles={['team', 'admin']}>
-              <TeamRoutes />
-            </AuthGate>
+            <Suspense fallback={<PageLoader />}>
+              <AuthGate requiredRoles={['team', 'admin']}>
+                <TeamRoutesLazy />
+              </AuthGate>
+            </Suspense>
           }
         />
-
-        {/* Public routes */}
         <Route
           path="/*"
           element={
@@ -188,71 +170,21 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
   return (
     <div key={location.pathname} className="page-transition">
       <Routes location={location}>
-        <Route
-          path="/"
-          element={
-            <Home
-              rotateMs={rotateMs}
-              showMarquee={showMarquee}
-              showTestimonials={showTestimonials}
-            />
-          }
-        />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/services/:slug" element={<ServiceDetailPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/" element={<Home rotateMs={rotateMs} showMarquee={showMarquee} showTestimonials={showTestimonials} />} />
+        <Route path="/services" element={<Suspense fallback={<PageLoader />}><ServicesPage /></Suspense>} />
+        <Route path="/services/:slug" element={<Suspense fallback={<PageLoader />}><ServiceDetailPage /></Suspense>} />
+        <Route path="/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
         <Route path="/process" element={<Navigate to="/services" replace />} />
-        <Route path="/work" element={<WorkPage />} />
-        <Route path="/work/:slug" element={<ProjectDetailPage />} />
-        <Route path="/careers" element={<CareersPage />} />
-        <Route path="/careers/:slug" element={<JobDetailPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/privacy" element={<LegalPage doc="privacy" />} />
-        <Route path="/terms" element={<LegalPage doc="terms" />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/work" element={<Suspense fallback={<PageLoader />}><WorkPage /></Suspense>} />
+        <Route path="/work/:slug" element={<Suspense fallback={<PageLoader />}><ProjectDetailPage /></Suspense>} />
+        <Route path="/careers" element={<Suspense fallback={<PageLoader />}><CareersPage /></Suspense>} />
+        <Route path="/careers/:slug" element={<Suspense fallback={<PageLoader />}><JobDetailPage /></Suspense>} />
+        <Route path="/about" element={<Suspense fallback={<PageLoader />}><AboutPage /></Suspense>} />
+        <Route path="/contact" element={<Suspense fallback={<PageLoader />}><ContactPage /></Suspense>} />
+        <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><LegalPage doc="privacy" /></Suspense>} />
+        <Route path="/terms" element={<Suspense fallback={<PageLoader />}><LegalPage doc="terms" /></Suspense>} />
+        <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
       </Routes>
     </div>
-  );
-}
-
-function AdminRoutes() {
-  return (
-    <Routes>
-      <Route index element={<Overview />} />
-      <Route path="services" element={<ServicesAdmin />} />
-      <Route path="services/:slug" element={<ServiceEditor />} />
-      <Route path="projects" element={<ProjectsAdmin />} />
-      <Route path="projects/:slug" element={<ProjectEditor />} />
-      <Route path="jobs" element={<JobsAdmin />} />
-      <Route path="jobs/:slug" element={<JobEditor />} />
-      <Route path="team" element={<TeamAdmin />} />
-      <Route path="content" element={<ContentAdmin />} />
-      <Route path="pricing" element={<PricingAdmin />} />
-      <Route path="legal" element={<LegalAdmin />} />
-      <Route path="media" element={<MediaAdmin />} />
-      <Route path="invoices" element={<InvoiceList />} />
-      <Route path="invoices/:id" element={<InvoiceEditor />} />
-      <Route path="users" element={<UsersAdmin />} />
-      <Route path="inbox" element={<Inbox />} />
-      <Route path="settings" element={<AdminSettings />} />
-      <Route path="inputs" element={<InputsShowcase />} />
-    </Routes>
-  );
-}
-
-function ClientRoutes() {
-  return (
-    <Routes>
-      <Route index element={<ClientOverview />} />
-    </Routes>
-  );
-}
-
-function TeamRoutes() {
-  return (
-    <Routes>
-      <Route index element={<TeamOverview />} />
-    </Routes>
   );
 }
