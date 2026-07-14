@@ -14,6 +14,7 @@ export interface Lead {
   name: string;
   email: string;
   message: string;
+  service: string | null;
   is_read: boolean;
   created_at: string;
 }

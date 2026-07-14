@@ -666,6 +666,7 @@ class ContactCreate(_Base):
     name: UserName
     email: EmailStr
     message: ContactMessage
+    service: str | None = None
     # Honeypot: a field hidden from real users. Bots tend to fill every input,
     # so a non-empty value marks the submission as spam (silently dropped).
     company_website: str = ""
@@ -676,6 +677,7 @@ class LeadOut(_Base):
     name: str
     email: EmailStr
     message: str
+    service: str | None = None
     is_read: bool
     created_at: datetime
 

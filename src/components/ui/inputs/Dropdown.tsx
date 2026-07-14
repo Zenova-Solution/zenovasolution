@@ -178,6 +178,20 @@ export function Dropdown<V extends string | number = string>({
     node?.scrollIntoView({ block: 'nearest' });
   }, [activeIdx, open]);
 
+  const handleWheel = (e: React.WheelEvent) => {
+    const el = listRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const atTop = scrollTop <= 0;
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+    if (
+      (e.deltaY > 0 && !atBottom) ||
+      (e.deltaY < 0 && !atTop)
+    ) {
+      e.stopPropagation();
+    }
+  };
+
   const pick = (opt: DropdownOption<V>) => {
     if (opt.disabled) return;
     onChange(opt.value);
@@ -234,7 +248,7 @@ export function Dropdown<V extends string | number = string>({
             />
           </div>
         )}
-        <div ref={listRef} className="zui-dropdown__list" role="listbox">
+        <div ref={listRef} className="zui-dropdown__list" role="listbox" onWheel={handleWheel}>
           {filtered.length === 0 && <div className="zui-dropdown__empty">No matches</div>}
           {filtered.map((opt, i) => {
             const isSelected = opt.value === value;

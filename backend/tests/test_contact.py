@@ -50,8 +50,10 @@ def auth(token: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"}
 
 
-async def make_lead(db: AsyncSession, name: str, email: str, message: str = "hi") -> Lead:
-    lead = Lead(name=name, email=email, message=message)
+async def make_lead(
+    db: AsyncSession, name: str, email: str, message: str = "hi", service: str | None = None
+) -> Lead:
+    lead = Lead(name=name, email=email, message=message, service=service)
     db.add(lead)
     await db.commit()
     return lead
@@ -63,7 +65,12 @@ async def make_lead(db: AsyncSession, name: str, email: str, message: str = "hi"
 
 
 async def test_submit_creates_lead(client: AsyncClient, db: AsyncSession) -> None:
-    payload = {"name": "Ada Lovelace", "email": "Ada@Example.com", "message": "Hello there"}
+    payload = {
+        "name": "Ada Lovelace",
+        "email": "Ada@Example.com",
+        "message": "Hello there",
+        "service": "web-development",
+    }
     r = await client.post(CONTACT, json=payload)
     assert r.status_code == 204, r.text
 
@@ -72,6 +79,7 @@ async def test_submit_creates_lead(client: AsyncClient, db: AsyncSession) -> Non
     lead = rows[0]
     assert lead.email == "ada@example.com"  # normalized to lowercase
     assert lead.message == "Hello there"
+    assert lead.service == "web-development"
     assert lead.is_read is False
 
 

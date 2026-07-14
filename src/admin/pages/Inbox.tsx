@@ -247,6 +247,11 @@ export function Inbox() {
                       gap: 14,
                     }}
                   >
+                    {lead.service && (
+                      <div style={{ fontSize: 12, color: 'var(--fg-dim)' }}>
+                        Service: <span style={{ color: 'var(--fg)' }}>{lead.service}</span>
+                      </div>
+                    )}
                     <p
                       style={{
                         margin: 0,

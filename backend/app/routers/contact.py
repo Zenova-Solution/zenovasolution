@@ -32,6 +32,7 @@ def _to_out(lead: Lead) -> LeadOut:
         name=lead.name,
         email=lead.email,
         message=lead.message,
+        service=lead.service,
         is_read=lead.is_read,
         created_at=lead.created_at,
     )
@@ -47,7 +48,12 @@ async def submit(
         # Honeypot tripped — accept silently so the bot sees success and moves on.
         logger.info("contact_spam_dropped", email=payload.email)
         return
-    lead = Lead(name=payload.name, email=payload.email.lower(), message=payload.message)
+    lead = Lead(
+        name=payload.name,
+        email=payload.email.lower(),
+        message=payload.message,
+        service=payload.service,
+    )
     db.add(lead)
     await db.flush()
     logger.info("contact_received", lead_id=str(lead.id), email=lead.email)

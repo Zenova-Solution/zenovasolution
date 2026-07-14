@@ -122,6 +122,20 @@ export function Combobox({
 
   const showPopover = open && filtered.length > 0 && !disabled;
 
+  const handleWheel = (e: React.WheelEvent) => {
+    const el = listRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const atTop = scrollTop <= 0;
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+    if (
+      (e.deltaY > 0 && !atBottom) ||
+      (e.deltaY < 0 && !atTop)
+    ) {
+      e.stopPropagation();
+    }
+  };
+
   return (
     <Popover
       open={showPopover}
@@ -150,7 +164,7 @@ export function Combobox({
         </div>
       }
     >
-      <div ref={listRef} className="zui-dropdown__list" role="listbox">
+      <div ref={listRef} className="zui-dropdown__list" role="listbox" onWheel={handleWheel}>
         {filtered.map((s, i) => {
           const isSelected = s.toLowerCase() === value.trim().toLowerCase();
           return (

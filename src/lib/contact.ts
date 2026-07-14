@@ -12,6 +12,8 @@ export interface ContactPayload {
   name: string;
   email: string;
   message: string;
+  /** Service the user is interested in */
+  service?: string;
   /** Honeypot — hidden from real users; leave empty. A non-empty value is spam. */
   company_website?: string;
 }

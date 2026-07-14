@@ -174,6 +174,7 @@ class Lead(Base):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     email: Mapped[str] = mapped_column(String(254), nullable=False)
     message: Mapped[str] = mapped_column(Text, nullable=False)
+    service: Mapped[str | None] = mapped_column(String(60), nullable=True)
     is_read: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, index=True
     )

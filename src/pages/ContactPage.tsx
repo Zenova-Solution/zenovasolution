@@ -5,6 +5,8 @@ import { Icon } from '@/components/icons/Icon';
 import { useBrand } from '@/admin/store';
 import { submitContact } from '@/lib/contact';
 import { scrollToTop } from '@/lib/scroll';
+import { Dropdown, type DropdownOption } from '@/components/ui/inputs';
+import '@/components/ui/inputs/inputs.css';
 import './ContactPage.css';
 
 interface ContactDetail {
@@ -23,6 +25,18 @@ export function ContactPage() {
   const [honeypot, setHoneypot] = useState(''); // bots fill hidden fields; humans don't
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [service, setService] = useState<string | null>(null);
+
+  const SERVICES: DropdownOption<string>[] = [
+    { value: 'web-development', label: 'Web Development' },
+    { value: 'mobile-development', label: 'Mobile Development' },
+    { value: 'ui-ux-design', label: 'UI/UX Design' },
+    { value: 'brand-identity', label: 'Brand Identity' },
+    { value: 'digital-marketing', label: 'Digital Marketing' },
+    { value: 'seo-analytics', label: 'SEO / Analytics' },
+    { value: 'consulting', label: 'Consulting' },
+    { value: 'other', label: 'Other' },
+  ];
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -37,6 +51,7 @@ export function ContactPage() {
         name: name.trim(),
         email: emailValue.trim(),
         message: message.trim(),
+        service: service ?? undefined,
         company_website: honeypot,
       });
       setSubmitted(true);
@@ -166,6 +181,23 @@ export function ContactPage() {
                 value={emailValue}
                 onChange={(e) => setEmailValue(e.target.value)}
                 disabled={sending}
+              />
+            </div>
+
+            <div className="ct-field">
+              <label className="ct-field__label mono" id="ct-service-label">
+                Service
+              </label>
+              <Dropdown
+                id="ct-service"
+                className="ct-field__dropdown"
+                value={service}
+                options={SERVICES}
+                onChange={(v) => setService(v)}
+                placeholder="Select a service"
+                disabled={sending}
+                clearable
+                onClear={() => setService(null)}
               />
             </div>
 

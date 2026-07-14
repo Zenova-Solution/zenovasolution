@@ -163,6 +163,62 @@ a.ct-detail__value:hover {
   color: var(--accent-1);
 }
 
+/* Dropdown override — match the contact form's border-bottom aesthetic. */
+.ct-field .zui-trigger.ct-field__dropdown {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: auto;
+  padding: 12px 2px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--fg);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  cursor: pointer;
+  text-align: left;
+  gap: 10px;
+  transition: border-color 0.25s;
+}
+.ct-field .zui-trigger.ct-field__dropdown:hover:not(:disabled) {
+  background: transparent;
+  border-bottom-color: var(--line-strong);
+}
+.ct-field .zui-trigger.ct-field__dropdown:focus-visible,
+.ct-field .zui-trigger.ct-field__dropdown.is-open {
+  outline: none;
+  border-bottom-color: var(--accent-1);
+  background: transparent;
+  box-shadow: none;
+}
+.ct-field .zui-trigger.ct-field__dropdown .zui-trigger__value.is-placeholder {
+  color: var(--fg-faint);
+}
+.ct-field .zui-trigger.ct-field__dropdown .zui-trigger__caret {
+  color: var(--fg-faint);
+}
+.ct-field .zui-trigger.ct-field__dropdown.is-open .zui-trigger__caret {
+  transform: rotate(180deg);
+  color: var(--accent-1);
+}
+.ct-field .zui-trigger.ct-field__dropdown .zui-trigger__clear {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  background: var(--line);
+  color: var(--fg-faint);
+}
+.ct-field .zui-trigger.ct-field__dropdown .zui-trigger__clear:hover {
+  background: var(--line-strong);
+  color: var(--fg);
+}
+.ct-field .zui-trigger.ct-field__dropdown:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* Honeypot — visually removed but still submitted; bots tend to fill it. */
 .ct-hp {
   position: absolute;
