@@ -1,8 +1,8 @@
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useMemo, useState } from 'react';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { GhostButton } from '@/components/ui/GhostButton';
 import { Icon } from '@/components/icons/Icon';
-import { useBrand } from '@/admin/store';
+import { useBrand, useServices } from '@/admin/store';
 import { submitContact } from '@/lib/contact';
 import { scrollToTop } from '@/lib/scroll';
 import { Dropdown, type DropdownOption } from '@/components/ui/inputs';
@@ -26,17 +26,16 @@ export function ContactPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [service, setService] = useState<string | null>(null);
+  const [servicesFromStore] = useServices();
 
-  const SERVICES: DropdownOption<string>[] = [
-    { value: 'web-development', label: 'Web Development' },
-    { value: 'mobile-development', label: 'Mobile Development' },
-    { value: 'ui-ux-design', label: 'UI/UX Design' },
-    { value: 'brand-identity', label: 'Brand Identity' },
-    { value: 'digital-marketing', label: 'Digital Marketing' },
-    { value: 'seo-analytics', label: 'SEO / Analytics' },
-    { value: 'consulting', label: 'Consulting' },
-    { value: 'other', label: 'Other' },
-  ];
+  const SERVICES: DropdownOption<string>[] = useMemo(
+    () =>
+      servicesFromStore.map((s) => ({
+        value: s.slug,
+        label: s.title,
+      })),
+    [servicesFromStore],
+  );
   useEffect(() => {
     scrollToTop();
   }, []);

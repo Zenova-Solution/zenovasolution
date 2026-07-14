@@ -85,11 +85,11 @@ function ServicePanel({
     >
       <ServiceVisualFull s={s} active={active} />
       <CardOverlay s={s} />
-      <span className="svc-panel__bar" aria-hidden="true" />
+      {/* <span className="svc-panel__bar" aria-hidden="true" /> */}
 
       {/* Collapsed spine — shown when the panel is not the active one (panels mode). */}
       <div className="svc-panel__spine" aria-hidden="true">
-        <span className="mono svc-panel__spine-num">{num}</span>
+        <span className="mono svc-panel__spine-num"></span>
         <span className="display svc-panel__spine-title">{s.title}</span>
       </div>
 
