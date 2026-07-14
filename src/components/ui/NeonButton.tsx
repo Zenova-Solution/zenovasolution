@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './NeonButton.css';
 
 export type NeonButtonSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -6,6 +7,10 @@ export type NeonButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 export interface NeonButtonProps {
   text?: string;
   onClick?: () => void;
+  /** If provided, renders as a React Router <Link> instead of <button>. */
+  to?: string;
+  /** If provided, renders as a plain <a> tag (use for external/mailto links). */
+  href?: string;
   className?: string;
   size?: NeonButtonSize;
   /** Omit to keep the native default (submit inside a <form>). */
@@ -23,41 +28,37 @@ const SIZE_ICON: Record<NeonButtonSize, number> = {
 export function NeonButton({
   text = 'Apply as Model',
   onClick,
+  to,
+  href,
   className = '',
   size = 'sm',
   type,
   disabled = false,
 }: NeonButtonProps) {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const wrapperRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
 
   useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = button.getBoundingClientRect();
+      const rect = wrapper.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      button.style.setProperty('--x', `${x}px`);
-      button.style.setProperty('--y', `${y}px`);
+      wrapper.style.setProperty('--x', `${x}px`);
+      wrapper.style.setProperty('--y', `${y}px`);
     };
 
-    button.addEventListener('mousemove', handleMouseMove);
+    wrapper.addEventListener('mousemove', handleMouseMove as EventListener);
     return () => {
-      button.removeEventListener('mousemove', handleMouseMove);
+      wrapper.removeEventListener('mousemove', handleMouseMove as EventListener);
     };
   }, []);
 
   const iconSize = SIZE_ICON[size];
-
-  return (
-    <button
-      className={`neon-button neon-button--${size} ${className}`}
-      ref={buttonRef}
-      onClick={onClick}
-      type={type}
-      disabled={disabled}
-    >
+  const classes = `neon-button neon-button--${size} ${className}`;
+  const content = (
+    <>
       <div className="neon-button-glow" />
       <div className="neon-button-content">
         <span className="neon-button__text">{text}</span>
@@ -92,6 +93,46 @@ export function NeonButton({
           </svg>
         </div>
       </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        ref={wrapperRef as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        className={classes}
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? (e) => e.preventDefault() : undefined}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  if (to) {
+    return (
+      <Link
+        ref={wrapperRef as React.RefObject<HTMLAnchorElement>}
+        to={to}
+        className={classes}
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? (e) => e.preventDefault() : undefined}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      ref={wrapperRef as React.RefObject<HTMLButtonElement>}
+      className={classes}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
+      {content}
     </button>
   );
 }

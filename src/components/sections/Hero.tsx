@@ -109,17 +109,11 @@ export function Hero({ rotateMs }: HeroProps) {
         >
           <NeonButton
             text={content.hero.primaryCta}
-            onClick={() => {
-              const href = content.hero.primaryCtaHref || '/contact';
-              window.location.href = href;
-            }}
+            to={content.hero.primaryCtaHref || '/contact'}
           />
           <GhostButton
             text={content.hero.secondaryCta}
-            onClick={() => {
-              const href = content.hero.secondaryCtaHref || '#services';
-              window.location.href = href;
-            }}
+            to={content.hero.secondaryCtaHref || '#services'}
           />
         </div>
 

@@ -251,7 +251,7 @@ export function ProjectDetailPage() {
             <br />
             like these?
           </h2>
-          <NeonButton text="Start a project" onClick={() => { window.location.href = '/contact'; }} />
+          <NeonButton text="Start a project" to="/contact" />
         </div>
       </section>
 

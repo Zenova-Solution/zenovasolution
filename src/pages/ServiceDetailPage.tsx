@@ -102,7 +102,7 @@ export function ServiceDetailPage() {
           )}
 
           <div className="sd-rail__cta">
-            <NeonButton text="Start this project" onClick={() => { window.location.href = '/contact'; }} />
+            <NeonButton text="Start this project" to="/contact" />
           </div>
         </aside>
 
@@ -227,8 +227,8 @@ export function ServiceDetailPage() {
             you are.
           </h2>
           <div className="sd-cta__actions">
-            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
-            <GhostButton text="See the process" onClick={() => { window.location.href = '/services'; }} />
+            <NeonButton text="Get in touch" to="/contact" />
+            <GhostButton text="See the process" to="/services" />
           </div>
         </div>
       </section>

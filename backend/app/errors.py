@@ -109,12 +109,17 @@ def install_exception_handlers(app: FastAPI) -> None:
             fields=fields,
             error_count=len(errors),
         )
+        # Redact the raw `input` values before returning them to the client.
+        safe_errors = []
+        for e in errors:
+            safe = {k: v for k, v in e.items() if k != "input"}
+            safe_errors.append(safe)
         return ORJSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             content=_payload(
                 "validation_failed",
                 "Request data is invalid.",
-                details=errors,
+                details={"fields": fields, "errors": safe_errors},
             ),
         )
 

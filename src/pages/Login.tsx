@@ -107,7 +107,6 @@ export function Login() {
                 type="button"
                 className="auth-pw-toggle"
                 onClick={() => setShowPw((v) => !v)}
-                tabIndex={-1}
                 aria-label="Toggle password visibility"
               >
                 {showPw ? (

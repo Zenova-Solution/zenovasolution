@@ -44,18 +44,8 @@ export function CTA() {
               {cta.sub}
             </p>
             <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <NeonButton
-                text={cta.primary}
-                onClick={() => {
-                  if (cta.primaryHref) window.location.href = cta.primaryHref;
-                }}
-              />
-              <GhostButton
-                text={cta.secondary}
-                onClick={() => {
-                  if (cta.secondaryHref) window.location.href = cta.secondaryHref;
-                }}
-              />
+              <NeonButton text={cta.primary} to={cta.primaryHref || '/contact'} />
+              <GhostButton text={cta.secondary} to={cta.secondaryHref || '/services'} />
             </div>
           </div>
         </div>

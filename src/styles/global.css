@@ -30,8 +30,9 @@
   --bg: #faf8f5;
   --bg-2: #f0ece6;
   --fg: #1a1410;
-  --fg-dim: rgba(26, 20, 16, 0.6);
-  --fg-faint: rgba(26, 20, 16, 0.55);
+  /* Opaque values chosen to meet WCAG 4.5:1 contrast on #faf8f5. */
+  --fg-dim: #5c534d;
+  --fg-faint: #5c534d;
   --line: rgba(26, 20, 16, 0.1);
   --line-strong: rgba(26, 20, 16, 0.18);
   --card: #f0ece6;
@@ -1182,6 +1183,71 @@ section.sec {
   color: #000 !important;
   background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,0,0,0.06), transparent);
   text-shadow: 0 0 18px rgba(0,0,0,0.35);
+}
+
+.nav-lamp {
+  animation: nav-lamp-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  pointer-events: none;
+}
+@keyframes nav-lamp-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.nav-lamp__core {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 4px;
+  background-color: #ff813a;
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  box-shadow: 0 0 12px rgba(255, 129, 58, 0.8);
+}
+:root[data-theme='light'] .nav-lamp__core {
+  background-color: #000;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+.nav-lamp__halo {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 24px;
+  background-color: rgba(255, 129, 58, 0.3);
+  border-radius: 999px;
+  filter: blur(8px);
+}
+:root[data-theme='light'] .nav-lamp__halo {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.nav-lamp__beam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 129, 58, 0.2), rgba(255, 129, 58, 0.05), transparent);
+  filter: blur(8px);
+}
+:root[data-theme='light'] .nav-lamp__beam {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.03), transparent);
+}
+.nav-lamp__glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 129, 58, 0.4), rgba(255, 129, 58, 0.1), transparent);
+  filter: blur(4px);
+}
+:root[data-theme='light'] .nav-lamp__glow {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.06), transparent);
 }
 
 .hamburger-bars {

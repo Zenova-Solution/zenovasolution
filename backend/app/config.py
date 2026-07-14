@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     db_pool_recycle_seconds: int = 1800
 
     jwt_secret: str = Field(min_length=32)
-    jwt_algorithm: str = "HS256"
+    jwt_algorithm: Literal["HS256", "HS384", "HS512"] = "HS256"
     jwt_access_ttl_minutes: int = 720
     jwt_refresh_ttl_days: int = 30
     bcrypt_rounds: int = 12
@@ -56,6 +56,13 @@ class Settings(BaseSettings):
     def _split_csv(cls, v: object) -> object:
         if isinstance(v, str):
             return [s.strip() for s in v.split(",") if s.strip()]
+        return v
+
+    @field_validator("cors_origins")
+    @classmethod
+    def _reject_wildcard_cors(cls, v: list[str]) -> list[str]:
+        if "*" in v:
+            raise ValueError("CORS_ORIGINS cannot contain a wildcard '*'.")
         return v
 
     @property

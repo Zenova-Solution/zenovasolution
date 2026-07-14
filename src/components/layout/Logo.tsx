@@ -19,7 +19,14 @@ export function Logo({ size, animate = false }: LogoProps) {
       role="img"
       aria-label="Zenova"
     >
-      <img src={markSrc} alt="" aria-hidden="true" className="zlogo-mark" />
+      <img
+        src={markSrc}
+        alt=""
+        aria-hidden="true"
+        fetchPriority="high"
+        decoding="async"
+        className="zlogo-mark"
+      />
       <span className="zlogo-word" aria-hidden="true">
         {animate
           ? LETTERS.map((ch, i) => (
@@ -39,7 +46,13 @@ export function LogoMark({ size }: LogoProps) {
   const markSrc = `${import.meta.env.BASE_URL}assets/zenova-mark.png`;
   return (
     <span style={{ display: 'inline-flex', ...style }}>
-      <img src={markSrc} alt="Zenova" className="zlogo-mark-only" />
+      <img
+        src={markSrc}
+        alt="Zenova"
+        loading="lazy"
+        decoding="async"
+        className="zlogo-mark-only"
+      />
     </span>
   );
 }

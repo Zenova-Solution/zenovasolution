@@ -230,8 +230,8 @@ export function PricingPage() {
             a real timeline — and that number doesn&rsquo;t move unless the scope does.
           </p>
           <div className="pcx-note__actions">
-            <NeonButton text="Book a scoping call" onClick={() => { window.location.href = '/contact'; }} />
-            <GhostButton text="See our process" onClick={() => { window.location.href = '/services'; }} />
+            <NeonButton text="Book a scoping call" to="/contact" />
+            <GhostButton text="See our process" to="/services" />
           </div>
         </div>
       </section>

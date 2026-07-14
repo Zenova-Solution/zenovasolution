@@ -26,13 +26,8 @@ export function JobDetailPage() {
     `Application: ${job.title}`
   )}`;
 
-  const apply = () => {
-    if (job.applyUrl.trim()) {
-      window.open(job.applyUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      window.location.assign(mailto);
-    }
-  };
+  const applyHref = job.applyUrl.trim() ? job.applyUrl : mailto;
+  const applyExternal = job.applyUrl.trim() ? true : false;
 
   const specs: Array<[string, string]> = [
     ['Department', job.department],
@@ -80,7 +75,12 @@ export function JobDetailPage() {
                 ? 'Apply through our hiring page — it only takes a few minutes.'
                 : `Send your CV and a short note to ${brand.careersEmail}.`}
             </p>
-            <ApplyButton text="Apply now" size="md" onClick={apply} />
+            <ApplyButton
+              text="Apply now"
+              size="md"
+              href={applyHref}
+              {...(applyExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            />
           </div>
           <a className="jd-rail__mail mono" href={mailto}>
             Questions? {brand.careersEmail} <Icon.Arrow size={12} />
@@ -140,8 +140,13 @@ export function JobDetailPage() {
             your kind of work?
           </h2>
           <div className="jd-cta__actions">
-            <ApplyButton text="Apply now" size="md" onClick={apply} />
-            <GhostButton text="See all roles" onClick={() => { window.location.href = '/careers'; }} />
+            <ApplyButton
+              text="Apply now"
+              size="md"
+              href={applyHref}
+              {...(applyExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            />
+            <GhostButton text="See all roles" to="/careers" />
           </div>
         </div>
       </section>

@@ -19,6 +19,11 @@
   border-color: color-mix(in srgb, var(--neon-glow) 20%, transparent);
 }
 
+.neon-button:focus-visible {
+  outline: 3px solid #ff813a;
+  outline-offset: 3px;
+}
+
 .neon-button:active {
   transform: scale(0.98);
 }

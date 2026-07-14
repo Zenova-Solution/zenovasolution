@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Logo } from './Logo';
 import { Icon } from '@/components/icons/Icon';
 import type { Theme } from '@/types/tweaks';
@@ -115,14 +114,10 @@ export function Nav() {
               >
                 <span style={{ position: 'relative', zIndex: 1 }}>{l.label}</span>
                 {active && (
-                  <motion.div
-                    layoutId="nav-lamp"
-                    initial={false}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 30,
-                    }}
+                  <div
+                    className="nav-lamp"
+                    data-theme={theme}
+                    aria-hidden="true"
                     style={{
                       position: 'absolute',
                       inset: 0,
@@ -131,40 +126,11 @@ export function Nav() {
                       borderRadius: 999,
                     }}
                   >
-                    <div style={{
-                      position: 'absolute', top: -2, left: '50%', transform: 'translateX(-50%)',
-                      width: 32, height: 4,
-                      backgroundColor: theme === 'light' ? '#000' : '#ff813a',
-                      borderTopLeftRadius: 999, borderTopRightRadius: 999,
-                      boxShadow: theme === 'light' ? '0 0 12px rgba(0,0,0,0.5)' : '0 0 12px rgba(255,129,58,0.8)'
-                    }} />
-                    {(
-                      <>
-                        <div style={{
-                          position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)',
-                          width: 48, height: 24,
-                          backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.15)' : 'rgba(255,129,58,0.3)',
-                          borderRadius: 999, filter: 'blur(8px)'
-                        }} />
-                        <div style={{
-                          position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-                          width: 72, height: '100%',
-                          background: theme === 'light'
-                            ? 'linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0.03), transparent)'
-                            : 'linear-gradient(to bottom, rgba(255,129,58,0.2), rgba(255,129,58,0.05), transparent)',
-                          filter: 'blur(8px)'
-                        }} />
-                        <div style={{
-                          position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-                          width: 32, height: '100%',
-                          background: theme === 'light'
-                            ? 'linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.06), transparent)'
-                            : 'linear-gradient(to bottom, rgba(255,129,58,0.4), rgba(255,129,58,0.1), transparent)',
-                          filter: 'blur(4px)'
-                        }} />
-                      </>
-                    )}
-                  </motion.div>
+                    <div className="nav-lamp__glow" />
+                    <div className="nav-lamp__halo" />
+                    <div className="nav-lamp__beam" />
+                    <div className="nav-lamp__core" />
+                  </div>
                 )}
               </Link>
             );
@@ -231,7 +197,7 @@ export function Nav() {
 
           <button
             className="nav-hamburger"
-            aria-label="Open menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
             style={{

@@ -140,13 +140,8 @@ export function CareersPage() {
             want to work with us.
           </p>
           <div className="car-cta__actions">
-            <NeonButton
-              text="Email us"
-              onClick={() => {
-                window.location.href = `mailto:${brand.careersEmail}`;
-              }}
-            />
-            <GhostButton text="See our work" onClick={() => { window.location.href = '/work'; }} />
+            <NeonButton text="Email us" href={`mailto:${brand.careersEmail}`} />
+            <GhostButton text="See our work" to="/work" />
           </div>
         </div>
       </section>

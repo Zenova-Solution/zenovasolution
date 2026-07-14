@@ -267,8 +267,8 @@ export function AboutPage() {
             we think?
           </h2>
           <div className="abt-cta__actions">
-            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
-            <GhostButton text="See our work" onClick={() => { window.location.href = '/work'; }} />
+            <NeonButton text="Get in touch" to="/contact" />
+            <GhostButton text="See our work" to="/work" />
           </div>
         </div>
       </section>

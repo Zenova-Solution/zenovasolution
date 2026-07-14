@@ -1,6 +1,20 @@
-import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useState,
+  type ChangeEvent,
+  type ReactNode,
+} from 'react';
 import { Combobox, DatePicker, Dropdown, Toggle } from '@/components/ui/inputs';
 import { isValidHex, isValidSlug, slugify } from '@/admin/lib/validate';
+
+const FieldIdContext = createContext<string | undefined>(undefined);
+
+function useFieldId() {
+  return useContext(FieldIdContext);
+}
 
 export function Field({
   label,
@@ -11,14 +25,20 @@ export function Field({
   hint?: string;
   children: ReactNode;
 }) {
+  const id = useId();
   return (
-    <div className="adm-field">
-      <label className="adm-label">{label}</label>
-      {children}
-      {hint && <p className="adm-help">{hint}</p>}
-    </div>
+    <FieldIdContext.Provider value={id}>
+      <div className="adm-field">
+        <label className="adm-label" htmlFor={id}>
+          {label}
+        </label>
+        {children}
+        {hint && <p className="adm-help">{hint}</p>}
+      </div>
+    </FieldIdContext.Provider>
   );
 }
+
 
 export function TextField({
   label,
@@ -35,9 +55,11 @@ export function TextField({
   placeholder?: string;
   type?: string;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
       <input
+        id={id}
         type={type}
         className="adm-input"
         value={value}
@@ -61,6 +83,7 @@ export function SlugField({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
+  const id = useFieldId();
   // `slugify` on every keystroke keeps the value inside the backend `Slug`
   // pattern; the only reachable invalid state is empty.
   const empty = value.length === 0;
@@ -68,6 +91,7 @@ export function SlugField({
   return (
     <Field label={label} hint={hint}>
       <input
+        id={id}
         type="text"
         className="adm-input"
         style={empty || invalid ? { borderColor: '#dc3c3c' } : undefined}
@@ -99,9 +123,11 @@ export function TextArea({
   rows?: number;
   placeholder?: string;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
       <textarea
+        id={id}
         className="adm-textarea"
         rows={rows}
         value={value}
@@ -129,9 +155,11 @@ export function Select({
   searchable?: boolean;
   placeholder?: string;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
       <Dropdown
+        id={id}
         value={value}
         options={options}
         onChange={onChange}
@@ -157,9 +185,10 @@ export function ComboField({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
-      <Combobox value={value} suggestions={suggestions} onChange={onChange} placeholder={placeholder} />
+      <Combobox id={id} value={value} suggestions={suggestions} onChange={onChange} placeholder={placeholder} />
     </Field>
   );
 }
@@ -179,6 +208,7 @@ export function TokenField({
   suggestions?: string[];
   placeholder?: string;
 }) {
+  const id = useFieldId();
   const [entry, setEntry] = useState('');
   const add = (raw: string) => {
     const t = raw.trim();
@@ -210,6 +240,7 @@ export function TokenField({
         </div>
       )}
       <Combobox
+        id={id}
         value={entry}
         onChange={setEntry}
         onSubmit={add}
@@ -239,9 +270,11 @@ export function DateField({
   clearable?: boolean;
   placeholder?: string;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
       <DatePicker
+        id={id}
         value={value || null}
         onChange={(v) => onChange(v ?? '')}
         min={min}
@@ -268,9 +301,11 @@ export function ToggleField({
   onChange: (v: boolean) => void;
   disabled?: boolean;
 }) {
+  const id = useFieldId();
   return (
     <Field label={label} hint={hint}>
       <Toggle
+        id={id}
         checked={value}
         onChange={onChange}
         disabled={disabled}
@@ -291,6 +326,7 @@ export function ColorField({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const id = useFieldId();
   // The native color picker only ever emits valid hex; the text box lets the
   // user type freely, so flag anything the backend `HexColor` would reject.
   const invalid = value.length > 0 && !isValidHex(value);
@@ -298,13 +334,16 @@ export function ColorField({
     <Field label={label} hint={hint}>
       <div style={{ display: 'flex', gap: 10 }}>
         <input
+          id={`${id}-picker`}
           type="color"
           className="adm-input adm-input--color"
           value={isValidHex(value) ? value.slice(0, 7) : '#000000'}
           onChange={(e) => onChange(e.target.value)}
           style={{ width: 64, flexShrink: 0 }}
+          aria-label={`${label} color picker`}
         />
         <input
+          id={id}
           type="text"
           className="adm-input"
           value={value}
@@ -375,5 +414,9 @@ export function Toast({ message, onClear }: { message: string | null; onClear: (
     return () => clearTimeout(t);
   }, [message, onClear]);
   if (!message) return null;
-  return <div className="adm-toast">{message}</div>;
+  return (
+    <div className="adm-toast" role="status" aria-live="polite">
+      {message}
+    </div>
+  );
 }

@@ -232,8 +232,8 @@ export function NotFoundPage() {
             animation: 'fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both',
           }}
         >
-          <NeonButton text="Return Home" onClick={() => { window.location.href = '/'; }} />
-          <GhostButton text="View Work" onClick={() => { window.location.href = '/work'; }} />
+          <NeonButton text="Return Home" to="/" />
+          <GhostButton text="View Work" to="/work" />
         </div>
       </div>
     </div>

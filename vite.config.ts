@@ -59,8 +59,10 @@ function stripUnusedPreloads(): Plugin {
     enforce: 'post',
     apply: 'build',
     transformIndexHtml(html) {
+      // Lazy-loaded routes (admin portals, legal, below-fold home sections) and their vendor
+      // chunks should not be eagerly modulepreloaded on the critical path.
       return html.replace(
-        /<link rel="(?:modulepreload|stylesheet)"[^>]*href="[^"]*\/(admin|client|team|vendor-pdf)[^"]*"[^>]*>\s*/g,
+        /<link rel="(?:modulepreload|stylesheet)"[^>]*href="[^"]*\/(?:admin|client|team|vendor-pdf|vendor-admin-ui|vendor-legal|vendor-motion|Work-|testimonials-demo-|FAQ-|CTA-)[^"]*"[^>]*>\s*/g,
         '',
       );
     },
@@ -91,6 +93,7 @@ export default defineConfig({
     minify: 'esbuild',
     cssMinify: true,
     cssCodeSplit: true,
+    chunkSizeWarningLimit: 800,
     modulePreload: {
       polyfill: false,
     },
@@ -101,14 +104,47 @@ export default defineConfig({
             if (id.includes('react-dom') || id.includes('react/') || id.includes('scheduler')) {
               return 'vendor-react';
             }
-            if (id.includes('framer-motion')) {
+            if (id.includes('framer-motion') || id.includes('motion-dom') || id.includes('motion-utils')) {
               return 'vendor-motion';
             }
             if (id.includes('lenis')) {
               return 'vendor-lenis';
             }
-            if (id.includes('jspdf')) {
+            if (id.includes('@babel/runtime')) {
+              return 'vendor-babel';
+            }
+            if (
+              id.includes('jspdf') ||
+              id.includes('html2canvas') ||
+              id.includes('canvg') ||
+              id.includes('pako') ||
+              id.includes('fflate') ||
+              id.includes('fast-png') ||
+              id.includes('iobuffer') ||
+              id.includes('css-line-break') ||
+              id.includes('text-segmentation') ||
+              id.includes('utrie') ||
+              id.includes('rgbcolor') ||
+              id.includes('stackblur-canvas') ||
+              id.includes('svg-pathdata') ||
+              id.includes('raf') ||
+              id.includes('regenerator-runtime') ||
+              id.includes('core-js')
+            ) {
               return 'vendor-pdf';
+            }
+            if (id.includes('react-router') || id.includes('@remix-run')) {
+              return 'vendor-router';
+            }
+            if (id.includes('dompurify')) {
+              return 'vendor-legal';
+            }
+            if (
+              id.includes('@radix-ui') ||
+              id.includes('class-variance-authority') ||
+              id.includes('clsx')
+            ) {
+              return 'vendor-admin-ui';
             }
             return 'vendor';
           }

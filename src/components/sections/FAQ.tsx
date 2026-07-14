@@ -160,7 +160,7 @@ export function FAQ() {
             fontSize: 14,
           }}
         >
-          <GhostButton text="More questions?" size="xs" onClick={() => { window.location.href = '/contact'; }} />
+          <GhostButton text="More questions?" size="xs" to="/contact" />
         </div>
       </div>
     </section>

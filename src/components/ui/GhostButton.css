@@ -16,6 +16,11 @@
   transition: transform 0.2s ease;
 }
 
+.ghost-button:focus-visible {
+  outline: 3px solid #ff813a;
+  outline-offset: 3px;
+}
+
 .ghost-button:active {
   transform: scale(0.97);
 }

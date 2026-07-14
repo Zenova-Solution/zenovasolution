@@ -37,7 +37,9 @@ export const SITE = {
   legalName: 'Zenova, Inc.',
   description:
     'Zenova combines design, development, marketing, and startup support into one seamless partnership for ambitious modern businesses.',
-  logo: 'https://zenova.agency/assets/zenova-logo.png',
+  // NOTE: replace with a dedicated 1200×630 or square logo file when available.
+  // The mark is used here because the referenced zenova-logo.png does not exist in the repo.
+  logo: 'https://zenova.agency/assets/zenova-mark.png',
   /** Absolute URL to the 1200×630 social share card. */
   ogImage: 'https://zenova.agency/uploads/og-card.png',
   locale: 'en_US',

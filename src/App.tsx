@@ -12,6 +12,9 @@ import { applyTheme, getInitialTheme } from '@/lib/theme';
 import type { Theme } from '@/types/tweaks';
 import { ConfirmProvider } from '@/admin/components/ConfirmProvider';
 import { SeoManager } from '@/seo/SeoManager';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { PageLoader } from '@/components/ui/PageLoader';
+import { SkipLink } from '@/components/ui/SkipLink';
 
 const ServicesPage = lazy(() => import('@/pages/ServicesPage').then(m => ({ default: m.ServicesPage })));
 const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage').then(m => ({ default: m.ServiceDetailPage })));
@@ -30,10 +33,6 @@ const AuthGate = lazy(() => import('@/components/ui/AuthGate').then(m => ({ defa
 const ZenovaTweaks = import.meta.env.DEV
   ? lazy(() => import('@/dev/ZenovaTweaks').then((m) => ({ default: m.ZenovaTweaks })))
   : null;
-
-function PageLoader() {
-  return <div style={{ minHeight: '100vh' }} />;
-}
 
 const AdminRoutesLazy = lazy(() => import('@/admin/AdminRoutes'));
 const ClientRoutesLazy = lazy(() => import('@/client/ClientRoutes'));
@@ -64,8 +63,10 @@ export function App() {
   }, [t.theme]);
 
   return (
+    <ErrorBoundary>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <SeoManager />
+      <SkipLink />
       <ConfirmProvider>
       <Routes>
         <Route path="/login" element={
@@ -125,6 +126,7 @@ export function App() {
       )}
       </ConfirmProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

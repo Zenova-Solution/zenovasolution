@@ -12,20 +12,20 @@ import './WorkPage.css';
 function LivePill({ project }: { project: ProjectDetail }) {
   if (!project.liveUrl?.trim()) return null;
   return (
-    <button
-      type="button"
+    <a
+      href={project.liveUrl}
+      target="_blank"
+      rel="noopener noreferrer"
       className="work-card__live wrk-live"
       onClick={(e) => {
-        e.preventDefault();
         e.stopPropagation();
-        window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
       }}
       title={`Open live site: ${project.liveUrl}`}
       aria-label={`Open live site for ${project.client} in a new tab`}
     >
       <span className="work-card__live-dot" aria-hidden="true" />
       Live <Icon.ArrowUpRight size={11} />
-    </button>
+    </a>
   );
 }
 
@@ -171,7 +171,7 @@ export function WorkPage() {
             <br />
             could be next.
           </h2>
-          <NeonButton text="Start a project" onClick={() => { window.location.href = '/contact'; }} />
+          <NeonButton text="Start a project" to="/contact" />
         </div>
       </section>
     </div>

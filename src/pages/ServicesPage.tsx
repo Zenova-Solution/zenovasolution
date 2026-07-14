@@ -343,8 +343,8 @@ export function ServicesPage() {
             Tell us what you&rsquo;re trying to do — we&rsquo;ll tell you what we&rsquo;d build, honestly.
           </p>
           <div className="svx-cta__actions">
-            <NeonButton text="Get in touch" onClick={() => { window.location.href = '/contact'; }} />
-            <GhostButton text="See pricing" onClick={() => { window.location.href = '/pricing'; }} />
+            <NeonButton text="Get in touch" to="/contact" />
+            <GhostButton text="See pricing" to="/pricing" />
           </div>
         </div>
       </section>

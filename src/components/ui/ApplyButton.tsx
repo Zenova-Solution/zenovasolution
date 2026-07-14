@@ -1,11 +1,16 @@
 import { cn } from '@/lib/utils';
 import { Icon } from '@/components/icons/Icon';
+import { Link } from 'react-router-dom';
 
 export type ApplyButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ApplyButtonProps {
   text?: string;
   onClick?: () => void;
+  /** If provided, renders as a React Router <Link> instead of <button>. */
+  to?: string;
+  /** If provided, renders as a plain <a> tag (use for external/mailto links). */
+  href?: string;
   className?: string;
   size?: ApplyButtonSize;
 }
@@ -45,26 +50,24 @@ const SIZE = {
 export function ApplyButton({
   text = 'Apply now',
   onClick,
+  to,
+  href,
   className = '',
   size = 'md',
 }: ApplyButtonProps) {
   const s = SIZE[size];
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'group relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full p-1 font-medium',
-        'bg-primary text-primary-foreground hover:bg-primary/90',
-        'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-        'cursor-pointer transition-[padding,background-color] duration-500 ease-out motion-reduce:transition-none',
-        s.height,
-        s.pad,
-        s.text,
-        className,
-      )}
-    >
+  const classes = cn(
+    'group relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full p-1 font-medium',
+    'bg-primary text-primary-foreground hover:bg-primary/90',
+    'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+    'cursor-pointer transition-[padding,background-color] duration-500 ease-out motion-reduce:transition-none',
+    s.height,
+    s.pad,
+    s.text,
+    className,
+  );
+  const content = (
+    <>
       <span className="relative z-10 whitespace-nowrap transition-transform duration-500 ease-out motion-reduce:transition-none">
         {text}
       </span>
@@ -80,6 +83,28 @@ export function ApplyButton({
       >
         <Icon.ArrowUpRight size={s.icon} />
       </span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a href={href} className={classes}>
+        {content}
+      </a>
+    );
+  }
+
+  if (to) {
+    return (
+      <Link to={to} className={classes}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button type="button" onClick={onClick} className={classes}>
+      {content}
     </button>
   );
 }
