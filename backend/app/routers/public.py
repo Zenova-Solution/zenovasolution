@@ -2,18 +2,32 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter
-from sqlalchemy import select
+from fastapi import APIRouter, Query
+from sqlalchemy import func, select
 
 from app.deps import DbSession
 from app.errors import NotFoundError
-from app.models import BrandSettings, Job, Project, Service, SiteContent, TeamMember
+from app.models import (
+    BlogPost,
+    BrandSettings,
+    Job,
+    Project,
+    SeoPage,
+    Service,
+    SiteContent,
+    TeamMember,
+)
 from app.schemas import (
     BrandSettings as BrandSchema,
 )
 from app.schemas import (
     JobDetail,
     ProjectDetail,
+    PublicBlogList,
+    PublicBlogListItem,
+    PublicBlogPost,
+    PublicSeoPage,
+    PublicSeoPageListItem,
     ServiceDetail,
     SiteBundle,
 )
@@ -90,3 +104,99 @@ async def get_job(slug: str, db: DbSession) -> JobDetail:
     if row is None:
         raise NotFoundError(f"Job '{slug}' not found.")
     return JobDetail.model_validate(row.data)
+
+
+def _blog_list_item(row: BlogPost) -> PublicBlogListItem:
+    return PublicBlogListItem(
+        slug=row.slug,
+        title=row.title,
+        excerpt=row.excerpt,
+        cover_image_url=row.cover_image_url,
+        author_name=row.author_name,
+        tags=row.tags,
+        published_at=row.published_at,
+    )
+
+
+@router.get("/blog", response_model=PublicBlogList)
+async def list_blog_posts(
+    db: DbSession,
+    limit: int = Query(12, ge=1, le=50),
+    offset: int = Query(0, ge=0),
+    tag: str | None = Query(None, max_length=60),
+) -> PublicBlogList:
+    """Published posts only, newest first."""
+    filters = [BlogPost.status == "published"]
+    if tag:
+        filters.append(BlogPost.tags.contains([tag]))
+    total = (
+        await db.execute(select(func.count()).select_from(BlogPost).where(*filters))
+    ).scalar_one()
+    rows = await db.execute(
+        select(BlogPost)
+        .where(*filters)
+        .order_by(BlogPost.published_at.desc().nulls_last(), BlogPost.slug)
+        .limit(limit)
+        .offset(offset)
+    )
+    return PublicBlogList(
+        items=[_blog_list_item(row) for row in rows.scalars()],
+        total=total,
+        limit=limit,
+        offset=offset,
+    )
+
+
+@router.get("/blog/{slug}", response_model=PublicBlogPost)
+async def get_blog_post(slug: str, db: DbSession) -> PublicBlogPost:
+    row = await db.get(BlogPost, slug)
+    if row is None or row.status != "published":
+        raise NotFoundError(f"Blog post '{slug}' not found.")
+    return PublicBlogPost(
+        slug=row.slug,
+        title=row.title,
+        excerpt=row.excerpt,
+        cover_image_url=row.cover_image_url,
+        author_name=row.author_name,
+        tags=row.tags,
+        published_at=row.published_at,
+        content_html=row.content_html,
+        meta_title=row.meta_title,
+        meta_description=row.meta_description,
+        og_image_url=row.og_image_url,
+        updated_at=row.updated_at,
+    )
+
+
+@router.get("/pages", response_model=list[PublicSeoPageListItem])
+async def list_seo_pages(db: DbSession) -> list[PublicSeoPageListItem]:
+    """Published standalone pages — consumed by the build-time sitemap step."""
+    rows = await db.execute(
+        select(SeoPage).where(SeoPage.is_published).order_by(SeoPage.slug)
+    )
+    return [
+        PublicSeoPageListItem(
+            slug=row.slug,
+            title=row.title,
+            meta_title=row.meta_title,
+            meta_description=row.meta_description,
+            updated_at=row.updated_at,
+        )
+        for row in rows.scalars()
+    ]
+
+
+@router.get("/pages/{slug}", response_model=PublicSeoPage)
+async def get_seo_page(slug: str, db: DbSession) -> PublicSeoPage:
+    row = await db.get(SeoPage, slug)
+    if row is None or not row.is_published:
+        raise NotFoundError(f"Page '{slug}' not found.")
+    return PublicSeoPage(
+        slug=row.slug,
+        title=row.title,
+        content_html=row.content_html,
+        meta_title=row.meta_title,
+        meta_description=row.meta_description,
+        og_image_url=row.og_image_url,
+        updated_at=row.updated_at,
+    )

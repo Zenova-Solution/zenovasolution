@@ -9,7 +9,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints, field_validator
 
 from typing import Literal
 
@@ -684,3 +684,142 @@ class LeadOut(_Base):
 
 class LeadPatch(_Base):
     is_read: bool | None = None
+
+
+# ---------------------------------------------------------------------------
+# Blog
+# ---------------------------------------------------------------------------
+
+BlogStatus = Literal["draft", "published"]
+Tag = Annotated[str, StringConstraints(min_length=1, max_length=60)]
+TitleStr = Annotated[str, StringConstraints(min_length=1, max_length=200)]
+MetaTitle = Annotated[str, StringConstraints(max_length=200)]
+MetaDescription = Annotated[str, StringConstraints(max_length=320)]
+
+# Slugs that can never be used by content served at a top-level URL.
+# Keep in lock-step with RESERVED_TOP_LEVEL_SLUGS in src/admin/lib/validate.ts
+# and the route table in src/App.tsx.
+RESERVED_TOP_LEVEL_SLUGS = frozenset(
+    {
+        "new",
+        "services",
+        "pricing",
+        "work",
+        "about",
+        "contact",
+        "careers",
+        "privacy",
+        "terms",
+        "blog",
+        "process",
+        "admin",
+        "client",
+        "team",
+        "login",
+        "signin",
+        "assets",
+        "uploads",
+        "api",
+        "index",
+        "home",
+        "404",
+    }
+)
+
+
+class BlogPostIn(_Base):
+    slug: Slug
+    title: TitleStr
+    excerpt: str = ""
+    content_html: str = ""
+    cover_image_url: str | None = None
+    author_name: Annotated[str, StringConstraints(max_length=120)] | None = None
+    tags: list[Tag] = Field(default_factory=list)
+    status: BlogStatus = "draft"
+    published_at: datetime | None = None
+    meta_title: MetaTitle | None = None
+    meta_description: MetaDescription | None = None
+    og_image_url: str | None = None
+
+    @field_validator("slug")
+    @classmethod
+    def _slug_not_new(cls, v: str) -> str:
+        # "new" is the admin editor's create-route sentinel (/admin/blog/new).
+        if v == "new":
+            raise ValueError("Slug 'new' is reserved.")
+        return v
+
+
+class BlogPostOut(BlogPostIn):
+    created_at: datetime
+    updated_at: datetime
+
+
+class PublicBlogListItem(_Base):
+    slug: str
+    title: str
+    excerpt: str
+    cover_image_url: str | None = None
+    author_name: str | None = None
+    tags: list[str]
+    published_at: datetime | None = None
+
+
+class PublicBlogList(_Base):
+    items: list[PublicBlogListItem]
+    total: int
+    limit: int
+    offset: int
+
+
+class PublicBlogPost(PublicBlogListItem):
+    content_html: str
+    meta_title: str | None = None
+    meta_description: str | None = None
+    og_image_url: str | None = None
+    updated_at: datetime
+
+
+# ---------------------------------------------------------------------------
+# SEO pages (standalone landing pages served at /{slug})
+# ---------------------------------------------------------------------------
+
+
+class SeoPageIn(_Base):
+    slug: Slug
+    title: TitleStr
+    content_html: str = ""
+    meta_title: MetaTitle | None = None
+    meta_description: MetaDescription | None = None
+    og_image_url: str | None = None
+    is_published: bool = False
+
+    @field_validator("slug")
+    @classmethod
+    def _slug_not_reserved(cls, v: str) -> str:
+        if v in RESERVED_TOP_LEVEL_SLUGS:
+            raise ValueError(f"Slug '{v}' is reserved by the site.")
+        return v
+
+
+class SeoPageOut(SeoPageIn):
+    created_at: datetime
+    updated_at: datetime
+
+
+class PublicSeoPage(_Base):
+    slug: str
+    title: str
+    content_html: str
+    meta_title: str | None = None
+    meta_description: str | None = None
+    og_image_url: str | None = None
+    updated_at: datetime
+
+
+class PublicSeoPageListItem(_Base):
+    slug: str
+    title: str
+    meta_title: str | None = None
+    meta_description: str | None = None
+    updated_at: datetime

@@ -110,9 +110,11 @@ def install_exception_handlers(app: FastAPI) -> None:
             error_count=len(errors),
         )
         # Redact the raw `input` values before returning them to the client.
+        # Drop `ctx` too: custom field_validators put the raw exception object
+        # in there, which is not JSON serializable (the message is in `msg`).
         safe_errors = []
         for e in errors:
-            safe = {k: v for k, v in e.items() if k != "input"}
+            safe = {k: v for k, v in e.items() if k not in ("input", "ctx")}
             safe_errors.append(safe)
         return ORJSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

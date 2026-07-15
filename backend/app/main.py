@@ -20,6 +20,7 @@ from app.logging import configure_logging, logger
 from app.middleware import RequestIDMiddleware
 from app.routers import (
     auth,
+    blog,
     brand,
     client_project,
     contact,
@@ -27,6 +28,7 @@ from app.routers import (
     jobs,
     projects,
     public,
+    seo_pages,
     services,
     team,
     uploads,
@@ -126,6 +128,8 @@ def create_app() -> FastAPI:
     app.include_router(users.router, prefix=prefix)
     app.include_router(client_project.router, prefix=prefix)
     app.include_router(contact.router, prefix=prefix)
+    app.include_router(blog.router, prefix=prefix)
+    app.include_router(seo_pages.router, prefix=prefix)
 
     return app
 

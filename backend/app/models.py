@@ -181,3 +181,67 @@ class Lead(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
+
+
+class BlogPost(Base):
+    """An admin-authored blog post.
+
+    Real columns (not JSONB) since the public listing filters on ``status`` and
+    orders by ``published_at``.
+    """
+
+    __tablename__ = "blog_posts"
+
+    slug: Mapped[str] = mapped_column(String(120), primary_key=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    excerpt: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    content_html: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    cover_image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    author_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    tags: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
+    status: Mapped[str] = mapped_column(
+        String(12), nullable=False, default="draft", index=True
+    )
+    published_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True, index=True
+    )
+    meta_title: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    meta_description: Mapped[str | None] = mapped_column(String(320), nullable=True)
+    og_image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SeoPage(Base):
+    """A standalone landing page served at a top-level URL (``/{slug}``).
+
+    Not linked from site navigation — reachable by direct URL and sitemap only.
+    """
+
+    __tablename__ = "seo_pages"
+
+    slug: Mapped[str] = mapped_column(String(120), primary_key=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    content_html: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    meta_title: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    meta_description: Mapped[str | None] = mapped_column(String(320), nullable=True)
+    og_image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    is_published: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
