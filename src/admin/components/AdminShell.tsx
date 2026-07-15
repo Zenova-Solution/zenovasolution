@@ -126,6 +126,27 @@ const NAV: NavItem[] = [
     ),
   },
   {
+    to: '/admin/blog',
+    label: 'Blog',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 3a2.8 2.8 0 0 1 4 4L8.5 19.5 3 21l1.5-5.5z" />
+        <path d="m15 5 4 4" />
+      </svg>
+    ),
+  },
+  {
+    to: '/admin/seo-pages',
+    label: 'SEO Pages',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18" />
+        <path d="M12 3a14.5 14.5 0 0 1 0 18 14.5 14.5 0 0 1 0-18z" />
+      </svg>
+    ),
+  },
+  {
     to: '/admin/media',
     label: 'Media',
     icon: (

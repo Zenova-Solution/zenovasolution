@@ -458,6 +458,7 @@ export const DEFAULT_CONTENT: SiteContent = {
           { id: 'fl6', label: 'About', href: '/about' },
           { id: 'fl7', label: 'Work', href: '/work' },
           { id: 'fl8', label: 'Pricing', href: '/pricing' },
+          { id: 'fl10', label: 'Blog', href: '/blog' },
           { id: 'fl9', label: 'Contact', href: '/contact' },
         ],
       },

@@ -26,7 +26,9 @@ const JobDetailPage = lazy(() => import('@/pages/JobDetailPage').then(m => ({ de
 const AboutPage = lazy(() => import('@/pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const ContactPage = lazy(() => import('@/pages/ContactPage').then(m => ({ default: m.ContactPage })));
 const LegalPage = lazy(() => import('@/pages/LegalPage').then(m => ({ default: m.LegalPage })));
-const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const BlogPage = lazy(() => import('@/pages/BlogPage').then(m => ({ default: m.BlogPage })));
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage').then(m => ({ default: m.BlogPostPage })));
+const SeoCatchAllPage = lazy(() => import('@/pages/SeoCatchAllPage').then(m => ({ default: m.SeoCatchAllPage })));
 const Login = lazy(() => import('@/pages/Login').then(m => ({ default: m.Login })));
 const AuthGate = lazy(() => import('@/components/ui/AuthGate').then(m => ({ default: m.AuthGate })));
 
@@ -145,7 +147,7 @@ function PublicLayout({
   useReveal();
   const location = useLocation();
   const isKnownPath =
-    /^\/(services|pricing|work|about|contact|careers|privacy|terms)?(\/.*)?$/.test(location.pathname);
+    /^\/(services|pricing|work|about|contact|careers|blog|privacy|terms)?(\/.*)?$/.test(location.pathname);
   return (
     <>
       <Nav />
@@ -183,9 +185,12 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
         <Route path="/careers/:slug" element={<Suspense fallback={<PageLoader />}><JobDetailPage /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoader />}><AboutPage /></Suspense>} />
         <Route path="/contact" element={<Suspense fallback={<PageLoader />}><ContactPage /></Suspense>} />
+        <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
+        <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogPostPage /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><LegalPage doc="privacy" /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoader />}><LegalPage doc="terms" /></Suspense>} />
-        <Route path="*" element={<Suspense fallback={<PageLoader />}><NotFoundPage /></Suspense>} />
+        {/* Catch-all serves admin-authored SEO pages at /<slug>, or the 404 page. */}
+        <Route path="*" element={<Suspense fallback={<PageLoader />}><SeoCatchAllPage /></Suspense>} />
       </Routes>
     </div>
   );

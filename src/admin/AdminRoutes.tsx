@@ -14,6 +14,10 @@ const TeamAdmin = lazy(() => import('@/admin/pages/TeamAdmin').then(m => ({ defa
 const ContentAdmin = lazy(() => import('@/admin/pages/ContentAdmin').then(m => ({ default: m.ContentAdmin })));
 const PricingAdmin = lazy(() => import('@/admin/pages/PricingAdmin').then(m => ({ default: m.PricingAdmin })));
 const LegalAdmin = lazy(() => import('@/admin/pages/LegalAdmin').then(m => ({ default: m.LegalAdmin })));
+const BlogAdmin = lazy(() => import('@/admin/pages/BlogAdmin').then(m => ({ default: m.BlogAdmin })));
+const BlogEditor = lazy(() => import('@/admin/pages/BlogEditor').then(m => ({ default: m.BlogEditor })));
+const SeoPagesAdmin = lazy(() => import('@/admin/pages/SeoPagesAdmin').then(m => ({ default: m.SeoPagesAdmin })));
+const SeoPageEditor = lazy(() => import('@/admin/pages/SeoPageEditor').then(m => ({ default: m.SeoPageEditor })));
 const MediaAdmin = lazy(() => import('@/admin/pages/MediaAdmin').then(m => ({ default: m.MediaAdmin })));
 const Settings = lazy(() => import('@/admin/pages/Settings').then(m => ({ default: m.Settings })));
 const InputsShowcase = lazy(() => import('@/admin/pages/InputsShowcase').then(m => ({ default: m.InputsShowcase })));
@@ -41,6 +45,10 @@ export default function AdminRoutes() {
         <Route path="content" element={<Suspense fallback={<AdminLoader />}><ContentAdmin /></Suspense>} />
         <Route path="pricing" element={<Suspense fallback={<AdminLoader />}><PricingAdmin /></Suspense>} />
         <Route path="legal" element={<Suspense fallback={<AdminLoader />}><LegalAdmin /></Suspense>} />
+        <Route path="blog" element={<Suspense fallback={<AdminLoader />}><BlogAdmin /></Suspense>} />
+        <Route path="blog/:slug" element={<Suspense fallback={<AdminLoader />}><BlogEditor /></Suspense>} />
+        <Route path="seo-pages" element={<Suspense fallback={<AdminLoader />}><SeoPagesAdmin /></Suspense>} />
+        <Route path="seo-pages/:slug" element={<Suspense fallback={<AdminLoader />}><SeoPageEditor /></Suspense>} />
         <Route path="media" element={<Suspense fallback={<AdminLoader />}><MediaAdmin /></Suspense>} />
         <Route path="invoices" element={<Suspense fallback={<AdminLoader />}><InvoiceList /></Suspense>} />
         <Route path="invoices/:id" element={<Suspense fallback={<AdminLoader />}><InvoiceEditor /></Suspense>} />

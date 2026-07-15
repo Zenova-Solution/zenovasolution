@@ -27,6 +27,40 @@ export function isValidEmail(v: string): boolean {
 }
 
 /**
+ * Slugs that can never be used by content served at a top-level URL
+ * (SEO pages live at zenova.agency/<slug>). Mirrors
+ * `RESERVED_TOP_LEVEL_SLUGS` in schemas.py — keep in lock-step.
+ */
+export const RESERVED_TOP_LEVEL_SLUGS = new Set([
+  'new',
+  'services',
+  'pricing',
+  'work',
+  'about',
+  'contact',
+  'careers',
+  'privacy',
+  'terms',
+  'blog',
+  'process',
+  'admin',
+  'client',
+  'team',
+  'login',
+  'signin',
+  'assets',
+  'uploads',
+  'api',
+  'index',
+  'home',
+  '404',
+]);
+
+export function isReservedSlug(v: string): boolean {
+  return RESERVED_TOP_LEVEL_SLUGS.has(v);
+}
+
+/**
  * Coerce arbitrary text into a valid `Slug`: lowercase, collapse whitespace and
  * underscores to dashes, drop anything outside `[a-z0-9-_]`, strip leading
  * non-alphanumerics (the slug must start with `[a-z0-9]`) and cap the length.
