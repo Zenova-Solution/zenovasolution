@@ -104,9 +104,13 @@ export function applySeoToTemplate(template: string, meta: SeoMeta): string {
   return html;
 }
 
-/** Generate sitemap.xml for all indexable routes. */
-export function sitemapXml(lastmod = new Date().toISOString().slice(0, 10)): string {
-  const urls = ALL_ROUTES.filter((r) => r.index)
+/** Generate sitemap.xml for all indexable routes (static + API-fetched extras). */
+export function sitemapXml(
+  extraRoutes: SeoMeta[] = [],
+  lastmod = new Date().toISOString().slice(0, 10),
+): string {
+  const urls = [...ALL_ROUTES, ...extraRoutes]
+    .filter((r) => r.index)
     .map((r) => {
       return [
         '  <url>',

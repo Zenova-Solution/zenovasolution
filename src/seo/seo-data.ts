@@ -60,6 +60,7 @@ export const NAV: Array<{ label: string; path: string }> = [
   { label: 'Services', path: '/services' },
   { label: 'Work', path: '/work' },
   { label: 'Pricing', path: '/pricing' },
+  { label: 'Blog', path: '/blog' },
   { label: 'About', path: '/about' },
   { label: 'Careers', path: '/careers' },
   { label: 'Contact', path: '/contact' },
@@ -176,6 +177,22 @@ const MAIN_ROUTES: SeoMeta[] = [
     breadcrumb: [
       { name: 'Home', path: '/' },
       { name: 'Careers', path: '/careers' },
+    ],
+  },
+  {
+    path: '/blog',
+    title: 'Blog — Insights on Design, Development & Growth | Zenova',
+    description:
+      'Practical writing from the Zenova team on design, development, marketing, and building modern businesses — lessons from real client work.',
+    h1: 'Notes from the studio',
+    intro:
+      'Practical writing on design, development, marketing, and building modern businesses — lessons from real client work, not theory.',
+    index: true,
+    changefreq: 'weekly',
+    priority: 0.8,
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Blog', path: '/blog' },
     ],
   },
   {
