@@ -27,6 +27,16 @@ export function Footer() {
     href: `/services/${s.slug}`,
   }));
 
+  // Footer content is CMS-managed; guarantee the Blog link even when the
+  // stored content predates the blog feature.
+  const columnLinks = (c: (typeof footer.columns)[number]) => {
+    if (c.title === 'Services') return serviceLinks;
+    if (c.title === 'Company' && !c.links.some((l) => l.href === '/blog')) {
+      return [...c.links, { id: 'fl-blog', label: 'Blog', href: '/blog' }];
+    }
+    return c.links;
+  };
+
   return (
     <footer
       style={{
@@ -111,7 +121,7 @@ export function Footer() {
                 {c.title}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {(c.title === 'Services' ? serviceLinks : c.links).map((l) => (
+                {columnLinks(c).map((l) => (
                   <Link
                     key={l.id}
                     to={l.href}
