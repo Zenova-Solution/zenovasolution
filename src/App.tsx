@@ -13,7 +13,16 @@ import type { Theme } from '@/types/tweaks';
 import { ConfirmProvider } from '@/admin/components/ConfirmProvider';
 import { SeoManager } from '@/seo/SeoManager';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { PageLoader } from '@/components/ui/PageLoader';
+// Static on purpose: these render before a route's own CSS chunk arrives, so they
+// must ship in the entry bundle. Never lazy() them. See Skeleton.css.
+import {
+  ArticlePageSkeleton,
+  DetailPageSkeleton,
+  FormPageSkeleton,
+  GridPageSkeleton,
+  ListPageSkeleton,
+  RouteBlank,
+} from '@/components/ui/PageSkeletons';
 import { SkipLink } from '@/components/ui/SkipLink';
 
 const ServicesPage = lazy(() => import('@/pages/ServicesPage').then(m => ({ default: m.ServicesPage })));
@@ -72,7 +81,7 @@ export function App() {
       <ConfirmProvider>
       <Routes>
         <Route path="/login" element={
-          <Suspense fallback={<PageLoader />}>
+          <Suspense fallback={<FormPageSkeleton variant="auth" fields={2} />}>
             <Login />
           </Suspense>
         } />
@@ -83,7 +92,7 @@ export function App() {
         <Route
           path="/admin/*"
           element={
-            <Suspense fallback={<PageLoader />}>
+            <Suspense fallback={<RouteBlank />}>
               <AuthGate requiredRoles={['admin']}>
                 <AdminRoutesLazy />
               </AuthGate>
@@ -93,7 +102,7 @@ export function App() {
         <Route
           path="/client/*"
           element={
-            <Suspense fallback={<PageLoader />}>
+            <Suspense fallback={<RouteBlank />}>
               <AuthGate requiredRoles={['client', 'admin']}>
                 <ClientRoutesLazy />
               </AuthGate>
@@ -103,7 +112,7 @@ export function App() {
         <Route
           path="/team/*"
           element={
-            <Suspense fallback={<PageLoader />}>
+            <Suspense fallback={<RouteBlank />}>
               <AuthGate requiredRoles={['team', 'admin']}>
                 <TeamRoutesLazy />
               </AuthGate>
@@ -175,22 +184,22 @@ function AnimatedRoutes({ rotateMs, showMarquee, showTestimonials }: AnimatedRou
     <div key={location.pathname} className="page-transition">
       <Routes location={location}>
         <Route path="/" element={<Home rotateMs={rotateMs} showMarquee={showMarquee} showTestimonials={showTestimonials} />} />
-        <Route path="/services" element={<Suspense fallback={<PageLoader />}><ServicesPage /></Suspense>} />
-        <Route path="/services/:slug" element={<Suspense fallback={<PageLoader />}><ServiceDetailPage /></Suspense>} />
-        <Route path="/pricing" element={<Suspense fallback={<PageLoader />}><PricingPage /></Suspense>} />
+        <Route path="/services" element={<Suspense fallback={<ListPageSkeleton pillars={3} rows={6} />}><ServicesPage /></Suspense>} />
+        <Route path="/services/:slug" element={<Suspense fallback={<DetailPageSkeleton railWidth={340} specCols={4} />}><ServiceDetailPage /></Suspense>} />
+        <Route path="/pricing" element={<Suspense fallback={<GridPageSkeleton toolbar count={3} min={260} media={false} />}><PricingPage /></Suspense>} />
         <Route path="/process" element={<Navigate to="/services" replace />} />
-        <Route path="/work" element={<Suspense fallback={<PageLoader />}><WorkPage /></Suspense>} />
-        <Route path="/work/:slug" element={<Suspense fallback={<PageLoader />}><ProjectDetailPage /></Suspense>} />
-        <Route path="/careers" element={<Suspense fallback={<PageLoader />}><CareersPage /></Suspense>} />
-        <Route path="/careers/:slug" element={<Suspense fallback={<PageLoader />}><JobDetailPage /></Suspense>} />
-        <Route path="/about" element={<Suspense fallback={<PageLoader />}><AboutPage /></Suspense>} />
-        <Route path="/contact" element={<Suspense fallback={<PageLoader />}><ContactPage /></Suspense>} />
-        <Route path="/blog" element={<Suspense fallback={<PageLoader />}><BlogPage /></Suspense>} />
-        <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogPostPage /></Suspense>} />
-        <Route path="/privacy" element={<Suspense fallback={<PageLoader />}><LegalPage doc="privacy" /></Suspense>} />
-        <Route path="/terms" element={<Suspense fallback={<PageLoader />}><LegalPage doc="terms" /></Suspense>} />
+        <Route path="/work" element={<Suspense fallback={<ListPageSkeleton feature rows={4} />}><WorkPage /></Suspense>} />
+        <Route path="/work/:slug" element={<Suspense fallback={<DetailPageSkeleton banner railWidth={260} specCols={3} />}><ProjectDetailPage /></Suspense>} />
+        <Route path="/careers" element={<Suspense fallback={<GridPageSkeleton toolbar count={6} min={320} media={false} />}><CareersPage /></Suspense>} />
+        <Route path="/careers/:slug" element={<Suspense fallback={<DetailPageSkeleton railWidth={320} specCols={4} />}><JobDetailPage /></Suspense>} />
+        <Route path="/about" element={<Suspense fallback={<GridPageSkeleton count={6} min={280} />}><AboutPage /></Suspense>} />
+        <Route path="/contact" element={<Suspense fallback={<FormPageSkeleton variant="split" fields={4} />}><ContactPage /></Suspense>} />
+        <Route path="/blog" element={<Suspense fallback={<GridPageSkeleton toolbar feature count={6} min={300} />}><BlogPage /></Suspense>} />
+        <Route path="/blog/:slug" element={<Suspense fallback={<ArticlePageSkeleton width={1140} side meta />}><BlogPostPage /></Suspense>} />
+        <Route path="/privacy" element={<Suspense fallback={<ArticlePageSkeleton />}><LegalPage doc="privacy" /></Suspense>} />
+        <Route path="/terms" element={<Suspense fallback={<ArticlePageSkeleton />}><LegalPage doc="terms" /></Suspense>} />
         {/* Catch-all serves admin-authored SEO pages at /<slug>, or the 404 page. */}
-        <Route path="*" element={<Suspense fallback={<PageLoader />}><SeoCatchAllPage /></Suspense>} />
+        <Route path="*" element={<Suspense fallback={<ArticlePageSkeleton />}><SeoCatchAllPage /></Suspense>} />
       </Routes>
     </div>
   );

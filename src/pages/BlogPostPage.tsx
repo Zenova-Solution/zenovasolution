@@ -5,7 +5,7 @@ import { fetchBlogList, fetchBlogPost, type PublicBlogListItem, type PublicBlogP
 import { setDynamicSeo, clearDynamicSeo } from '@/seo/dynamic-seo';
 import { SITE, canonicalUrl } from '@/seo/seo-data';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { PageLoader } from '@/components/ui/PageLoader';
+import { ArticlePageSkeleton } from '@/components/ui/PageSkeletons';
 import { NeonButton } from '@/components/ui/NeonButton';
 import { ApiError } from '@/lib/api';
 import { scrollToTop } from '@/lib/scroll';
@@ -276,7 +276,7 @@ export function BlogPostPage() {
     );
   }
 
-  if (!post) return <PageLoader />;
+  if (!post) return <ArticlePageSkeleton width={1140} side meta />;
 
   const published = formatDate(post.published_at);
   const minutes = readingMinutes(post.content_html);
@@ -302,9 +302,9 @@ export function BlogPostPage() {
 
   return (
     <article className="bpp">
-      <div className="bpp-progress" aria-hidden="true">
+      {/* <div className="bpp-progress" aria-hidden="true">
         <span style={{ width: `${progress * 100}%` }} />
-      </div>
+      </div> */}
       <div className="container bpp__inner">
         <nav className="bpp-crumb mono reveal" aria-label="Breadcrumb">
           <Link to="/blog" className="bpp-crumb__link">

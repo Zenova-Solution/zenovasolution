@@ -5,7 +5,7 @@ import { fetchSeoPage, type PublicSeoPage } from '@/lib/publicContentApi';
 import { setDynamicSeo, clearDynamicSeo } from '@/seo/dynamic-seo';
 import { SITE, canonicalUrl } from '@/seo/seo-data';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { PageLoader } from '@/components/ui/PageLoader';
+import { ArticlePageSkeleton } from '@/components/ui/PageSkeletons';
 import { Footer } from '@/components/layout/Footer';
 import { ApiError } from '@/lib/api';
 import { scrollToTop } from '@/lib/scroll';
@@ -99,7 +99,7 @@ export function SeoCatchAllPage() {
   }, [page]);
 
   if (!slug || notFound || error) return <NotFoundPage />;
-  if (!page) return <PageLoader />;
+  if (!page) return <ArticlePageSkeleton />;
 
   return (
     <>

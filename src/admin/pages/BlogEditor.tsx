@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmEditorSkeleton } from '@/admin/components/AdminSkeletons';
 import {
   DateField,
   Select,
@@ -115,7 +116,7 @@ function BlogEditorForm({ slug }: { slug: string }) {
   if (!draft) {
     return (
       <AdminShell title="Loading…" crumbs={[{ label: 'Blog', to: '/admin/blog' }, { label: '…' }]}>
-        <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>Loading post…</div>
+        <AdmEditorSkeleton fields={6} />
       </AdminShell>
     );
   }

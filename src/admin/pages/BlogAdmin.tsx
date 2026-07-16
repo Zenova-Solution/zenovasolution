@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmListSkeleton } from '@/admin/components/AdminSkeletons';
 import { useConfirm } from '@/admin/components/confirm-context';
 import { Toast } from '@/admin/components/Form';
 import { deleteBlogPost, listBlogPosts, type BlogPost } from '@/admin/blogApi';
@@ -83,7 +84,7 @@ export function BlogAdmin() {
           </button>
         </div>
       ) : posts === null ? (
-        <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>Loading posts…</div>
+        <AdmListSkeleton grid={GRID} cols={5} />
       ) : posts.length === 0 ? (
         <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>
           No posts yet — write the first one.

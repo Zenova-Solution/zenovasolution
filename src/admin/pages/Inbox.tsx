@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmListSkeleton } from '@/admin/components/AdminSkeletons';
 import { useConfirm } from '@/admin/components/confirm-context';
 import { Toast } from '@/admin/components/Form';
 import { deleteLead, listLeads, markLeadRead, type Lead } from '@/admin/leadsApi';
@@ -130,7 +131,7 @@ export function Inbox() {
           </button>
         </div>
       ) : leads === null ? (
-        <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>Loading messages…</div>
+        <AdmListSkeleton grid={GRID} cols={5} leadCell />
       ) : filtered.length === 0 ? (
         <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>
           {tab === 'unread' ? 'No unread messages.' : 'No messages yet.'}

@@ -1,0 +1,329 @@
+/* Skeleton loading system — shared by the public site and admin.
+
+   LOAD-ORDER INVARIANT: this file must end up in the ENTRY css bundle, so it is
+   imported by main.tsx. Do not move the import into Skeleton.tsx: that module is
+   shared with the admin chunk, and manualChunks duplicates it, which makes Vite
+   emit this CSS into the admin bundle alone (verified — public skeletons rendered
+   unstyled). Never lazy()-import the skeleton modules either.
+
+   The reason skeletons need entry CSS at all: a Suspense fallback renders before
+   the route chunk's own CSS has downloaded. That is also why the layout below
+   re-declares page tokens under .skel-* names rather than reusing page classes
+   like .svx-hero or .blg-grid, which live in those per-page CSS chunks. */
+
+.skel {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--card, rgba(127, 127, 127, 0.12));
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+@keyframes skel-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+/* The pulse is the affordance here, so pin it mid-cycle rather than at full
+   strength, where a bar would read as a real but empty element. */
+@media (prefers-reduced-motion: reduce) {
+  .skel {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.skel-page {
+  pointer-events: none;
+}
+.skel-text {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Hero ── mirrors the shared 176px/48px hero padding of
+   .svx-hero, .pcx-hero, .wrk-masthead, .car-hero, .blg-masthead */
+.skel-hero {
+  padding: 176px 0 48px;
+}
+.skel-hero__kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.skel-hero__title {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+/* ── Card grid ── mirrors .blg-grid / .car-grid / .abt-team__grid / .pcx-grid,
+   whose minmax() floors differ per page and arrive via --skel-min */
+.skel-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--skel-min, 300px), 1fr));
+}
+.skel-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--card) 40%, transparent);
+}
+.skel-card__media {
+  aspect-ratio: 16 / 9;
+  border-radius: 0;
+}
+.skel-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+/* ── Feature card ── mirrors .blg-feat (55/45) and .wrk-featured__card (21/9) */
+.skel-feature {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  background: color-mix(in srgb, var(--card) 40%, transparent);
+}
+.skel-feature--wide {
+  grid-template-columns: 1fr;
+}
+.skel-feature__media {
+  min-height: 280px;
+  border-radius: 0;
+}
+.skel-feature--wide .skel-feature__media {
+  aspect-ratio: 21 / 9;
+  min-height: 0;
+}
+.skel-feature__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+}
+
+/* ── Toolbar ── mirrors .blg-toolbar chips, .car-filters, .pcx-tabs__row */
+.skel-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+/* ── Pillars ── mirrors .svx-pillars__row (3-up) */
+.skel-pillars {
+  display: grid;
+  grid-template-columns: repeat(var(--skel-cols, 3), 1fr);
+  gap: 24px;
+  padding-bottom: 56px;
+}
+.skel-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Row list ── mirrors .svx-row (64px 1fr auto 40px) and .wrk-row */
+.skel-rows {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 72px;
+}
+.skel-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto 40px;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+.skel-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Detail split ── mirrors .sd-body / .jd-body / .pd-article,
+   whose rail widths differ per page and arrive via --skel-rail */
+.skel-detail {
+  display: grid;
+  grid-template-columns: minmax(0, var(--skel-rail, 300px)) minmax(0, 1fr);
+  gap: 48px;
+  padding: 8px 0 80px;
+}
+.skel-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: start;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px;
+  background: color-mix(in srgb, var(--card) 40%, transparent);
+}
+.skel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Spec strip ── mirrors dl.sd-spec / dl.jd-spec */
+.skel-spec {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  padding: 28px 0 0;
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+}
+.skel-spec__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Banner ── mirrors .pd-banner */
+.skel-banner {
+  aspect-ratio: 21 / 9;
+  border-radius: 24px;
+  margin-top: 32px;
+}
+
+/* ── Article ── mirrors .legal__inner (820) / .bpp__inner + .bpp-layout (1fr 300px) */
+/* .legal/.bpp put 140px on the section and .container adds its own 20px top. */
+.skel-article {
+  max-width: var(--skel-width, 820px);
+  padding-top: 160px;
+  padding-bottom: 96px;
+}
+.skel-article__head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.skel-article__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 56px;
+}
+.skel-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.skel-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-self: start;
+}
+
+/* ── Form ── mirrors .ct-split, which is full-bleed with no .container: the two
+   halves carry their own padding and the pane has the border + card fill. */
+.skel-split {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: 100svh;
+}
+.skel-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 168px clamp(24px, 5vw, 88px) 80px;
+}
+.skel-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.skel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skel-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  padding: 168px clamp(24px, 4vw, 72px) 80px;
+}
+
+/* ── Responsive ── collapse to the same breakpoints the real pages use */
+@media (max-width: 900px) {
+  .skel-pillars {
+    grid-template-columns: 1fr;
+  }
+}
+/* .bpp-layout collapses at 1023px; .sd-body/.jd-body/.pd-article at 900px. The
+   real rails reflow below the content — a skeleton just drops them. */
+@media (max-width: 1023px) {
+  .skel-article__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .skel-side {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .skel-detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .skel-rail {
+    display: none;
+  }
+}
+@media (max-width: 860px) {
+  .skel-split {
+    grid-template-columns: 1fr;
+  }
+  .skel-intro {
+    padding: 140px 24px 48px;
+  }
+  .skel-pane {
+    border-left: none;
+    padding: 56px 24px 72px;
+  }
+  .skel-feature {
+    grid-template-columns: 1fr;
+  }
+  .skel-feature__media {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+@media (max-width: 640px) {
+  .skel-hero {
+    padding: 132px 0 36px;
+  }
+  .skel-article {
+    padding-top: 136px;
+    padding-bottom: 72px;
+  }
+  .skel-row {
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+  }
+  .skel-row__meta,
+  .skel-row__arrow {
+    display: none;
+  }
+}

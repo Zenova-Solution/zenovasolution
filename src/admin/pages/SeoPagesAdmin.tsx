@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmListSkeleton } from '@/admin/components/AdminSkeletons';
 import { useConfirm } from '@/admin/components/confirm-context';
 import { Toast } from '@/admin/components/Form';
 import { deleteSeoPage, listSeoPages, type SeoPage } from '@/admin/seoPagesApi';
@@ -82,7 +83,7 @@ export function SeoPagesAdmin() {
           </button>
         </div>
       ) : pages === null ? (
-        <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>Loading pages…</div>
+        <AdmListSkeleton grid={GRID} cols={5} />
       ) : pages.length === 0 ? (
         <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>
           No SEO pages yet — create the first landing page.

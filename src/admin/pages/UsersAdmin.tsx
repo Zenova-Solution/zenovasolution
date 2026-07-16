@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmListSkeleton } from '@/admin/components/AdminSkeletons';
 import { useConfirm } from '@/admin/components/confirm-context';
 import { Button } from '@/admin/components/Button';
 import { Select, TextField, Toast, ToggleField } from '@/admin/components/Form';
@@ -332,7 +333,7 @@ export function UsersAdmin() {
           </button>
         </div>
       ) : users === null ? (
-        <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>Loading users…</div>
+        <AdmListSkeleton grid={GRID} cols={7} leadCell />
       ) : filtered.length === 0 ? (
         <div className="adm-card" style={{ color: 'var(--fg-dim)', fontSize: 13 }}>
           {tab === 'all' ? 'No user accounts yet.' : `No ${ROLE_LABELS[tab as Role].toLowerCase()} accounts yet.`}

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/admin/components/Button';
 import { AdminShell } from '@/admin/components/AdminShell';
+import { AdmMediaSkeleton } from '@/admin/components/AdminSkeletons';
 import { useConfirm } from '@/admin/components/confirm-context';
 import { Toast } from '@/admin/components/Form';
 import { Dropdown } from '@/components/ui/inputs';
@@ -262,9 +263,7 @@ export function MediaAdmin() {
       )}
 
       {loading && items.length === 0 ? (
-        <div className="adm-card" style={{ textAlign: 'center', color: 'var(--fg-faint)' }}>
-          Loading library…
-        </div>
+        <AdmMediaSkeleton count={8} />
       ) : items.length === 0 ? (
         <div className="adm-card" style={{ textAlign: 'center', color: 'var(--fg-faint)' }}>
           No files yet. Upload one above to get started.

@@ -937,6 +937,22 @@
   flex-wrap: wrap;
 }
 
+.adm-list__row--skeleton {
+  pointer-events: none;
+}
+
+.adm-editor-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.adm-editor-skeleton__field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 /* Phone — convert each row into a stacked card with field labels. */
 @media (max-width: 720px) {
   .adm-list {
@@ -967,6 +983,13 @@
 
   [data-theme='light'] .adm-list__row {
     background: var(--bg-2);
+  }
+
+  /* Skeleton rows carry no data-label cells, so the stacked-card grid above has
+     nothing to lay out — collapse them to a single column instead. Needs to match
+     the specificity of the .adm-list__row:first-child rule it follows. */
+  .adm-list__row.adm-list__row--skeleton {
+    grid-template-columns: 1fr !important;
   }
 
   .adm-list__row:hover:not(.adm-list__row--head) {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchBlogList, type PublicBlogListItem } from '@/lib/publicContentApi';
+import { SkeletonListBody } from '@/components/ui/Skeleton';
 import { scrollToTop } from '@/lib/scroll';
 import './BlogPage.css';
 
@@ -237,30 +238,7 @@ export function BlogPage() {
               </button>
             </div>
           ) : items === null ? (
-            <div aria-hidden="true">
-              {!tag && (
-                <div className="blg-feat blg-card--skeleton">
-                  <div className="blg-feat__media" />
-                  <div className="blg-feat__body">
-                    <div className="blg-skel blg-skel--title" />
-                    <div className="blg-skel" />
-                    <div className="blg-skel blg-skel--short" />
-                  </div>
-                </div>
-              )}
-              <div className="blg-grid">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="blg-card blg-card--skeleton">
-                    <div className="blg-card__media" />
-                    <div className="blg-card__body">
-                      <div className="blg-skel blg-skel--title" />
-                      <div className="blg-skel" />
-                      <div className="blg-skel blg-skel--short" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <SkeletonListBody feature={!tag} count={6} min={300} />
           ) : items.length === 0 ? (
             <div className="blg-state">
               <p>{tag ? `No posts tagged “${tag}” yet.` : 'No posts yet — check back soon.'}</p>

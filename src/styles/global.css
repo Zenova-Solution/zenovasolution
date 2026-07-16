@@ -130,6 +130,19 @@ button {
   margin: 0 auto;
   padding: 20px 32px 0;
 }
+/* Exposed to screen readers only. Used by the skeleton loading regions. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ── Hero ambient glow (theme-aware, sits behind the hero content) ── */
 .hero-ambient {
@@ -1946,10 +1959,6 @@ section.sec {
 }
 
 /* ── Auth animations ── */
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 
 @keyframes auth-fade-up {
   from { opacity: 0; transform: translateY(12px); }
