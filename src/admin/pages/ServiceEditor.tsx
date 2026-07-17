@@ -231,7 +231,7 @@ export function ServiceEditor() {
           />
           <MediaField
             label="Card media"
-            hint="Upload or pick an image (poster/fallback) and optionally add a video that plays on hover."
+            hint="Best image size: 1600×1200 (4:3), used as poster/fallback. Optional hover video."
             image={draft.image ?? ''}
             video={draft.video ?? ''}
             onImageChange={(v) => update('image', v)}

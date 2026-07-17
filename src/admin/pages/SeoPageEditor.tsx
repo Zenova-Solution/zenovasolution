@@ -249,7 +249,7 @@ function SeoPageEditorForm({ slug }: { slug: string }) {
             value={draft.og_image_url ?? ''}
             onChange={(v) => update('og_image_url', v || null)}
             prefix="pages"
-            hint="1200×630 works best. Falls back to the site-wide OG card."
+            hint="Best size: 1200×630 (1.91:1). Falls back to the site-wide OG card."
           />
         </div>
       )}

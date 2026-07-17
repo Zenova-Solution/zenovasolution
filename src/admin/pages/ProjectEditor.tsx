@@ -370,6 +370,8 @@ function ImagesEditor({
             <ImageThumb src={img.src} alt={img.alt} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <ImageField
+                label="Project image"
+                hint="Best size: 1600×900 or wider (16:9). The first image is used as the project banner."
                 value={img.src}
                 onChange={(v) => update(i, { src: v })}
                 prefix="projects"

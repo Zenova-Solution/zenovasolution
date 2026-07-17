@@ -231,6 +231,7 @@ function BlogEditorForm({ slug }: { slug: string }) {
           />
           <ImageField
             label="Cover image"
+            hint="Best size: 1600×900 (16:9). JPG/WebP, under ~500 KB."
             value={draft.cover_image_url ?? ''}
             onChange={(v) => update('cover_image_url', v || null)}
             prefix="blog"
@@ -307,7 +308,7 @@ function BlogEditorForm({ slug }: { slug: string }) {
             value={draft.og_image_url ?? ''}
             onChange={(v) => update('og_image_url', v || null)}
             prefix="blog"
-            hint="1200×630 works best. Falls back to the cover image."
+            hint="Best size: 1200×630 (1.91:1). Falls back to the cover image."
           />
         </div>
       )}

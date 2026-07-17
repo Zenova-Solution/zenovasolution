@@ -189,7 +189,7 @@ export function TeamAdmin() {
               <div style={{ fontWeight: 600, fontSize: 15 }}>{m.name || 'Unnamed'}</div>
               <div style={{ fontSize: 12, color: 'var(--fg-faint)', marginTop: 2 }}>{m.role}</div>
             </div>
-            <ImageField label="Avatar" hint="Optional profile picture" value={m.avatar ?? ''} onChange={(v) => update(i, { avatar: v || undefined })} prefix="team" />
+            <ImageField label="Avatar" hint="Best size: 400×400 (square). Shown as a circle; optional." value={m.avatar ?? ''} onChange={(v) => update(i, { avatar: v || undefined })} prefix="team" />
             <TextField label="Name" value={m.name} onChange={(v) => update(i, { name: v })} />
             <TextField label="Role" value={m.role} onChange={(v) => update(i, { role: v })} />
             <TextArea label="Bio" value={m.bio} onChange={(v) => update(i, { bio: v })} rows={3} />

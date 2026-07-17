@@ -551,7 +551,7 @@ export function ContentAdmin() {
               />
               <ImageField
                 label="Avatar image"
-                hint="Upload a headshot or pick one from the media library."
+                hint="Best size: 256×256 (square). Headshot, shown as a small circle."
                 value={t.image ?? ''}
                 onChange={(v) => {
                   const testimonials = draft.testimonials.map((x, idx) =>
