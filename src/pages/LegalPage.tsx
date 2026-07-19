@@ -25,7 +25,7 @@ export function LegalPage({ doc }: LegalPageProps) {
   const rawBody = current?.body?.trim() ? current.body : fallback.body;
   const bodyHtml = useMemo(() => {
     if (!rawBody) return '';
-    return DOMPurify.sanitize(rawBody);
+    return DOMPurify.sanitize(rawBody, { FORBID_ATTR: ['style'] });
   }, [rawBody]);
 
   return (

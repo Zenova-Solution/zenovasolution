@@ -43,7 +43,7 @@ function headingId(text: string): string {
  * be deep-linked (`/blog/post#heading`).
  */
 function prepareBody(rawHtml: string): string {
-  const clean = DOMPurify.sanitize(rawHtml);
+  const clean = DOMPurify.sanitize(rawHtml, { FORBID_ATTR: ['style'] });
   const doc = new DOMParser().parseFromString(clean, 'text/html');
   const seen = new Map<string, number>();
   doc.body.querySelectorAll('h2, h3').forEach((h) => {
@@ -104,7 +104,7 @@ export function BlogPostPage() {
   const [reloadKey, setReloadKey] = useState(0);
 
   const [related, setRelated] = useState<{ items: PublicBlogListItem[]; byTag: boolean } | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [_progress, setProgress] = useState(0);
   const [copied, setCopied] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const copyTimer = useRef<number | undefined>(undefined);
