@@ -7,6 +7,8 @@ import { NeonButton } from '@/components/ui/NeonButton';
 import { Icon } from '@/components/icons/Icon';
 import { type ProjectDetail, type ProjectImage } from '@/data/projects';
 import { useProjects } from '@/admin/store';
+import { setDynamicSeo, clearDynamicSeo } from '@/seo/dynamic-seo';
+import { SITE } from '@/seo/seo-data';
 import { useImageRatio, clampRatio, RATIO_BOUNDS } from '@/hooks/useImageRatio';
 import { scrollToTop } from '@/lib/scroll';
 import './ProjectDetailPage.css';
@@ -33,6 +35,30 @@ export function ProjectDetailPage() {
   useEffect(() => {
     scrollToTop();
   }, [slug]);
+
+  useEffect(() => {
+    if (!project) return;
+    const path = `/work/${project.slug}`;
+    const title = `${project.client} — ${project.title} | ${SITE.name}`;
+    const description = project.summary || project.title;
+    setDynamicSeo(path, {
+      meta: {
+        path,
+        title,
+        description,
+        h1: project.title,
+        intro: project.summary || '',
+        index: true,
+        breadcrumb: [
+          { name: 'Home', path: '/' },
+          { name: 'Work', path: '/work' },
+          { name: project.client, path },
+        ],
+      },
+      ogImage: project.images?.[0]?.src || undefined,
+    });
+    return () => clearDynamicSeo(path);
+  }, [project]);
 
   // Called before the early return so the hook count stays stable across renders.
   const heroSrc = project?.images?.find((img) => Boolean(img?.src))?.src;

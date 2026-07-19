@@ -6,6 +6,8 @@ import { ServiceVisual } from '@/components/sections/ServiceVisual';
 import { ServiceMedia } from '@/components/sections/ServiceMedia';
 import { Icon, type IconComponent } from '@/components/icons/Icon';
 import { useServices } from '@/admin/store';
+import { setDynamicSeo, clearDynamicSeo } from '@/seo/dynamic-seo';
+import { SITE } from '@/seo/seo-data';
 import { scrollToTop } from '@/lib/scroll';
 import './ServiceDetailPage.css';
 
@@ -17,6 +19,30 @@ export function ServiceDetailPage() {
   useEffect(() => {
     scrollToTop();
   }, [slug]);
+
+  useEffect(() => {
+    if (!service) return;
+    const path = `/services/${service.slug}`;
+    const title = `${service.title} | ${SITE.name}`;
+    const description = service.short || service.hero;
+    setDynamicSeo(path, {
+      meta: {
+        path,
+        title,
+        description,
+        h1: service.title,
+        intro: service.hero || service.short,
+        index: true,
+        breadcrumb: [
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: service.title, path },
+        ],
+      },
+      ogImage: service.image || undefined,
+    });
+    return () => clearDynamicSeo(path);
+  }, [service]);
 
   if (!service) {
     return <Navigate to="/services" replace />;

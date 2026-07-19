@@ -4,6 +4,8 @@ import { ApplyButton } from '@/components/ui/ApplyButton';
 import { GhostButton } from '@/components/ui/GhostButton';
 import { Icon } from '@/components/icons/Icon';
 import { useJobs, useBrand } from '@/admin/store';
+import { setDynamicSeo, clearDynamicSeo } from '@/seo/dynamic-seo';
+import { SITE } from '@/seo/seo-data';
 import { scrollToTop } from '@/lib/scroll';
 import { formatPosted } from '@/lib/jobDate';
 import './JobDetailPage.css';
@@ -17,6 +19,29 @@ export function JobDetailPage() {
   useEffect(() => {
     scrollToTop();
   }, [slug]);
+
+  useEffect(() => {
+    if (!job) return;
+    const path = `/careers/${job.slug}`;
+    const title = `${job.title} — Careers | ${SITE.name}`;
+    const description = job.summary || `${job.title} at ${SITE.name}`;
+    setDynamicSeo(path, {
+      meta: {
+        path,
+        title,
+        description,
+        h1: job.title,
+        intro: job.summary || '',
+        index: true,
+        breadcrumb: [
+          { name: 'Home', path: '/' },
+          { name: 'Careers', path: '/careers' },
+          { name: job.title, path },
+        ],
+      },
+    });
+    return () => clearDynamicSeo(path);
+  }, [job]);
 
   if (!job) {
     return <Navigate to="/careers" replace />;
